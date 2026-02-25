@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { EB_Garamond } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Footer from "@/components/Footer";
 
-const outfit = Outfit({
-  variable: "--font-outfit",
+const ebGaramond = EB_Garamond({
+  variable: "--font-eb-garamond",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -21,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={outfit.variable}>
+      <body className={ebGaramond.variable}>
         {children}
         <Analytics />
       </body>

@@ -3,7 +3,7 @@
   --foreground: #ffffff;
   --accent: #ff4500;
   /* Subtle spicy hint for "Chile Line" */
-  --font-base: var(--font-outfit), sans-serif;
+  --font-base: var(--font-eb-garamond), 'Georgia', serif;
 }
 
 * {
