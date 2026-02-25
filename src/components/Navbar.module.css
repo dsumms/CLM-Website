@@ -1,0 +1,158 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 4rem;
+    z-index: 100;
+    color: white;
+    pointer-events: none;
+}
+
+/* Re-enable pointer events for interactive elements */
+.logo a,
+.hamburger,
+.navRight {
+    pointer-events: auto;
+}
+
+.logo a {
+    display: flex;
+    align-items: center;
+    transition: opacity 0.3s ease;
+}
+
+.logo a:hover {
+    opacity: 0.8;
+}
+
+.logoImage {
+    object-fit: contain;
+    /* Convert the grey/black logo to crisp white for dark backgrounds */
+    filter: brightness(0) invert(1);
+}
+
+/* Right side: train cars + hamburger */
+.navRight {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+/* Locomotive container */
+.trainLocomotive {
+    display: flex;
+    align-items: center;
+}
+
+.trainLocomotive::after {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    margin: 0 1.2rem;
+    flex-shrink: 0;
+}
+
+.locomotiveImage {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    /* Inverted so a black train graphic becomes white */
+    filter: invert(1);
+}
+
+/* Each menu item "train car" */
+.trainCar {
+    display: flex;
+    align-items: center;
+}
+
+/* Connector dot between cars */
+.trainCar::after {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    margin: 0 1.2rem;
+    flex-shrink: 0;
+}
+
+.menuLink {
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: white;
+    opacity: 0.85;
+    transition: opacity 0.25s ease, color 0.25s ease;
+    white-space: nowrap;
+}
+
+.menuLink:hover {
+    opacity: 1;
+    color: var(--accent);
+}
+
+/* Hamburger Button — the "locomotive" */
+.hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.line {
+    width: 28px;
+    height: 2px;
+    background-color: white;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    transform-origin: center;
+}
+
+.hamburger.open .line:first-child {
+    transform: translateY(4px) rotate(45deg);
+}
+
+.hamburger.open .line:last-child {
+    transform: translateY(-4px) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 1.2rem 1.5rem;
+    }
+
+    .menuLink {
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+    }
+
+    .trainCar::after {
+        margin: 0 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .menuLink {
+        font-size: 0.65rem;
+        letter-spacing: 0.08em;
+    }
+
+    .trainCar::after {
+        margin: 0 0.5rem;
+    }
+}

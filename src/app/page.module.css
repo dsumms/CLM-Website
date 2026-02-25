@@ -1,0 +1,154 @@
+.main {
+    width: 100vw;
+    min-height: 100vh;
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.canvasContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: var(--background);
+}
+
+.heroContent {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    pointer-events: none;
+    color: white;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9), 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+.headline {
+    font-size: clamp(3rem, 10vw, 8rem);
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    margin: 0;
+    line-height: 1;
+}
+
+.subheadline {
+    font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    margin-top: 1.5rem;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 1), 0 0 40px rgba(0, 0, 0, 0.8);
+}
+
+/* Projects Section */
+.projects {
+    padding: 8rem 4rem;
+    background-color: var(--background);
+    position: relative;
+    z-index: 20;
+}
+
+.projectsHeader {
+    margin-bottom: 6rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 2rem;
+}
+
+.projectsHeader h2 {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+}
+
+.grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.grid>div:nth-child(even) {
+    width: 80%;
+    align-self: flex-end;
+}
+
+.grid>div:nth-child(odd) {
+    width: 80%;
+    align-self: flex-start;
+}
+
+/* Footer Section */
+.footer {
+    padding: 8rem 4rem 4rem 4rem;
+    background-color: #050505;
+    text-align: center;
+}
+
+.footerContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.footerContent h2 {
+    font-size: 3rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.email {
+    font-size: 1.5rem;
+    text-decoration: underline;
+    text-underline-offset: 8px;
+    transition: color 0.3s;
+}
+
+.email:hover {
+    color: var(--accent);
+}
+
+.socials {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.socials a {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.socials a:hover {
+    opacity: 1;
+}
+
+.copyright {
+    margin-top: 4rem;
+    font-size: 0.9rem;
+    opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+
+    .projects,
+    .footer {
+        padding: 4rem 2rem;
+    }
+
+    .grid>div:nth-child(even),
+    .grid>div:nth-child(odd) {
+        width: 100%;
+    }
+}

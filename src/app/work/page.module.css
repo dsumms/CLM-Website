@@ -1,0 +1,58 @@
+.main {
+    width: 100vw;
+    min-height: 100vh;
+    background-color: var(--background);
+    color: var(--foreground);
+}
+
+.header {
+    padding: 12rem 4rem 4rem 4rem;
+}
+
+.header h1 {
+    font-size: clamp(3rem, 6vw, 6rem);
+    font-weight: 800;
+    letter-spacing: 0.1em;
+}
+
+.gridContainer {
+    padding: 0 4rem 8rem 4rem;
+}
+
+.masonryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 4rem;
+}
+
+.gridItem {
+    width: 100%;
+}
+
+.gridItem:nth-child(even) {
+    margin-top: 4rem;
+}
+
+.footer {
+    text-align: center;
+    padding: 4rem;
+    opacity: 0.5;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+
+    .header,
+    .gridContainer {
+        padding: 6rem 2rem 2rem 2rem;
+    }
+
+    .masonryGrid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .gridItem:nth-child(even) {
+        margin-top: 0;
+    }
+}
