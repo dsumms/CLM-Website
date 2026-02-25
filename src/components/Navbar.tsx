@@ -65,7 +65,9 @@ export default function Navbar() {
                             }}
                         >
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src="/train.png" alt="Train Locomotive" className={styles.locomotiveImage} />
+                            <Link href="/" onClick={closeMenu}>
+                                <img src="/train.png" alt="Train Locomotive" className={styles.locomotiveImage} />
+                            </Link>
                         </motion.div>
                     )}
                     {isOpen && menuItems.map((item, index) => (
