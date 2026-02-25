@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Footer from "@/components/Footer";
 
@@ -22,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={outfit.variable}>
         {children}
-        <Footer />
+        <Analytics />
       </body>
     </html>
   );
