@@ -23,9 +23,9 @@ export default function Navbar() {
                 opacity: 1,
                 background: isOpen
                     ? "linear-gradient(to bottom, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 0.75) 75%, rgba(0, 0, 0, 0) 100%)"
-                    : "linear-gradient(to bottom, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 0.35) 70%, rgba(0, 0, 0, 0) 100%)"
+                    : "linear-gradient(to bottom, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 0.5) 70%, rgba(0, 0, 0, 0) 100%)"
             }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
             <div className={styles.logo}>
                 <Link href="/" onClick={closeMenu}>
