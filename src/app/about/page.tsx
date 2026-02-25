@@ -9,8 +9,9 @@ export default function About() {
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({ target: containerRef });
 
-    const y1 = useTransform(scrollYProgress, [0, 1], [0, -200]);
-    const y2 = useTransform(scrollYProgress, [0, 1], [0, -400]);
+    const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
+    const y2 = useTransform(scrollYProgress, [0, 1], [0, -200]);
+    const imgY = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
 
     return (
         <main className={styles.main} ref={containerRef}>
@@ -40,7 +41,12 @@ export default function About() {
                     </p>
                 </motion.div>
 
-                <div className={styles.spacer}></div>
+                <div className={styles.imageContainer}>
+                    <motion.div
+                        className={styles.parallaxImage}
+                        style={{ y: imgY, backgroundImage: "url('/images/bosque.png')" }}
+                    />
+                </div>
 
                 <motion.div
                     className={styles.textBlockRight}
@@ -58,25 +64,12 @@ export default function About() {
                     </p>
                 </motion.div>
 
-                <div className={styles.spacer}></div>
-
-                <motion.div
-                    className={styles.emphasisBlock}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true, margin: "-10%" }}
-                    transition={{ duration: 1.2 }}
-                >
-                    <h2>THE WAY WE CARRY WATER</h2>
-                    <span className={styles.year}>(2025)</span>
-                    <p className={styles.debutText}>
-                        Our debut short film, The Way We Carry Water, embodies this vision. Filmed across the seasons in
-                        Northern New Mexico, it explores grief, tradition, and the interconnection between people and the land.
-                        The project is supported by the Santa Fe International Film Festival, Los Luceros Historic Site,
-                        the Northern Rio Grande National Heritage Area, and Hands Across Cultures, reflecting our deep
-                        regional partnerships and dedication to preserving cultural heritage through cinema.
-                    </p>
-                </motion.div>
+                <div className={styles.imageContainer}>
+                    <motion.div
+                        className={styles.parallaxImage}
+                        style={{ y: imgY, backgroundImage: "url('/images/landscape.png')" }}
+                    />
+                </div>
             </section>
 
             <section className={styles.mantraSection}>
@@ -94,9 +87,6 @@ export default function About() {
                 </p>
             </section>
 
-            <footer className={styles.footer}>
-                <p>© 2025 Chile Line Media. All rights reserved.</p>
-            </footer>
         </main>
     );
 }

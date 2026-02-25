@@ -1,0 +1,160 @@
+.main {
+    width: 100vw;
+    min-height: 100vh;
+    background-color: var(--background);
+    color: var(--foreground);
+    display: flex;
+    flex-direction: column;
+}
+
+.contentContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 8rem 4rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.backgroundGlow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, rgba(255, 69, 0, 0.05) 0%, rgba(0, 0, 0, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 800px;
+    width: 100%;
+}
+
+.title {
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+    line-height: 1;
+}
+
+.subtitle {
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    font-weight: 300;
+    opacity: 0.7;
+    margin-bottom: 5rem;
+}
+
+.linksContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    align-items: center;
+}
+
+.emailLink {
+    display: inline-block;
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    font-weight: 400;
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.emailLink::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--accent);
+    transform-origin: bottom right;
+    transition: transform 0.4s cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+.emailLink:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.emailLink:hover {
+    color: var(--accent);
+    transition: color 0.4s ease;
+}
+
+.socialGrid {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.socialCard {
+    padding: 1rem 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.socialCard::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(255, 69, 0, 0.1) 0%, rgba(255, 69, 0, 0) 70%);
+    border-radius: 50%;
+    transition: transform 0.6s ease;
+    z-index: 0;
+}
+
+.socialCard:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.socialCard span {
+    position: relative;
+    z-index: 10;
+}
+
+.socialCard:hover {
+    border-color: rgba(255, 69, 0, 0.5);
+    background: rgba(255, 69, 0, 0.05);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px -10px rgba(255, 69, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+    .contentContainer {
+        padding: 6rem 2rem;
+    }
+
+    .socialGrid {
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .socialCard {
+        width: 100%;
+    }
+}

@@ -70,18 +70,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
-          <h2>GET IN TOUCH</h2>
-          <a href="mailto:hello@chilelinemedia.com" className={styles.email}>hello@chilelinemedia.com</a>
-          <div className={styles.socials}>
-            <a href="#">Instagram</a>
-            <a href="#">Vimeo</a>
-          </div>
-          <p className={styles.copyright}>© 2025 Chile Line Media. All rights reserved.</p>
-        </div>
-      </footer>
     </main>
   );
 }

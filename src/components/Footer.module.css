@@ -1,0 +1,61 @@
+.footer {
+    padding: 8rem 4rem 4rem 4rem;
+    background-color: #050505;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footerContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.footerContent h2 {
+    font-size: 3rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.email {
+    font-size: 1.5rem;
+    text-decoration: underline;
+    text-underline-offset: 8px;
+    transition: color 0.3s;
+}
+
+.email:hover {
+    color: var(--accent);
+}
+
+.socials {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.socials a {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+    transition: opacity 0.3s, color 0.3s;
+}
+
+.socials a:hover {
+    opacity: 1;
+    color: var(--accent);
+}
+
+.copyright {
+    margin-top: 4rem;
+    font-size: 0.9rem;
+    opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+    .footer {
+        padding: 4rem 2rem;
+    }
+}
