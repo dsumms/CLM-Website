@@ -122,6 +122,7 @@ export default function PointCloudParticles({ imageSrc }: { imageSrc: string }) 
             for (let x = 0; x < width; x++) {
                 const px = (x / width - 0.5) * scale;
                 const py = (y / height - 0.5) * scale * (height / width);
+                // eslint-disable-next-line react-hooks/purity
                 const pz = (Math.random() - 0.5) * 0.2;
 
                 positions[i * 3] = px;
@@ -131,6 +132,7 @@ export default function PointCloudParticles({ imageSrc }: { imageSrc: string }) 
                 reference[i * 2] = x / width;
                 reference[i * 2 + 1] = y / height;
 
+                // eslint-disable-next-line react-hooks/purity
                 sizes[i] = Math.random() * 1.0 + 0.5;
                 i++;
             }

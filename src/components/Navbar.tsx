@@ -64,6 +64,7 @@ export default function Navbar() {
                                 ease: [0.16, 1, 0.3, 1]
                             }}
                         >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src="/train.png" alt="Train Locomotive" className={styles.locomotiveImage} />
                         </motion.div>
                     )}
