@@ -27,7 +27,7 @@ void main() {
   vec3 crushed = pow(texColor.rgb, vec3(1.2));
   vec3 darkened = crushed * 1.5;
   // Warm highlights, cool shadows — cinematic color grade
-  vColor = mix(darkened * vec3(0.7, 0.8, 1.0), darkened * vec3(1.0, 0.90, 0.8), brightness);
+  vColor = mix(darkened * vec3(0.8, 0.9, 1.0), darkened * vec3(1.0, 0.90, 0.8), brightness);
   
   vec3 pos = position;
   
@@ -53,7 +53,7 @@ void main() {
   vDepth = -mvPosition.z;
   
   gl_Position = projectionMatrix * mvPosition;
-  gl_PointSize = size * (40.0 / -mvPosition.z) * (brightness * 0.5 + 0.55);
+  gl_PointSize = size * (250.0 / -mvPosition.z) * (brightness * 0.5 + 0.50);
 }
 `;
 
@@ -107,7 +107,7 @@ export default function PointCloudParticles({ imageSrc }: { imageSrc: string }) 
     });
 
     const [positions, reference, sizes] = useMemo(() => {
-        const width = 550;
+        const width = 200;
         const height = Math.floor(width * (9 / 16));
         const particleCount = width * height;
 
