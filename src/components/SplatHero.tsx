@@ -94,7 +94,7 @@ const UPSTREAM_PARITY_SPLAT_RENDERER: SplatRendererConfig = {
 };
 
 const DEFAULT_WIGGLE: WiggleConfig = {
-    damping: 0.006,
+    damping: 0.016,
     desktopYaw: 0.02,
     desktopPitch: 0.006,
     touchYaw: 0.015,
