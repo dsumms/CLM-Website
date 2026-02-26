@@ -30,7 +30,7 @@ export default function Navbar() {
                 y: 0,
                 opacity: 1,
                 background: isOpen
-                    ? "linear-gradient(to bottom, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 0.75) 75%, rgba(0, 0, 0, 0) 100%)"
+                    ? (isMobile ? "rgba(0, 0, 0, 1)" : "linear-gradient(to bottom, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 0.75) 75%, rgba(0, 0, 0, 0) 100%)")
                     : "linear-gradient(to bottom, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 0.5) 70%, rgba(0, 0, 0, 0) 100%)"
             }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -128,7 +128,7 @@ export default function Navbar() {
                         key="mobile-menu"
                         className={styles.mobileMenuOverlay}
                         initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
+                        animate={{ opacity: 1, height: "100vh" }}
                         exit={{ opacity: 0, height: 0, transition: { duration: 0.3 } }}
                         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     >
