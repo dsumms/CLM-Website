@@ -70,9 +70,9 @@ const LIVE_SPLAT_BACKDROP = [
 
 // Calibrated hero pose. Keep these together so future visual tuning is easy.
 const DEFAULT_HERO_CAMERA: HeroCameraConfig = {
-    position: [-1.2, -1.99, 19.85] as const,
+    position: [-1.45, -2, 20] as const,
     target: [-0.8, 0.1, 0] as const,
-    fov: 50,
+    fov: 35,
     near: 0.01,
     far: 500,
 };
@@ -96,9 +96,9 @@ const UPSTREAM_PARITY_SPLAT_RENDERER: SplatRendererConfig = {
 const DEFAULT_WIGGLE: WiggleConfig = {
     damping: 0.025,
     desktopYaw: 0.02,
-    desktopPitch: 0.006,
+    desktopPitch: 0.007,
     touchYaw: 0.015,
-    touchPitch: 0.004,
+    touchPitch: 0.005,
 };
 
 type SplatCanvasErrorBoundaryProps = {
