@@ -42,6 +42,12 @@ type DebugRendererState = SplatRendererConfig;
 
 type CalibrationRenderMode = "splat" | "fallback" | "runtime-fallback";
 
+type SplatUrlFlags = {
+    debugEnabled: boolean;
+    forceLiveSplat: boolean;
+    disableRuntimeFallback: boolean;
+};
+
 type PointerState = {
     x: number;
     y: number;
@@ -57,7 +63,6 @@ type NavigatorWithHints = Navigator & {
 
 const FALLBACK_IMAGE_SRC = "/hero-image.jpg";
 const MOBILE_FALLBACK_MAX_WIDTH = 900;
-const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const LIVE_SPLAT_BACKDROP = [
     "radial-gradient(120% 90% at 50% 30%, rgba(196, 218, 228, 0.95) 0%, rgba(160, 192, 205, 0.88) 38%, rgba(103, 128, 121, 0.52) 70%, rgba(24, 30, 28, 0.25) 100%)",
     "linear-gradient(180deg, #c5d9e2 0%, #a6bcc8 42%, #7f8f6d 74%, #1d2520 100%)",
@@ -213,12 +218,30 @@ function shouldUseStaticFallback() {
     return false;
 }
 
-function shouldEnableCalibrationDebug() {
-    if (IS_PRODUCTION || typeof window === "undefined") {
-        return false;
+function readSplatUrlFlags(): SplatUrlFlags {
+    if (typeof window === "undefined") {
+        return {
+            debugEnabled: false,
+            forceLiveSplat: false,
+            disableRuntimeFallback: false,
+        };
     }
 
-    return new URLSearchParams(window.location.search).get("splatDebug") === "1";
+    const params = new URLSearchParams(window.location.search);
+    const isEnabled = (key: string) => {
+        const value = params.get(key);
+        return value === "1" || value === "true";
+    };
+
+    return {
+        debugEnabled: isEnabled("splatDebug"),
+        forceLiveSplat: isEnabled("splatForceLive"),
+        disableRuntimeFallback: isEnabled("splatNoRuntimeFallback"),
+    };
+}
+
+function shouldEnableCalibrationDebug() {
+    return readSplatUrlFlags().debugEnabled;
 }
 
 class SplatCanvasErrorBoundary extends Component<
@@ -502,7 +525,9 @@ function CalibrationPanel({
             <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "center" }}>
                 <div>
                     <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 0.2 }}>Splat Calibration</div>
-                    <div style={{ fontSize: 10, color: "rgba(255,255,255,0.65)" }}>Dev-only (`?splatDebug=1`)</div>
+                    <div style={{ fontSize: 10, color: "rgba(255,255,255,0.65)" }}>
+                        Query toggle (`?splatDebug=1`) - works in production
+                    </div>
                 </div>
                 <div
                     style={{
@@ -715,8 +740,9 @@ function makeDefaultDebugRenderer(): DebugRendererState {
 
 export default function SplatHero() {
     const pointerStateRef = useRef<PointerState>({ x: 0, y: 0, isTouch: false });
+    const [splatUrlFlags] = useState<SplatUrlFlags>(() => readSplatUrlFlags());
     const [baseRenderMode] = useState<"splat" | "fallback">(() =>
-        shouldUseStaticFallback() ? "fallback" : "splat"
+        splatUrlFlags.forceLiveSplat ? "splat" : shouldUseStaticFallback() ? "fallback" : "splat"
     );
     const [debugEnabled] = useState<boolean>(() => shouldEnableCalibrationDebug());
     const [debugCamera, setDebugCamera] = useState<HeroCameraConfig>(() => cloneCameraConfig(DEFAULT_HERO_CAMERA));
@@ -730,7 +756,8 @@ export default function SplatHero() {
     const activeWiggle = getActiveWiggleConfig(debugEnabled, debugWiggle);
     const activeRenderer = debugEnabled ? debugRenderer : DEFAULT_SPLAT_RENDERER;
     const liveSplatActive =
-        baseRenderMode === "splat" && splatRuntimeFailureMessage === null;
+        baseRenderMode === "splat" &&
+        (splatUrlFlags.disableRuntimeFallback || splatRuntimeFailureMessage === null);
     const calibrationRenderMode: CalibrationRenderMode = liveSplatActive
         ? "splat"
         : splatRuntimeFailureMessage !== null
@@ -805,7 +832,12 @@ export default function SplatHero() {
                   ? error
                   : "Unknown live splat error";
 
-        console.error("SplatHero live splat failed, switching to static fallback.", error);
+        console.error(
+            splatUrlFlags.disableRuntimeFallback
+                ? "SplatHero live splat error (runtime fallback suppressed by ?splatNoRuntimeFallback=1)."
+                : "SplatHero live splat failed, switching to static fallback.",
+            error
+        );
         setSplatRuntimeFailureMessage((prev) => prev ?? message);
     };
 
@@ -828,6 +860,38 @@ export default function SplatHero() {
             setCopyStatus("Clipboard unavailable. Constants were printed to the console.");
         }
     };
+
+    const liveSplatCanvas = (
+        <Canvas
+            key={heroCameraKey(activeCamera)}
+            dpr={[1, 1.25]}
+            camera={{
+                position: activeCamera.position,
+                fov: activeCamera.fov,
+                near: activeCamera.near,
+                far: activeCamera.far,
+            }}
+            gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
+            style={{ position: "absolute", inset: 0, background: "transparent" }}
+        >
+            <WiggleCamera
+                pointerStateRef={pointerStateRef}
+                cameraConfig={activeCamera}
+                wiggleConfig={activeWiggle}
+            />
+            <Suspense fallback={null}>
+                <TunableSplat
+                    src={HERO_SPLAT.src}
+                    position={HERO_SPLAT.position}
+                    rotation={HERO_SPLAT.rotation}
+                    toneMapped={false}
+                    alphaHash={activeRenderer.alphaHash}
+                    screenCullBoundsMultiplier={activeRenderer.screenCullBoundsMultiplier}
+                    onError={handleSplatRuntimeError}
+                />
+            </Suspense>
+        </Canvas>
+    );
 
     return (
         <div
@@ -878,37 +942,13 @@ export default function SplatHero() {
             ) : null}
 
             {liveSplatActive ? (
-                <SplatCanvasErrorBoundary onError={handleSplatRuntimeError}>
-                    <Canvas
-                        key={heroCameraKey(activeCamera)}
-                        dpr={[1, 1.25]}
-                        camera={{
-                            position: activeCamera.position,
-                            fov: activeCamera.fov,
-                            near: activeCamera.near,
-                            far: activeCamera.far,
-                        }}
-                        gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
-                        style={{ position: "absolute", inset: 0, background: "transparent" }}
-                    >
-                        <WiggleCamera
-                            pointerStateRef={pointerStateRef}
-                            cameraConfig={activeCamera}
-                            wiggleConfig={activeWiggle}
-                        />
-                        <Suspense fallback={null}>
-                            <TunableSplat
-                                src={HERO_SPLAT.src}
-                                position={HERO_SPLAT.position}
-                                rotation={HERO_SPLAT.rotation}
-                                toneMapped={false}
-                                alphaHash={activeRenderer.alphaHash}
-                                screenCullBoundsMultiplier={activeRenderer.screenCullBoundsMultiplier}
-                                onError={handleSplatRuntimeError}
-                            />
-                        </Suspense>
-                    </Canvas>
-                </SplatCanvasErrorBoundary>
+                splatUrlFlags.disableRuntimeFallback ? (
+                    liveSplatCanvas
+                ) : (
+                    <SplatCanvasErrorBoundary onError={handleSplatRuntimeError}>
+                        {liveSplatCanvas}
+                    </SplatCanvasErrorBoundary>
+                )
             ) : (
                 <Image
                     src={FALLBACK_IMAGE_SRC}
@@ -925,6 +965,31 @@ export default function SplatHero() {
                     }}
                 />
             )}
+
+            {!debugEnabled && splatRuntimeFailureMessage ? (
+                <div
+                    style={{
+                        position: "absolute",
+                        right: 12,
+                        bottom: 12,
+                        zIndex: 15,
+                        maxWidth: "min(440px, calc(100vw - 24px))",
+                        background: "rgba(10,12,16,0.82)",
+                        border: "1px solid rgba(255,120,120,0.28)",
+                        color: "rgba(255,255,255,0.9)",
+                        borderRadius: 10,
+                        padding: "8px 10px",
+                        fontSize: 10,
+                        lineHeight: 1.35,
+                        pointerEvents: "none",
+                        backdropFilter: "blur(10px)",
+                    }}
+                >
+                    Live splat failed and the static hero fallback is active. Debug on deploy with
+                    ` ?splatDebug=1&splatForceLive=1&splatNoRuntimeFallback=1 `
+                    and check the browser console.
+                </div>
+            ) : null}
 
             {debugEnabled ? (
                 <CalibrationPanel
