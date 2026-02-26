@@ -1,13 +1,17 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import ProjectCard from "@/components/ProjectCard";
-import PointCloudParticles from "@/components/PointCloudParticles";
-import { Canvas } from "@react-three/fiber";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import styles from "./page.module.css";
 import { projects } from "@/data/projects";
+
+// Dynamic import to avoid SSR issues with Three.js / WebGL
+const SplatHero = dynamic(() => import("@/components/SplatHero"), {
+  ssr: false,
+});
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -25,11 +29,7 @@ export default function Home() {
       <section className={styles.hero}>
         {mounted && (
           <div className={styles.canvasContainer}>
-            <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
-              <Suspense fallback={null}>
-                <PointCloudParticles imageSrc="/hero-image.jpg" />
-              </Suspense>
-            </Canvas>
+            <SplatHero />
           </div>
         )}
 
