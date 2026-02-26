@@ -24,6 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={ebGaramond.variable}>
         {children}
+        <Footer />
         <Analytics />
       </body>
     </html>

@@ -50,6 +50,10 @@ type NavigatorWithHints = Navigator & {
 const FALLBACK_IMAGE_SRC = "/hero-image.jpg";
 const MOBILE_FALLBACK_MAX_WIDTH = 900;
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
+const LIVE_SPLAT_BACKDROP = [
+    "radial-gradient(120% 90% at 50% 30%, rgba(196, 218, 228, 0.95) 0%, rgba(160, 192, 205, 0.88) 38%, rgba(103, 128, 121, 0.52) 70%, rgba(24, 30, 28, 0.25) 100%)",
+    "linear-gradient(180deg, #c5d9e2 0%, #a6bcc8 42%, #7f8f6d 74%, #1d2520 100%)",
+].join(", ");
 
 // Calibrated hero pose. Keep these together so future visual tuning is easy.
 const DEFAULT_HERO_CAMERA: HeroCameraConfig = {
@@ -640,7 +644,13 @@ export default function SplatHero() {
 
     return (
         <div
-            style={{ position: "relative", width: "100%", height: "100%" }}
+            style={{
+                position: "relative",
+                width: "100%",
+                height: "100%",
+                overflow: "hidden",
+                background: LIVE_SPLAT_BACKDROP,
+            }}
             onPointerMove={(event) => {
                 updatePointerFromClientPosition(
                     event.currentTarget,
