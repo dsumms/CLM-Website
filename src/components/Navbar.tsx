@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,6 +10,14 @@ const menuItems = ['Work', 'About', 'Contact'];
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     const toggleMenu = () => setIsOpen(!isOpen);
     const closeMenu = () => setIsOpen(false);
@@ -42,7 +50,7 @@ export default function Navbar() {
 
             <div className={styles.navRight}>
                 <AnimatePresence>
-                    {isOpen && (
+                    {isOpen && !isMobile && (
                         <motion.div
                             key="train-locomotive"
                             className={styles.trainLocomotive}
@@ -70,7 +78,7 @@ export default function Navbar() {
                             </Link>
                         </motion.div>
                     )}
-                    {isOpen && menuItems.map((item, index) => (
+                    {isOpen && !isMobile && menuItems.map((item, index) => (
                         <motion.div
                             key={item}
                             className={styles.trainCar}
@@ -112,6 +120,40 @@ export default function Navbar() {
                     <span className={styles.line}></span>
                 </button>
             </div>
+
+            {/* Mobile Menu Dropdown */}
+            <AnimatePresence>
+                {isOpen && isMobile && (
+                    <motion.div
+                        key="mobile-menu"
+                        className={styles.mobileMenuOverlay}
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0, transition: { duration: 0.3 } }}
+                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                        <div className={styles.mobileMenuContent}>
+                            {menuItems.map((item, index) => (
+                                <motion.div
+                                    key={`mobile-${item}`}
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: 20, transition: { duration: 0.2 } }}
+                                    transition={{ delay: index * 0.1, duration: 0.4 }}
+                                >
+                                    <Link
+                                        href={`/${item.toLowerCase()}`}
+                                        className={styles.mobileMenuLink}
+                                        onClick={closeMenu}
+                                    >
+                                        {item}
+                                    </Link>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </motion.nav>
     );
 }
