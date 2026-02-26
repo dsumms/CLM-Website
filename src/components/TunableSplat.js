@@ -250,14 +250,8 @@ class SplatLoader extends THREE.Loader {
     });
   }
 }
-async function load(shared) {
-  shared.manager.itemStart(shared.url);
-  const data = await fetch(shared.url);
-  if (data.body === null) throw 'Failed to fetch file';
-  let _totalDownloadBytes = data.headers.get('Content-Length');
-  const totalDownloadBytes = _totalDownloadBytes ? parseInt(_totalDownloadBytes) : undefined;
-  if (totalDownloadBytes == undefined) throw 'Failed to get content length';
-  shared.stream = data.body.getReader();
+// CLM PATCH START: centralize GPU buffer sizing so we can reuse it for both stream and full-buffer paths
+function initializeSharedBuffers(shared, totalDownloadBytes) {
   shared.totalDownloadBytes = totalDownloadBytes;
   shared.numVertices = Math.floor(shared.totalDownloadBytes / shared.rowLength);
   const context = shared.gl.getContext();
@@ -273,10 +267,67 @@ async function load(shared) {
   shared.covAndColorTexture = new THREE.DataTexture(shared.covAndColorData, shared.bufferTextureWidth, shared.bufferTextureHeight, THREE.RGBAIntegerFormat, THREE.UnsignedIntType);
   shared.covAndColorTexture.internalFormat = 'RGBA32UI';
   shared.covAndColorTexture.needsUpdate = true;
+}
+// CLM PATCH END
+
+async function load(shared) {
+  shared.manager.itemStart(shared.url);
+  const data = await fetch(shared.url);
+  // CLM PATCH START: browsers transparently decode br/gzip, but Content-Length can remain compressed size.
+  // That breaks drei's stream allocation math on CDNs (e.g. Vercel). Use a full-buffer path when encoded.
+  const contentEncoding = (data.headers.get('Content-Encoding') || '').trim().toLowerCase();
+  const hasEncodedBody = contentEncoding !== '' && contentEncoding !== 'identity';
+  let _totalDownloadBytes = data.headers.get('Content-Length');
+  const totalDownloadBytes = _totalDownloadBytes ? parseInt(_totalDownloadBytes) : undefined;
+
+  if (hasEncodedBody || totalDownloadBytes == undefined) {
+    const prefetchedBuffer = new Uint8Array(await data.arrayBuffer());
+    if (prefetchedBuffer.byteLength === 0) throw 'Failed to fetch file';
+    shared.prefetchedBuffer = prefetchedBuffer;
+    initializeSharedBuffers(shared, prefetchedBuffer.byteLength);
+    return shared;
+  }
+
+  if (data.body === null) throw 'Failed to fetch file';
+  shared.stream = data.body.getReader();
+  initializeSharedBuffers(shared, totalDownloadBytes);
   return shared;
 }
 async function lazyLoad(shared) {
   shared.loading = true;
+  // CLM PATCH START: safe path for compressed/unknown-length responses
+  if (shared.prefetchedBuffer) {
+    try {
+      const numVertices = Math.floor(shared.prefetchedBuffer.byteLength / shared.rowLength);
+      const matrices = pushDataBuffer(shared, shared.prefetchedBuffer.buffer, numVertices);
+      shared.worker.postMessage({
+        method: 'push',
+        src: shared.url,
+        length: shared.numVertices * 16,
+        matrices: matrices.buffer
+      }, [matrices.buffer]);
+      if (shared.onProgress) {
+        const event = new ProgressEvent('progress', {
+          lengthComputable: true,
+          loaded: shared.totalDownloadBytes,
+          total: shared.totalDownloadBytes
+        });
+        shared.onProgress(event);
+      }
+    } catch (error) {
+      console.error(error);
+      if (shared.onRuntimeError) shared.onRuntimeError(error);
+      throw error;
+    } finally {
+      shared.prefetchedBuffer = null;
+    }
+    shared.loaded = true;
+    if (shared.onLoaded) shared.onLoaded();
+    shared.manager.itemEnd(shared.url);
+    return;
+  }
+  // CLM PATCH END
+
   let bytesDownloaded = 0;
   let bytesProcessed = 0;
   const chunks = [];
