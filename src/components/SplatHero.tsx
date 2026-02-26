@@ -1,11 +1,10 @@
 ﻿"use client";
 
 import Image from "next/image";
-import type { CSSProperties } from "react";
-import { Suspense, useEffect, useRef, useState, type MutableRefObject } from "react";
+import { Component, Suspense, useEffect, useRef, useState, type CSSProperties, type MutableRefObject, type ReactNode } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Splat } from "@react-three/drei";
 import * as THREE from "three";
+import { TunableSplat } from "./TunableSplat";
 
 type Vec3 = [number, number, number];
 
@@ -33,6 +32,15 @@ type DebugOverlayState = {
     showReferenceUnderlay: boolean;
     underlayOpacity: number;
 };
+
+type SplatRendererConfig = {
+    screenCullBoundsMultiplier: number;
+    alphaHash: boolean;
+};
+
+type DebugRendererState = SplatRendererConfig;
+
+type CalibrationRenderMode = "splat" | "fallback" | "runtime-fallback";
 
 type PointerState = {
     x: number;
@@ -70,12 +78,31 @@ const HERO_SPLAT = {
     rotation: [Math.PI, 0, 0] as const,
 };
 
+const DEFAULT_SPLAT_RENDERER: SplatRendererConfig = {
+    screenCullBoundsMultiplier: 4,
+    alphaHash: false,
+};
+
+const UPSTREAM_PARITY_SPLAT_RENDERER: SplatRendererConfig = {
+    screenCullBoundsMultiplier: 1.2,
+    alphaHash: false,
+};
+
 const DEFAULT_WIGGLE: WiggleConfig = {
     damping: 0.006,
     desktopYaw: 0.02,
     desktopPitch: 0.006,
     touchYaw: 0.015,
     touchPitch: 0.004,
+};
+
+type SplatCanvasErrorBoundaryProps = {
+    children: ReactNode;
+    onError: (error: Error) => void;
+};
+
+type SplatCanvasErrorBoundaryState = {
+    hasError: boolean;
 };
 
 function clamp(value: number, min: number, max: number) {
@@ -95,6 +122,12 @@ function cloneCameraConfig(config: HeroCameraConfig): HeroCameraConfig {
     };
 }
 
+function cloneSplatRendererConfig(config: SplatRendererConfig): SplatRendererConfig {
+    return {
+        ...config,
+    };
+}
+
 function updateVec3At(vec: Vec3, index: 0 | 1 | 2, value: number): Vec3 {
     const next = [...vec] as Vec3;
     next[index] = value;
@@ -111,11 +144,15 @@ function toWiggleConfig(state: DebugWiggleState): WiggleConfig {
     };
 }
 
-function buildConstantsSnippet(camera: HeroCameraConfig, wiggle: WiggleConfig) {
+function buildConstantsSnippet(
+    camera: HeroCameraConfig,
+    wiggle: WiggleConfig,
+    renderer: SplatRendererConfig
+) {
     const formatVec3 = (values: Vec3) =>
         `[${round(values[0], 3)}, ${round(values[1], 3)}, ${round(values[2], 3)}]`;
 
-    return `const HERO_CAMERA = {\n  position: ${formatVec3(camera.position)} as const,\n  target: ${formatVec3(camera.target)} as const,\n  fov: ${round(camera.fov, 2)},\n  near: ${camera.near},\n  far: ${camera.far},\n};\n\nconst WIGGLE = {\n  damping: ${round(wiggle.damping, 4)},\n  desktopYaw: ${round(wiggle.desktopYaw, 4)},\n  desktopPitch: ${round(wiggle.desktopPitch, 4)},\n  touchYaw: ${round(wiggle.touchYaw, 4)},\n  touchPitch: ${round(wiggle.touchPitch, 4)},\n};`;
+    return `const HERO_CAMERA = {\n  position: ${formatVec3(camera.position)} as const,\n  target: ${formatVec3(camera.target)} as const,\n  fov: ${round(camera.fov, 2)},\n  near: ${camera.near},\n  far: ${camera.far},\n};\n\nconst WIGGLE = {\n  damping: ${round(wiggle.damping, 4)},\n  desktopYaw: ${round(wiggle.desktopYaw, 4)},\n  desktopPitch: ${round(wiggle.desktopPitch, 4)},\n  touchYaw: ${round(wiggle.touchYaw, 4)},\n  touchPitch: ${round(wiggle.touchPitch, 4)},\n};\n\nconst SPLAT_RENDERER = {\n  screenCullBoundsMultiplier: ${round(renderer.screenCullBoundsMultiplier, 2)},\n  alphaHash: ${renderer.alphaHash},\n};`;
 }
 
 function hasWebGLSupport() {
@@ -182,6 +219,33 @@ function shouldEnableCalibrationDebug() {
     }
 
     return new URLSearchParams(window.location.search).get("splatDebug") === "1";
+}
+
+class SplatCanvasErrorBoundary extends Component<
+    SplatCanvasErrorBoundaryProps,
+    SplatCanvasErrorBoundaryState
+> {
+    state: SplatCanvasErrorBoundaryState = {
+        hasError: false,
+    };
+
+    static getDerivedStateFromError(): SplatCanvasErrorBoundaryState {
+        return {
+            hasError: true,
+        };
+    }
+
+    componentDidCatch(error: Error) {
+        this.props.onError(error);
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return null;
+        }
+
+        return this.props.children;
+    }
 }
 
 function NumberControl({
@@ -341,6 +405,8 @@ function CalibrationPanel({
     debugCamera,
     debugWiggle,
     debugOverlay,
+    debugRenderer,
+    runtimeFailureMessage,
     copyStatus,
     onCameraAxisChange,
     onTargetAxisChange,
@@ -348,14 +414,19 @@ function CalibrationPanel({
     onWiggleChange,
     onWiggleEnabledChange,
     onOverlayChange,
+    onRendererChange,
     onResetCamera,
     onResetWiggle,
+    onResetRenderer,
+    onSetRendererUpstreamParity,
     onCopyConstants,
 }: {
-    renderMode: "splat" | "fallback";
+    renderMode: CalibrationRenderMode;
     debugCamera: HeroCameraConfig;
     debugWiggle: DebugWiggleState;
     debugOverlay: DebugOverlayState;
+    debugRenderer: DebugRendererState;
+    runtimeFailureMessage?: string;
     copyStatus: string;
     onCameraAxisChange: (index: 0 | 1 | 2, value: number) => void;
     onTargetAxisChange: (index: 0 | 1 | 2, value: number) => void;
@@ -363,8 +434,11 @@ function CalibrationPanel({
     onWiggleChange: (key: keyof WiggleConfig, value: number) => void;
     onWiggleEnabledChange: (enabled: boolean) => void;
     onOverlayChange: (next: DebugOverlayState) => void;
+    onRendererChange: (next: DebugRendererState) => void;
     onResetCamera: () => void;
     onResetWiggle: () => void;
+    onResetRenderer: () => void;
+    onSetRendererUpstreamParity: () => void;
     onCopyConstants: () => void;
 }) {
     const buttonStyle: CSSProperties = {
@@ -377,8 +451,27 @@ function CalibrationPanel({
         cursor: "pointer",
     };
 
-    const statusColor =
-        renderMode === "splat" ? "rgba(77, 208, 122, 0.95)" : "rgba(255, 196, 0, 0.95)";
+    const statusTone =
+        renderMode === "splat"
+            ? {
+                  color: "rgba(77, 208, 122, 0.95)",
+                  border: "1px solid rgba(77, 208, 122, 0.35)",
+                  background: "rgba(77, 208, 122, 0.12)",
+                  label: "Live splat",
+              }
+            : renderMode === "runtime-fallback"
+              ? {
+                    color: "rgba(255, 120, 120, 0.95)",
+                    border: "1px solid rgba(255, 120, 120, 0.35)",
+                    background: "rgba(255, 120, 120, 0.12)",
+                    label: "Runtime fallback",
+                }
+              : {
+                    color: "rgba(255, 196, 0, 0.95)",
+                    border: "1px solid rgba(255, 196, 0, 0.35)",
+                    background: "rgba(255, 196, 0, 0.12)",
+                    label: "Fallback active",
+                };
 
     return (
         <div
@@ -415,15 +508,15 @@ function CalibrationPanel({
                     style={{
                         fontSize: 10,
                         fontWeight: 700,
-                        color: statusColor,
-                        border: renderMode === "splat" ? "1px solid rgba(77, 208, 122, 0.35)" : "1px solid rgba(255, 196, 0, 0.35)",
-                        background: renderMode === "splat" ? "rgba(77, 208, 122, 0.12)" : "rgba(255, 196, 0, 0.12)",
+                        color: statusTone.color,
+                        border: statusTone.border,
+                        background: statusTone.background,
                         borderRadius: 999,
                         padding: "4px 8px",
                         whiteSpace: "nowrap",
                     }}
                 >
-                    {renderMode === "splat" ? "Live splat" : "Fallback active"}
+                    {statusTone.label}
                 </div>
             </div>
 
@@ -439,6 +532,30 @@ function CalibrationPanel({
                     }}
                 >
                     Performance/reduced-motion fallback is active, so camera tuning controls will not affect rendering until live splat mode is available.
+                </div>
+            ) : null}
+
+            {renderMode === "runtime-fallback" ? (
+                <div
+                    style={{
+                        fontSize: 10,
+                        color: "rgba(255,255,255,0.8)",
+                        background: "rgba(255,120,120,0.08)",
+                        border: "1px solid rgba(255,120,120,0.2)",
+                        borderRadius: 8,
+                        padding: "7px 8px",
+                        display: "grid",
+                        gap: 4,
+                    }}
+                >
+                    <div>
+                        Live splat rendering failed and the hero fell back to the static image to avoid a broken background.
+                    </div>
+                    {runtimeFailureMessage ? (
+                        <div style={{ color: "rgba(255,255,255,0.62)" }}>
+                            {runtimeFailureMessage}
+                        </div>
+                    ) : null}
                 </div>
             ) : null}
 
@@ -504,6 +621,41 @@ function CalibrationPanel({
             </div>
 
             <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 10, display: "grid", gap: 8 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.92)" }}>Renderer</div>
+                <NumberControl
+                    label="Bounds Multiplier"
+                    value={debugRenderer.screenCullBoundsMultiplier}
+                    step={0.1}
+                    min={1}
+                    max={12}
+                    onChange={(value) =>
+                        onRendererChange({
+                            ...debugRenderer,
+                            screenCullBoundsMultiplier: clamp(value, 1, 12),
+                        })
+                    }
+                />
+                <ToggleControl
+                    label="Alpha Hash"
+                    checked={debugRenderer.alphaHash}
+                    onChange={(checked) =>
+                        onRendererChange({
+                            ...debugRenderer,
+                            alphaHash: checked,
+                        })
+                    }
+                />
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                    <button type="button" style={buttonStyle} onClick={onResetRenderer}>
+                        Reset Renderer
+                    </button>
+                    <button type="button" style={buttonStyle} onClick={onSetRendererUpstreamParity}>
+                        Upstream Parity
+                    </button>
+                </div>
+            </div>
+
+            <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 10, display: "grid", gap: 8 }}>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
                     <button type="button" style={buttonStyle} onClick={onResetCamera}>
                         Reset Camera
@@ -557,21 +709,35 @@ function makeDefaultDebugOverlay(): DebugOverlayState {
     };
 }
 
+function makeDefaultDebugRenderer(): DebugRendererState {
+    return cloneSplatRendererConfig(DEFAULT_SPLAT_RENDERER);
+}
+
 export default function SplatHero() {
     const pointerStateRef = useRef<PointerState>({ x: 0, y: 0, isTouch: false });
-    const [renderMode] = useState<"splat" | "fallback">(() =>
+    const [baseRenderMode] = useState<"splat" | "fallback">(() =>
         shouldUseStaticFallback() ? "fallback" : "splat"
     );
     const [debugEnabled] = useState<boolean>(() => shouldEnableCalibrationDebug());
     const [debugCamera, setDebugCamera] = useState<HeroCameraConfig>(() => cloneCameraConfig(DEFAULT_HERO_CAMERA));
     const [debugWiggle, setDebugWiggle] = useState<DebugWiggleState>(() => makeDefaultDebugWiggle());
     const [debugOverlay, setDebugOverlay] = useState<DebugOverlayState>(() => makeDefaultDebugOverlay());
+    const [debugRenderer, setDebugRenderer] = useState<DebugRendererState>(() => makeDefaultDebugRenderer());
+    const [splatRuntimeFailureMessage, setSplatRuntimeFailureMessage] = useState<string | null>(null);
     const [copyStatus, setCopyStatus] = useState("");
 
     const activeCamera = debugEnabled ? debugCamera : DEFAULT_HERO_CAMERA;
     const activeWiggle = getActiveWiggleConfig(debugEnabled, debugWiggle);
+    const activeRenderer = debugEnabled ? debugRenderer : DEFAULT_SPLAT_RENDERER;
+    const liveSplatActive =
+        baseRenderMode === "splat" && splatRuntimeFailureMessage === null;
+    const calibrationRenderMode: CalibrationRenderMode = liveSplatActive
+        ? "splat"
+        : splatRuntimeFailureMessage !== null
+          ? "runtime-fallback"
+          : "fallback";
     const showDebugUnderlay =
-        renderMode === "splat" && debugEnabled && debugOverlay.showReferenceUnderlay;
+        liveSplatActive && debugEnabled && debugOverlay.showReferenceUnderlay;
 
     const updatePointerFromClientPosition = (
         element: HTMLDivElement,
@@ -626,8 +792,29 @@ export default function SplatHero() {
         setCopyStatus("");
     };
 
+    const handleRendererChange = (next: DebugRendererState) => {
+        setDebugRenderer(next);
+        setCopyStatus("");
+    };
+
+    const handleSplatRuntimeError = (error: unknown) => {
+        const message =
+            error instanceof Error
+                ? error.message
+                : typeof error === "string"
+                  ? error
+                  : "Unknown live splat error";
+
+        console.error("SplatHero live splat failed, switching to static fallback.", error);
+        setSplatRuntimeFailureMessage((prev) => prev ?? message);
+    };
+
     const handleCopyConstants = async () => {
-        const snippet = buildConstantsSnippet(debugCamera, toWiggleConfig(debugWiggle));
+        const snippet = buildConstantsSnippet(
+            debugCamera,
+            toWiggleConfig(debugWiggle),
+            debugRenderer
+        );
 
         try {
             if (!navigator.clipboard?.writeText) {
@@ -635,7 +822,7 @@ export default function SplatHero() {
             }
 
             await navigator.clipboard.writeText(snippet);
-            setCopyStatus("Copied current HERO_CAMERA/WIGGLE constants to clipboard.");
+            setCopyStatus("Copied current HERO_CAMERA/WIGGLE/SPLAT_RENDERER constants to clipboard.");
         } catch {
             console.info(snippet);
             setCopyStatus("Clipboard unavailable. Constants were printed to the console.");
@@ -690,33 +877,38 @@ export default function SplatHero() {
                 />
             ) : null}
 
-            {renderMode === "splat" ? (
-                <Canvas
-                    key={heroCameraKey(activeCamera)}
-                    dpr={[1, 1.25]}
-                    camera={{
-                        position: activeCamera.position,
-                        fov: activeCamera.fov,
-                        near: activeCamera.near,
-                        far: activeCamera.far,
-                    }}
-                    gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
-                    style={{ position: "absolute", inset: 0, background: "transparent" }}
-                >
-                    <WiggleCamera
-                        pointerStateRef={pointerStateRef}
-                        cameraConfig={activeCamera}
-                        wiggleConfig={activeWiggle}
-                    />
-                    <Suspense fallback={null}>
-                        <Splat
-                            src={HERO_SPLAT.src}
-                            position={HERO_SPLAT.position}
-                            rotation={HERO_SPLAT.rotation}
-                            toneMapped={false}
+            {liveSplatActive ? (
+                <SplatCanvasErrorBoundary onError={handleSplatRuntimeError}>
+                    <Canvas
+                        key={heroCameraKey(activeCamera)}
+                        dpr={[1, 1.25]}
+                        camera={{
+                            position: activeCamera.position,
+                            fov: activeCamera.fov,
+                            near: activeCamera.near,
+                            far: activeCamera.far,
+                        }}
+                        gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
+                        style={{ position: "absolute", inset: 0, background: "transparent" }}
+                    >
+                        <WiggleCamera
+                            pointerStateRef={pointerStateRef}
+                            cameraConfig={activeCamera}
+                            wiggleConfig={activeWiggle}
                         />
-                    </Suspense>
-                </Canvas>
+                        <Suspense fallback={null}>
+                            <TunableSplat
+                                src={HERO_SPLAT.src}
+                                position={HERO_SPLAT.position}
+                                rotation={HERO_SPLAT.rotation}
+                                toneMapped={false}
+                                alphaHash={activeRenderer.alphaHash}
+                                screenCullBoundsMultiplier={activeRenderer.screenCullBoundsMultiplier}
+                                onError={handleSplatRuntimeError}
+                            />
+                        </Suspense>
+                    </Canvas>
+                </SplatCanvasErrorBoundary>
             ) : (
                 <Image
                     src={FALLBACK_IMAGE_SRC}
@@ -736,10 +928,12 @@ export default function SplatHero() {
 
             {debugEnabled ? (
                 <CalibrationPanel
-                    renderMode={renderMode}
+                    renderMode={calibrationRenderMode}
                     debugCamera={debugCamera}
                     debugWiggle={debugWiggle}
                     debugOverlay={debugOverlay}
+                    debugRenderer={debugRenderer}
+                    runtimeFailureMessage={splatRuntimeFailureMessage ?? undefined}
                     copyStatus={copyStatus}
                     onCameraAxisChange={handleCameraAxisChange}
                     onTargetAxisChange={handleTargetAxisChange}
@@ -755,12 +949,21 @@ export default function SplatHero() {
                     onOverlayChange={(next) => {
                         setDebugOverlay(next);
                     }}
+                    onRendererChange={handleRendererChange}
                     onResetCamera={() => {
                         setDebugCamera(cloneCameraConfig(DEFAULT_HERO_CAMERA));
                         setCopyStatus("");
                     }}
                     onResetWiggle={() => {
                         setDebugWiggle(makeDefaultDebugWiggle());
+                        setCopyStatus("");
+                    }}
+                    onResetRenderer={() => {
+                        setDebugRenderer(makeDefaultDebugRenderer());
+                        setCopyStatus("");
+                    }}
+                    onSetRendererUpstreamParity={() => {
+                        setDebugRenderer(cloneSplatRendererConfig(UPSTREAM_PARITY_SPLAT_RENDERER));
                         setCopyStatus("");
                     }}
                     onCopyConstants={() => {
@@ -771,4 +974,3 @@ export default function SplatHero() {
         </div>
     );
 }
-
