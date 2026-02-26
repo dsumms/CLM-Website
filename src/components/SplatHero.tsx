@@ -61,7 +61,7 @@ const DEFAULT_HERO_CAMERA: HeroCameraConfig = {
     target: [-0.8, 0.1, 0] as const,
     fov: 50,
     near: 0.01,
-    far: 5000,
+    far: 500,
 };
 
 const HERO_SPLAT = {
