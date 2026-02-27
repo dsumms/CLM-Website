@@ -5,6 +5,7 @@ import { Component, Suspense, useEffect, useRef, useState, type CSSProperties, t
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { TunableSplat } from "./TunableSplat";
+import SplatLoadingOverlay from "./SplatLoadingOverlay";
 
 type Vec3 = [number, number, number];
 
@@ -477,19 +478,19 @@ function CalibrationPanel({
     const statusTone =
         renderMode === "splat"
             ? {
-                  color: "rgba(77, 208, 122, 0.95)",
-                  border: "1px solid rgba(77, 208, 122, 0.35)",
-                  background: "rgba(77, 208, 122, 0.12)",
-                  label: "Live splat",
-              }
+                color: "rgba(77, 208, 122, 0.95)",
+                border: "1px solid rgba(77, 208, 122, 0.35)",
+                background: "rgba(77, 208, 122, 0.12)",
+                label: "Live splat",
+            }
             : renderMode === "runtime-fallback"
-              ? {
+                ? {
                     color: "rgba(255, 120, 120, 0.95)",
                     border: "1px solid rgba(255, 120, 120, 0.35)",
                     background: "rgba(255, 120, 120, 0.12)",
                     label: "Runtime fallback",
                 }
-              : {
+                : {
                     color: "rgba(255, 196, 0, 0.95)",
                     border: "1px solid rgba(255, 196, 0, 0.35)",
                     background: "rgba(255, 196, 0, 0.12)",
@@ -750,6 +751,7 @@ export default function SplatHero() {
     const [debugOverlay, setDebugOverlay] = useState<DebugOverlayState>(() => makeDefaultDebugOverlay());
     const [debugRenderer, setDebugRenderer] = useState<DebugRendererState>(() => makeDefaultDebugRenderer());
     const [splatRuntimeFailureMessage, setSplatRuntimeFailureMessage] = useState<string | null>(null);
+    const [splatLoaded, setSplatLoaded] = useState(false);
     const [copyStatus, setCopyStatus] = useState("");
 
     const activeCamera = debugEnabled ? debugCamera : DEFAULT_HERO_CAMERA;
@@ -761,8 +763,8 @@ export default function SplatHero() {
     const calibrationRenderMode: CalibrationRenderMode = liveSplatActive
         ? "splat"
         : splatRuntimeFailureMessage !== null
-          ? "runtime-fallback"
-          : "fallback";
+            ? "runtime-fallback"
+            : "fallback";
     const showDebugUnderlay =
         liveSplatActive && debugEnabled && debugOverlay.showReferenceUnderlay;
 
@@ -829,8 +831,8 @@ export default function SplatHero() {
             error instanceof Error
                 ? error.message
                 : typeof error === "string"
-                  ? error
-                  : "Unknown live splat error";
+                    ? error
+                    : "Unknown live splat error";
 
         console.error(
             splatUrlFlags.disableRuntimeFallback
@@ -888,6 +890,7 @@ export default function SplatHero() {
                     alphaHash={activeRenderer.alphaHash}
                     screenCullBoundsMultiplier={activeRenderer.screenCullBoundsMultiplier}
                     onError={handleSplatRuntimeError}
+                    onLoaded={() => setSplatLoaded(true)}
                 />
             </Suspense>
         </Canvas>
@@ -965,6 +968,8 @@ export default function SplatHero() {
                     }}
                 />
             )}
+
+            {liveSplatActive && <SplatLoadingOverlay loaded={splatLoaded} />}
 
             {!debugEnabled && splatRuntimeFailureMessage ? (
                 <div

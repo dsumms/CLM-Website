@@ -1,0 +1,76 @@
+.overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Match the live-splat backdrop so the transition is seamless */
+    background: linear-gradient(180deg,
+            hsl(220 18% 8%) 0%,
+            hsl(220 14% 6%) 100%);
+    opacity: 1;
+    transition: opacity 600ms ease, transform 600ms ease;
+    pointer-events: none;
+    will-change: opacity, transform;
+}
+
+.overlayHidden {
+    opacity: 0;
+    transform: scale(1.02);
+}
+
+/* ── Rive canvas sizing ─────────────────────────────────────── */
+
+.riveContainer {
+    width: min(320px, 60vw);
+    height: min(320px, 60vw);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── CSS-only fallback (shown when no .riv file) ────────────── */
+
+.fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+.pulseRing {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-top-color: rgba(255, 255, 255, 0.7);
+    animation: spin 0.9s linear infinite;
+}
+
+.fallbackText {
+    font-family: var(--font-sans, system-ui, sans-serif);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.45;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
