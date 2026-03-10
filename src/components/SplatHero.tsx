@@ -4,8 +4,7 @@ import Image from "next/image";
 import { Component, Suspense, useEffect, useRef, useState, type CSSProperties, type MutableRefObject, type ReactNode } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { TunableSplat } from "./TunableSplat";
-import SplatLoadingOverlay from "./SplatLoadingOverlay";
+import { SparkSplat, SparkSplatRenderer } from "./SparkSplat";
 
 type Vec3 = [number, number, number];
 
@@ -71,21 +70,21 @@ const LIVE_SPLAT_BACKDROP = [
 
 // Calibrated hero pose. Keep these together so future visual tuning is easy.
 const DEFAULT_HERO_CAMERA: HeroCameraConfig = {
-    position: [-1.45, -2, 20] as const,
-    target: [-0.8, 0.1, 0] as const,
-    fov: 35,
+    position: [1.41, -1.99, -20.3] as const,
+    target: [0.72, -1.3, 0] as const,
+    fov: 33,
     near: 0.01,
     far: 500,
 };
 
 const HERO_SPLAT = {
-    src: "/hero-image.splat",
+    src: "/hero-image.spz",
     position: [0, 0, 0] as const,
-    rotation: [Math.PI, 0, 0] as const,
+    rotation: [0, Math.PI, 0] as const,
 };
 
 const DEFAULT_SPLAT_RENDERER: SplatRendererConfig = {
-    screenCullBoundsMultiplier: 4,
+    screenCullBoundsMultiplier: 4.5,
     alphaHash: false,
 };
 
@@ -95,9 +94,9 @@ const UPSTREAM_PARITY_SPLAT_RENDERER: SplatRendererConfig = {
 };
 
 const DEFAULT_WIGGLE: WiggleConfig = {
-    damping: 0.025,
-    desktopYaw: 0.02,
-    desktopPitch: 0.007,
+    damping: 0.021,
+    desktopYaw: 0.015,
+    desktopPitch: 0.006,
     touchYaw: 0.015,
     touchPitch: 0.005,
 };
@@ -881,16 +880,14 @@ export default function SplatHero() {
                 cameraConfig={activeCamera}
                 wiggleConfig={activeWiggle}
             />
+            <SparkSplatRenderer />
             <Suspense fallback={null}>
-                <TunableSplat
-                    src={HERO_SPLAT.src}
+                <SparkSplat
+                    url={HERO_SPLAT.src}
                     position={HERO_SPLAT.position}
                     rotation={HERO_SPLAT.rotation}
-                    toneMapped={false}
-                    alphaHash={activeRenderer.alphaHash}
-                    screenCullBoundsMultiplier={activeRenderer.screenCullBoundsMultiplier}
-                    onError={handleSplatRuntimeError}
                     onLoaded={() => setSplatLoaded(true)}
+                    onError={handleSplatRuntimeError}
                 />
             </Suspense>
         </Canvas>
@@ -969,7 +966,7 @@ export default function SplatHero() {
                 />
             )}
 
-            {liveSplatActive && <SplatLoadingOverlay loaded={splatLoaded} />}
+
 
             {!debugEnabled && splatRuntimeFailureMessage ? (
                 <div

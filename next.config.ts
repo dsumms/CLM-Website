@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: "/hero-image.splat",
+        source: "/hero-image.spz",
         headers: [
           // Keep browsers revalidating so same-path updates don't get stuck stale.
           { key: "Cache-Control", value: "public, max-age=0, must-revalidate" },
