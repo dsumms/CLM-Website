@@ -59,7 +59,7 @@ const itemVariants = {
     visible: {
         opacity: 1,
         y: 0,
-        transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
+        transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] as const },
     },
 };
 
@@ -73,7 +73,7 @@ export default function Process() {
                     className={styles.heroTitle}
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as const }}
                 >
                     OUR PROCESS
                 </motion.h1>
@@ -120,7 +120,7 @@ export default function Process() {
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as const }}
                     className={styles.ctaContent}
                 >
                     <h2 className={styles.ctaTitle}>
