@@ -6,7 +6,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./Navbar.module.css";
 
-const menuItems = ['Work', 'About', 'Contact'];
+const menuItems = ['Work', 'Process', 'About', 'Contact'];
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
