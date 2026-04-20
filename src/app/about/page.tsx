@@ -30,14 +30,14 @@ const team = [
 ];
 
 const partnerships = [
-    { name: "The New Mexico Film Office", logo: "/logos/media__1776718766123.png" },
-    { name: "The Santa Fe Film Institute", logo: "/logos/media__1776718766127.png" },
+    { name: "The New Mexico Film Office", logo: "/logos/media__1776718884198.png" },
+    { name: "The Santa Fe Film Institute", logo: "/logos/media__1776718884197.png" },
     { name: "Santa Fe International Film Festival", logo: "/logos/media__1776719502962.png" },
     { name: "Los Luceros Historic Site / NM Historic Sites", logo: "/logos/media__1776720924256.png" },
-    { name: "Northern Rio Grande Heritage Area", logo: "/logos/media__1776718884197.png" },
-    { name: "Apaluma", logo: "/logos/media__1776718884198.png" },
-    { name: "The New Mexico Environment Department", logo: "/logos/media__1776719321756.png" },
-    { name: "Hands Across Cultures", logo: null },
+    { name: "Northern Rio Grande Heritage Area", logo: "/logos/media__1776723477993.png" },
+    { name: "Apaluma", logo: "/logos/media__1776718766123.png" },
+    { name: "The New Mexico Environment Department", logo: "/logos/media__1776718766127.png" },
+    { name: "Hands Across Cultures", logo: "/logos/media__1776719321756.png" },
 ];
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
