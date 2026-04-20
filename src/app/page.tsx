@@ -13,15 +13,16 @@ const SplatHero = dynamic(() => import("@/components/SplatHero"), {
   ssr: false,
 });
 
+import Image from "next/image";
+
 const partners = [
-  "The New Mexico Film Office",
-  "The Santa Fe Film Institute",
-  "Santa Fe International Film Festival",
-  "Los Luceros Historic Site",
-  "Northern Rio Grande Heritage Area",
-  "Apaluma",
-  "NM Environment Department",
-  "Hands Across Cultures",
+  "/logos/media__1776718766123.png",
+  "/logos/media__1776718766127.png",
+  "/logos/media__1776718884197.png",
+  "/logos/media__1776718884198.png",
+  "/logos/media__1776719274867.png",
+  "/logos/media__1776719321756.png",
+  "/logos/media__1776719502962.png",
 ];
 
 export default function Home() {
@@ -65,10 +66,15 @@ export default function Home() {
       <section className={styles.partnerStrip}>
         <div className={styles.partnerTrack}>
           {/* Duplicate the list for seamless infinite scroll */}
-          {[...partners, ...partners].map((name, i) => (
-            <span key={`${name}-${i}`} className={styles.partnerName}>
-              {name}
-            </span>
+          {[...partners, ...partners].map((src, i) => (
+            <div key={`${src}-${i}`} className={styles.partnerLogoWrapper}>
+              <Image 
+                src={src} 
+                alt="Partner Logo" 
+                fill 
+                style={{ objectFit: 'contain' }} 
+              />
+            </div>
           ))}
         </div>
       </section>

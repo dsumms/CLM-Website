@@ -67,19 +67,19 @@
     animation: scrollPartners 30s linear infinite;
 }
 
-.partnerName {
-    white-space: nowrap;
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    opacity: 0.45;
-    transition: opacity 0.3s ease;
+.partnerLogoWrapper {
+    position: relative;
+    height: 50px;
+    width: 150px;
     flex-shrink: 0;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+    filter: grayscale(100%);
 }
 
-.partnerName:hover {
-    opacity: 0.9;
+.partnerLogoWrapper:hover {
+    opacity: 1;
+    filter: grayscale(0%);
 }
 
 @keyframes scrollPartners {
@@ -142,7 +142,8 @@
         gap: 2rem;
     }
 
-    .partnerName {
-        font-size: 0.75rem;
+    .partnerLogoWrapper {
+        height: 35px;
+        width: 100px;
     }
 }

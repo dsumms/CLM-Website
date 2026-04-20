@@ -41,7 +41,7 @@ export const projects: Project[] = [
             "A world of locations in one state. Completed in the summer of 2022, this was the first project produced by Chile Line Media. In partnership with the New Mexico Film Office, the goal of this short film was to showcase New Mexico as a world of locations in one state. Furthermore, to honor all creators past, present, and future and represent New Mexico as a premier place of the arts.",
     },
     {
-        title: "The Apaluma Brand Video",
+        title: "Apaluma - Brand Video",
         year: "",
         slug: "the-apaluma-brand-video",
         youtubeId: "",
