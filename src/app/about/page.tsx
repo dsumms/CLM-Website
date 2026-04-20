@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
+import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import styles from "./page.module.css";
@@ -29,14 +30,14 @@ const team = [
 ];
 
 const partnerships = [
-    "The New Mexico Film Office",
-    "The Santa Fe Film Institute",
-    "Santa Fe International Film Festival",
-    "Los Luceros Historic Site",
-    "Northern Rio Grande Heritage Area",
-    "Apaluma",
-    "The New Mexico Environment Department",
-    "Hands Across Cultures",
+    { name: "The New Mexico Film Office", logo: "/logos/media__1776718766123.png" },
+    { name: "The Santa Fe Film Institute", logo: "/logos/media__1776718766127.png" },
+    { name: "Santa Fe International Film Festival", logo: "/logos/media__1776719502962.png" },
+    { name: "Los Luceros Historic Site / NM Historic Sites", logo: "/logos/media__1776720924256.png" },
+    { name: "Northern Rio Grande Heritage Area", logo: "/logos/media__1776718884197.png" },
+    { name: "Apaluma", logo: "/logos/media__1776718884198.png" },
+    { name: "The New Mexico Environment Department", logo: "/logos/media__1776719321756.png" },
+    { name: "Hands Across Cultures", logo: null },
 ];
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
@@ -187,8 +188,8 @@ export default function About() {
                     PAST PARTNERSHIPS
                 </motion.h2>
 
-                <motion.ul
-                    className={styles.partnerList}
+                <motion.div
+                    className={styles.partnerGrid}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -201,17 +202,32 @@ export default function About() {
                     }}
                 >
                     {partnerships.map((partner) => (
-                        <motion.li
-                            key={partner}
+                        <motion.div
+                            key={partner.name}
+                            className={styles.partnerGridItem}
                             variants={{
-                                hidden: { opacity: 0, x: -20 },
-                                visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: easeOut } },
+                                hidden: { opacity: 0, y: 20 },
+                                visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: easeOut } },
                             }}
                         >
-                            {partner}
-                        </motion.li>
+                            {partner.logo ? (
+                                <div className={styles.partnerLogoBox}>
+                                    <Image
+                                        src={partner.logo}
+                                        alt={partner.name}
+                                        fill
+                                        style={{ objectFit: "contain" }}
+                                    />
+                                </div>
+                            ) : (
+                                <div className={styles.partnerLogoBox}>
+                                    <span className={styles.partnerPlaceholderText}>{partner.name}</span>
+                                </div>
+                            )}
+                            <span className={styles.partnerLabel}>{partner.name}</span>
+                        </motion.div>
                     ))}
-                </motion.ul>
+                </motion.div>
             </section>
 
         </main>
