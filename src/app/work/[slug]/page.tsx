@@ -38,29 +38,46 @@ export default async function ProjectDetail({ params }: PageProps) {
             </div>
 
             <section className={styles.content}>
-                <div className={styles.videoPlaceholder}>
-                    <iframe
-                        width="100%"
-                        height="100%"
-                        src={`https://www.youtube.com/embed/${project.youtubeId}`}
-                        title="YouTube video player"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerPolicy="strict-origin-when-cross-origin"
-                        allowFullScreen>
-                    </iframe>
-                </div>
+                {project.youtubeId && (
+                    <div className={styles.videoPlaceholder}>
+                        <iframe
+                            width="100%"
+                            height="100%"
+                            src={`https://www.youtube.com/embed/${project.youtubeId}`}
+                            title="YouTube video player"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerPolicy="strict-origin-when-cross-origin"
+                            allowFullScreen>
+                        </iframe>
+                    </div>
+                )}
 
                 <div className={styles.infoGrid}>
                     <div className={styles.description}>
                         <h2>ABOUT THE PROJECT</h2>
-                        <p>{project.description}</p>
+                        {project.description.split("\n\n").map((paragraph, i) => (
+                            <p key={i} style={i > 0 ? { marginTop: "1.5rem" } : undefined}>
+                                {paragraph}
+                            </p>
+                        ))}
                     </div>
+
+                    {project.awards && project.awards.length > 0 && (
+                        <div className={styles.awards}>
+                            <h2>AWARDS</h2>
+                            <ul>
+                                {project.awards.map((award) => (
+                                    <li key={award}>{award}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </div>
             </section>
 
             <footer className={styles.footer}>
-                <p>© 2025 Chile Line Media. All rights reserved.</p>
+                <p>&copy; {new Date().getFullYear()} Chile Line Media. All rights reserved.</p>
             </footer>
         </main>
     );

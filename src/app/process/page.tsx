@@ -11,6 +11,7 @@ const stages = [
         title: "Discovery / Brief",
         description:
             "Every project begins with listening. We sit down with you to understand your story, your goals, and the audience you want to reach. This phase shapes the creative direction and ensures we're aligned before a single frame is shot.",
+        imageHint: "Meeting or conversation setting",
         accent: "#ff4500",
     },
     {
@@ -18,6 +19,7 @@ const stages = [
         title: "Pre-Production",
         description:
             "We develop the concept, build the shot list, scout locations, and lock the schedule. Pre-production is where vision becomes plan — every detail is mapped so production runs smoothly and efficiently.",
+        imageHint: "Location scouting, shot lists, gear prep",
         accent: "#ff4500",
     },
     {
@@ -25,6 +27,7 @@ const stages = [
         title: "Production",
         description:
             "Cameras roll. Our crew captures the performances, landscapes, and moments that bring the story to life. We stay adaptable on set while honoring the creative blueprint we built together.",
+        imageHint: "Crew on set, camera work",
         accent: "#ff4500",
     },
     {
@@ -32,6 +35,7 @@ const stages = [
         title: "Post-Production",
         description:
             "The footage is shaped into its final form through editing, color grading, and sound design. This is where rhythm, tone, and emotion are refined until every cut feels intentional and every frame earns its place.",
+        imageHint: "Editing bay, color grading",
         accent: "#ff4500",
     },
     {
@@ -39,6 +43,7 @@ const stages = [
         title: "Delivery",
         description:
             "Your finished film is exported in the right formats for every platform and audience. We provide the deliverables you need — from broadcast masters to social cuts — so your story reaches the world exactly as intended.",
+        imageHint: "Screening, final export",
         accent: "#ff4500",
     },
 ];
@@ -106,10 +111,9 @@ export default function Process() {
                             <p className={styles.stageDesc}>{stage.description}</p>
                         </div>
                         <div className={styles.stageImage}>
-                            <div
-                                className={styles.placeholderRect}
-                                style={{ backgroundColor: stage.accent, opacity: 0.12 }}
-                            />
+                            <div className={styles.imagePlaceholder}>
+                                <span className={styles.imageHintText}>{stage.imageHint}</span>
+                            </div>
                         </div>
                     </motion.section>
                 ))}

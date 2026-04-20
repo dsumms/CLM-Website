@@ -64,8 +64,6 @@
     left: 0;
 }
 
-
-
 .mantraSection {
     min-height: 80vh;
     display: flex;
@@ -95,6 +93,110 @@
     max-width: 600px;
 }
 
+/* ── Section Heading (shared) ── */
+.sectionHeading {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 2rem;
+    margin-bottom: 4rem;
+}
+
+/* ── Our Team ── */
+.teamSection {
+    padding: 6rem 4rem 8rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.teamGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4rem 3rem;
+}
+
+.teamCard {
+    display: flex;
+    flex-direction: column;
+}
+
+.teamPhoto {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.04) 0%,
+        rgba(255, 255, 255, 0.01) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+}
+
+.teamName {
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.teamRole {
+    display: block;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-top: 0.35rem;
+    margin-bottom: 1.25rem;
+}
+
+.teamBio {
+    font-size: 1rem;
+    line-height: 1.7;
+    opacity: 0.75;
+}
+
+/* ── Past Partnerships ── */
+.partnershipsSection {
+    padding: 6rem 4rem 10rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.partnerList {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.partnerList li {
+    font-size: 1.15rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    opacity: 0.65;
+    padding-left: 1.5rem;
+    position: relative;
+    transition: opacity 0.3s ease;
+}
+
+.partnerList li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--accent);
+    opacity: 0.7;
+}
+
+.partnerList li:hover {
+    opacity: 1;
+}
+
 @media (max-width: 768px) {
 
     .hero,
@@ -105,5 +207,15 @@
 
     .textBlockRight {
         text-align: left;
+    }
+
+    .teamSection,
+    .partnershipsSection {
+        padding: 4rem 2rem;
+    }
+
+    .teamGrid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
     }
 }

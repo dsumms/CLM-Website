@@ -13,6 +13,17 @@ const SplatHero = dynamic(() => import("@/components/SplatHero"), {
   ssr: false,
 });
 
+const partners = [
+  "The New Mexico Film Office",
+  "The Santa Fe Film Institute",
+  "Santa Fe International Film Festival",
+  "Los Luceros Historic Site",
+  "Northern Rio Grande Heritage Area",
+  "Apaluma",
+  "NM Environment Department",
+  "Hands Across Cultures",
+];
+
 export default function Home() {
   const [mounted, setMounted] = useState(false);
 
@@ -20,6 +31,11 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
+
+  const narrativeProjects = projects.filter((p) => p.category === "narrative");
+  const commercialProjects = projects.filter(
+    (p) => p.category === "commercial"
+  );
 
   return (
     <main className={styles.main}>
@@ -45,7 +61,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Projects Grid */}
+      {/* Partner Logo Scroll */}
+      <section className={styles.partnerStrip}>
+        <div className={styles.partnerTrack}>
+          {/* Duplicate the list for seamless infinite scroll */}
+          {[...partners, ...partners].map((name, i) => (
+            <span key={`${name}-${i}`} className={styles.partnerName}>
+              {name}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      {/* Narrative Works */}
       <section className={styles.projects}>
         <motion.div
           className={styles.projectsHeader}
@@ -54,11 +82,36 @@ export default function Home() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <h2>SELECTED WORKS</h2>
+          <h2>NARRATIVE WORKS</h2>
         </motion.div>
 
         <div className={styles.grid}>
-          {projects.slice(0, 3).map((project) => (
+          {narrativeProjects.map((project) => (
+            <ProjectCard
+              key={project.slug}
+              title={project.title}
+              year={project.year}
+              youtubeId={project.youtubeId}
+              slug={project.slug}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* Commercial Works */}
+      <section className={styles.projects}>
+        <motion.div
+          className={styles.projectsHeader}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <h2>COMMERCIAL WORKS</h2>
+        </motion.div>
+
+        <div className={styles.grid}>
+          {commercialProjects.map((project) => (
             <ProjectCard
               key={project.slug}
               title={project.title}

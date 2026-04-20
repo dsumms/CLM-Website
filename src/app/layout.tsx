@@ -13,7 +13,7 @@ const ebGaramond = EB_Garamond({
 
 export const metadata: Metadata = {
   title: "Chile Line Media",
-  description: "A collective of young filmmakers based in New Mexico.",
+  description: "Independent narrative and branded storytelling company based in New Mexico.",
 };
 
 export default function RootLayout({

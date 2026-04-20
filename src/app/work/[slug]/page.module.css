@@ -99,6 +99,43 @@
     font-weight: 300;
 }
 
+/* ── Awards ── */
+.awards {
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.awards h2 {
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
+}
+
+.awards ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.awards li {
+    font-size: 1.15rem;
+    font-weight: 400;
+    line-height: 1.5;
+    padding-left: 1.5rem;
+    position: relative;
+    opacity: 0.8;
+}
+
+.awards li::before {
+    content: "🏆";
+    position: absolute;
+    left: 0;
+    font-size: 0.9rem;
+}
+
 .footer {
     text-align: center;
     padding: 4rem;

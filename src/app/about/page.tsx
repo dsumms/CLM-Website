@@ -5,6 +5,42 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import styles from "./page.module.css";
 
+const team = [
+    {
+        name: "Makaio Frazier",
+        role: "Founder, CEO & Creative Director",
+        bio: "Makaio Frazier is a filmmaker, writer, and producer based in northern New Mexico. He began his career working on crews for acclaimed projects such as Oppenheimer, American Primeval, and Frybread Face and Me, experiences that led him to launch Chile Line Media in 2022. Through CLM, Makaio develops narrative films and commercial content that highlight the landscapes, communities, and traditions of the Southwest. His latest short, The Way We Carry Water (2025), was filmed across all four seasons and celebrates the living heritage of acequia culture while tracing a young man's journey through grief and renewal. Makaio's work reflects a commitment to craft, authenticity, and supporting regional voices in cinema.",
+    },
+    {
+        name: 'Fred "Boomer" Mady III',
+        role: "Partner, COO & Head of Production",
+        bio: "Fred Mady III is a filmmaker, producer, and production manager based in New Mexico. He is the co-founder of Chile Line Media, where he develops narrative films and visual work rooted in the landscapes, people, and traditions of the Southwest. With a background in set leadership, production logistics, and independent filmmaking, his work is built on both story and execution.",
+    },
+    {
+        name: "Dylan Summer",
+        role: "Partner, CTO & Head of Post-Production",
+        bio: "Dylan Summer, co-founder of Chile Line Media, is a visual effects artist, editor, and producer. He helps define the visual direction of the company's film and commercial projects, from early compositing through final cut. Five years in post-production — he brings a careful eye to timing, color, and continuity under real production constraints. On location he supports producing, keeping projects on track and the work itself the priority.",
+    },
+    {
+        name: "Mia Gonzales",
+        role: "Head of Marketing",
+        bio: "Mia Gonzales is a multidisciplinary artist, writer, and marketing strategist specializing in brand storytelling, compelling social media strategy, and creative direction. As Head of Marketing for Chile Line Media, she develops campaigns that extend film beyond the screen, shaping how they connect with audiences across digital platforms and festival spaces.",
+    },
+];
+
+const partnerships = [
+    "The New Mexico Film Office",
+    "The Santa Fe Film Institute",
+    "Santa Fe International Film Festival",
+    "Los Luceros Historic Site",
+    "Northern Rio Grande Heritage Area",
+    "Apaluma",
+    "The New Mexico Environment Department",
+    "Hands Across Cultures",
+];
+
+const easeOut = [0.16, 1, 0.3, 1] as const;
+
 export default function About() {
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({ target: containerRef });
@@ -34,10 +70,11 @@ export default function About() {
                     style={{ y: y1 }}
                 >
                     <p>
-                        Chile Line Media is a New Mexico based production company founded by filmmaker Makaio Frazier.
-                        The company is dedicated to telling stories rooted in land, legacy, and lived experience.
-                        We create films that celebrate the depth of regional culture while connecting with universal themes
-                        of identity, resilience, and belonging.
+                        Chile Line Media is a film and media production company based in northern
+                        New Mexico. Founded by Makaio Frazier, CLM is dedicated to telling stories
+                        rooted in land, legacy, and lived experience. We create films that celebrate
+                        the depth of regional culture while connecting with universal themes of
+                        identity, resilience, and belonging.
                     </p>
                 </motion.div>
 
@@ -57,10 +94,10 @@ export default function About() {
                     transition={{ duration: 1 }}
                 >
                     <p>
-                        Our team of filmmakers, designers, and storytellers blends narrative craft with visual poetry,
-                        capturing the quiet beauty, humanity, and complexity of the Southwest. Whether through intimate
-                        short films or ambitious features, we are committed to authentic representation, ethical filmmaking,
-                        and collaboration with local communities.
+                        Our team blends narrative craft with visual poetry, capturing the quiet
+                        beauty, humanity, and complexity of the Southwest. Whether through intimate
+                        short films or ambitious features, we are committed to authentic
+                        representation, ethical filmmaking, and collaboration with local communities.
                     </p>
                 </motion.div>
 
@@ -70,6 +107,22 @@ export default function About() {
                         style={{ y: imgY, backgroundImage: "url('/images/landscape.png')" }}
                     />
                 </div>
+
+                <motion.div
+                    className={styles.textBlock}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true, margin: "-20%" }}
+                    transition={{ duration: 1 }}
+                >
+                    <p>
+                        Alongside our original work, CLM partners with organizations, nonprofits,
+                        and brands to produce commercial content grounded in the same values —
+                        place-based storytelling that honors the communities and landscapes it
+                        represents. We bring the same cinematic standard to a brand film as we do
+                        to a festival submission.
+                    </p>
+                </motion.div>
             </section>
 
             <section className={styles.mantraSection}>
@@ -85,6 +138,80 @@ export default function About() {
                 <p>
                     We carry forward the stories of those who came before us while creating space for new voices to emerge.
                 </p>
+            </section>
+
+            {/* ── Our Team ── */}
+            <section className={styles.teamSection}>
+                <motion.h2
+                    className={styles.sectionHeading}
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: easeOut }}
+                >
+                    OUR TEAM
+                </motion.h2>
+
+                <div className={styles.teamGrid}>
+                    {team.map((member, i) => (
+                        <motion.div
+                            key={member.name}
+                            className={styles.teamCard}
+                            initial={{ opacity: 0, y: 40 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-10%" }}
+                            transition={{
+                                duration: 0.7,
+                                delay: i * 0.1,
+                                ease: easeOut,
+                            }}
+                        >
+                            <div className={styles.teamPhoto} />
+                            <h3 className={styles.teamName}>{member.name}</h3>
+                            <span className={styles.teamRole}>{member.role}</span>
+                            <p className={styles.teamBio}>{member.bio}</p>
+                        </motion.div>
+                    ))}
+                </div>
+            </section>
+
+            {/* ── Past Partnerships ── */}
+            <section className={styles.partnershipsSection}>
+                <motion.h2
+                    className={styles.sectionHeading}
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: easeOut }}
+                >
+                    PAST PARTNERSHIPS
+                </motion.h2>
+
+                <motion.ul
+                    className={styles.partnerList}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={{
+                        hidden: { opacity: 0 },
+                        visible: {
+                            opacity: 1,
+                            transition: { staggerChildren: 0.08, delayChildren: 0.2 },
+                        },
+                    }}
+                >
+                    {partnerships.map((partner) => (
+                        <motion.li
+                            key={partner}
+                            variants={{
+                                hidden: { opacity: 0, x: -20 },
+                                visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: easeOut } },
+                            }}
+                        >
+                            {partner}
+                        </motion.li>
+                    ))}
+                </motion.ul>
             </section>
 
         </main>

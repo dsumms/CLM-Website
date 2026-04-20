@@ -14,7 +14,7 @@ export default function Footer() {
                 transition={{ duration: 0.8 }}
             >
                 <h2>GET IN TOUCH</h2>
-                <a href="mailto:hello@chilelinemedia.com" className={styles.email}>hello@chilelinemedia.com</a>
+                <a href="mailto:CLM@chilelinemedia.com" className={styles.email}>CLM@chilelinemedia.com</a>
                 <div className={styles.socials}>
                     <a href="https://www.youtube.com/@ChileLineMedia" target="_blank" rel="noopener noreferrer">YouTube</a>
                     <a href="https://www.instagram.com/chilelinemedia/" target="_blank" rel="noopener noreferrer">Instagram</a>
