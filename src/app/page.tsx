@@ -20,7 +20,7 @@ const partners = [
   "/logos/media__1776718766127.png",
   "/logos/media__1776718884197.png",
   "/logos/media__1776718884198.png",
-  "/logos/media__1776719274867.png",
+  "/logos/media__1776720924256.png",
   "/logos/media__1776719321756.png",
   "/logos/media__1776719502962.png",
 ];
