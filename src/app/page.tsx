@@ -52,12 +52,14 @@ export default function Home() {
           {/* Duplicate the list for seamless infinite scroll */}
           {[...partners, ...partners].map((partner, i) => (
             <div key={`${partner.src}-${i}`} className={styles.partnerLogoWrapper}>
-              <Image 
-                src={partner.src} 
-                alt={partner.name} 
-                fill 
-                style={{ objectFit: 'contain' }} 
-              />
+              <div className={styles.partnerLogoImage}>
+                <Image
+                  src={partner.src}
+                  alt={partner.name}
+                  fill
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
               <span className={styles.partnerName}>{partner.name}</span>
             </div>
           ))}
