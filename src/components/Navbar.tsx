@@ -50,7 +50,7 @@ export default function Navbar() {
 
             <div className={styles.navRight}>
                 <AnimatePresence>
-                    {isOpen && !isMobile && (
+                    {!isMobile && (
                         <motion.div
                             key="train-locomotive"
                             className={styles.trainLocomotive}
@@ -78,7 +78,7 @@ export default function Navbar() {
                             </Link>
                         </motion.div>
                     )}
-                    {isOpen && !isMobile && menuItems.map((item, index) => (
+                    {!isMobile && menuItems.map((item, index) => (
                         <motion.div
                             key={item}
                             className={styles.trainCar}
