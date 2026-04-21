@@ -36,8 +36,15 @@ export default function Navbar() {
         }
     }, [isOpen, isMobile]);
 
-    const toggleMenu = () => setIsOpen(!isOpen);
+    const toggleMenu = () => {
+        if (!isMobile) {
+            return;
+        }
+
+        setIsOpen(!isOpen);
+    };
     const closeMenu = useCallback(() => setIsOpen(false), []);
+    const menuOpen = isMobile ? isOpen : true;
 
     const handleMobileKeyDown = useCallback((e: React.KeyboardEvent) => {
         if (e.key === "Escape") {
@@ -146,10 +153,10 @@ export default function Navbar() {
 
                 <button
                     ref={hamburgerRef}
-                    className={`${styles.hamburger} ${isOpen ? styles.open : ""}`}
+                    className={`${styles.hamburger} ${menuOpen ? styles.open : ""}`}
                     onClick={toggleMenu}
                     aria-label="Toggle menu"
-                    aria-expanded={isOpen}
+                    aria-expanded={menuOpen}
                 >
                     <span className={styles.line}></span>
                     <span className={styles.line}></span>
