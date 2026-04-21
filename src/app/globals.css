@@ -21,6 +21,40 @@ body {
   overflow-x: hidden;
 }
 
+@keyframes subtleWarmShift {
+  0% {
+    background: radial-gradient(ellipse at 20% 50%, #080807 0%, #000 50%, #080707 100%);
+  }
+  33% {
+    background: radial-gradient(ellipse at 50% 30%, #0a0908 0%, #000 50%, #080807 100%);
+  }
+  66% {
+    background: radial-gradient(ellipse at 80% 60%, #080707 0%, #000 50%, #0a0908 100%);
+  }
+  100% {
+    background: radial-gradient(ellipse at 20% 50%, #080807 0%, #000 50%, #080707 100%);
+  }
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.04;
+  animation: subtleWarmShift 24s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before {
+    animation: none;
+  }
+}
+
 a {
   color: inherit;
   text-decoration: none;
