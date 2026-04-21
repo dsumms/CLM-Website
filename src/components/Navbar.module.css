@@ -12,6 +12,27 @@
     pointer-events: none;
 }
 
+/* Skip to content link */
+.skipLink {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: white;
+    color: black;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    z-index: 10000;
+    border-radius: 0 0 4px 4px;
+    pointer-events: auto;
+    transition: top 0.2s ease;
+}
+
+.skipLink:focus {
+    top: 0;
+}
+
 /* Re-enable pointer events for interactive elements */
 .logo a,
 .hamburger,
@@ -99,14 +120,18 @@
     color: var(--accent);
 }
 
+.menuLink:active {
+    color: var(--accent);
+}
+
 /* Hamburger Button — the "locomotive" */
 .hamburger {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    min-height: 44px;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -188,10 +213,17 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     text-decoration: none;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
     transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .mobileMenuLink:hover {
-    color: var(--accent, rgba(255, 255, 255, 0.8));
+    color: var(--accent);
     transform: scale(1.05);
+}
+
+.mobileMenuLink:active {
+    color: var(--accent);
 }

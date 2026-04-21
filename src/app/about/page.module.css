@@ -1,5 +1,5 @@
 .main {
-    width: 100vw;
+    width: 100%;
     min-height: 100vh;
     background-color: var(--background);
     color: var(--foreground);
@@ -44,7 +44,7 @@
 }
 
 .imageContainer {
-    width: 100vw;
+    width: 100%;
     margin-left: calc(-50vw + 50%);
     height: 70vh;
     overflow: hidden;

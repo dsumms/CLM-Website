@@ -4,22 +4,27 @@ import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
 import styles from "./page.module.css";
 import { projects } from "@/data/projects";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 
 export default function Work() {
     const [hoveredProject, setHoveredProject] = useState<string | null>(null);
 
+    // Only set background-image for the hovered project (or the first as default).
+    // This avoids preloading all YouTube thumbnails at once.
+    const activeSlug = hoveredProject ?? projects[0]?.slug ?? null;
+    const activeProject = projects.find((p) => p.slug === activeSlug);
+
     return (
         <main className={styles.main}>
-            {/* Background Images */}
-            {projects.map((project) => (
+            {/* Background Image — only one loaded at a time */}
+            {activeProject && activeProject.youtubeId && (
                 <div
-                    key={`bg-${project.slug}`}
-                    className={`${styles.backgroundLayer} ${hoveredProject === project.slug ? styles.activeBg : ""}`}
-                    style={{ backgroundImage: `url(https://img.youtube.com/vi/${project.youtubeId}/maxresdefault.jpg)` }}
+                    key={`bg-${activeProject.slug}`}
+                    className={`${styles.backgroundLayer} ${styles.activeBg}`}
+                    style={{ backgroundImage: `url(https://img.youtube.com/vi/${activeProject.youtubeId}/maxresdefault.jpg)` }}
                 />
-            ))}
+            )}
 
             {/* Dark gradient overlay so text remains readable */}
             <div className={`${styles.overlay} ${hoveredProject ? styles.overlayDark : ""}`} />
