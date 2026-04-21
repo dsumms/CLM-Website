@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import styles from "./page.module.css";
 import { projects } from "@/data/projects";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 export default function Work() {

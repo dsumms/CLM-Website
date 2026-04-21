@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { extend, useThree, useFrame } from "@react-three/fiber";
+import { extend, useThree, useFrame, type ThreeElement } from "@react-three/fiber";
 import {
     SplatMesh as SparkSplatMesh,
     SparkRenderer as SparkSparkRenderer,
@@ -14,8 +14,8 @@ extend({ SparkSplatMesh, SparkSparkRenderer });
 // Augment R3F's intrinsic elements for TypeScript
 declare module "@react-three/fiber" {
     interface ThreeElements {
-        sparkSplatMesh: any;
-        sparkSparkRenderer: any;
+        sparkSplatMesh: ThreeElement<typeof SparkSplatMesh>;
+        sparkSparkRenderer: ThreeElement<typeof SparkSparkRenderer>;
     }
 }
 

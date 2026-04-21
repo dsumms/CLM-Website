@@ -45,7 +45,7 @@
 
 .imageContainer {
     width: 100%;
-    margin-left: calc(-50vw + 50%);
+    margin-left: 0;
     height: 70vh;
     overflow: hidden;
     position: relative;
