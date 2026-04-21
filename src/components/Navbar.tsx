@@ -72,9 +72,14 @@ export default function Navbar() {
                                 ease: [0.16, 1, 0.3, 1]
                             }}
                         >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <Link href="/" onClick={closeMenu}>
-                                <img src="/train.png" alt="Train Locomotive" className={styles.locomotiveImage} />
+                                <Image
+                                    src="/train.png"
+                                    alt="Train Locomotive"
+                                    width={160}
+                                    height={40}
+                                    className={styles.locomotiveImage}
+                                />
                             </Link>
                         </motion.div>
                     )}

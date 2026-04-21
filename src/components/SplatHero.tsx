@@ -750,12 +750,10 @@ export default function SplatHero() {
     const [debugOverlay, setDebugOverlay] = useState<DebugOverlayState>(() => makeDefaultDebugOverlay());
     const [debugRenderer, setDebugRenderer] = useState<DebugRendererState>(() => makeDefaultDebugRenderer());
     const [splatRuntimeFailureMessage, setSplatRuntimeFailureMessage] = useState<string | null>(null);
-    const [splatLoaded, setSplatLoaded] = useState(false);
     const [copyStatus, setCopyStatus] = useState("");
 
     const activeCamera = debugEnabled ? debugCamera : DEFAULT_HERO_CAMERA;
     const activeWiggle = getActiveWiggleConfig(debugEnabled, debugWiggle);
-    const activeRenderer = debugEnabled ? debugRenderer : DEFAULT_SPLAT_RENDERER;
     const liveSplatActive =
         baseRenderMode === "splat" &&
         (splatUrlFlags.disableRuntimeFallback || splatRuntimeFailureMessage === null);
@@ -886,7 +884,6 @@ export default function SplatHero() {
                     url={HERO_SPLAT.src}
                     position={HERO_SPLAT.position}
                     rotation={HERO_SPLAT.rotation}
-                    onLoaded={() => setSplatLoaded(true)}
                     onError={handleSplatRuntimeError}
                 />
             </Suspense>
