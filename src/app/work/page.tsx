@@ -2,12 +2,15 @@
 
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import styles from "./page.module.css";
 import { projects } from "@/data/projects";
 import { useState } from "react";
 import Link from "next/link";
 
 export default function Work() {
+    const prefersReducedMotion = useReducedMotion();
+    const noMotion = { duration: 0 };
     const [hoveredProject, setHoveredProject] = useState<string | null>(null);
 
     // Only set background-image for the hovered project (or the first as default).
@@ -36,7 +39,7 @@ export default function Work() {
                     <motion.h1
                         initial={{ opacity: 0, y: 50 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1 }}
+                        transition={prefersReducedMotion ? noMotion : { duration: 1 }}
                     >
                         OUR WORK
                     </motion.h1>
@@ -55,7 +58,7 @@ export default function Work() {
                                     className={styles.projectTitle}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5 }}
+                                    transition={prefersReducedMotion ? noMotion : { duration: 0.5 }}
                                 >
                                     {project.title}
                                 </motion.h2>
