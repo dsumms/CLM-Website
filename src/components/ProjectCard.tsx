@@ -45,7 +45,11 @@ export default function ProjectCard({ title, year, youtubeId, slug }: ProjectCar
             viewport={{ once: true, margin: "-10%" }}
             transition={{ duration: 0.8, ease: "easeOut" }}
         >
-            <Link href={`/work/${slug}`} className={styles.link}>
+            <Link
+                href={`/work/${slug}`}
+                className={styles.link}
+                aria-label={`View project ${title}`}
+            >
                 <div className={styles.imageContainer}>
                     {youtubeId && !hasError ? (
                         <motion.img
@@ -58,11 +62,11 @@ export default function ProjectCard({ title, year, youtubeId, slug }: ProjectCar
                             onError={handleImgError}
                         />
                     ) : (
-                        <div className={styles.placeholder} style={{ y }}>
+                        <motion.div className={styles.placeholder} style={{ y }}>
                             <span className={styles.placeholderText}>{title}</span>
-                        </div>
+                        </motion.div>
                     )}
-                    <div className={styles.overlay} aria-label={`Play ${title}`}>
+                    <div className={styles.overlay} aria-hidden="true">
                         <div className={styles.playButton} />
                     </div>
                 </div>
