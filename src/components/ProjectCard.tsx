@@ -2,24 +2,39 @@
 
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import styles from "./ProjectCard.module.css";
 
 interface ProjectCardProps {
     title: string;
     year: string;
-    youtubeId: string;
+    youtubeId?: string;
     slug: string;
 }
 
 export default function ProjectCard({ title, year, youtubeId, slug }: ProjectCardProps) {
     const targetRef = useRef<HTMLDivElement>(null);
+    const [thumbSrc, setThumbSrc] = useState(
+        youtubeId
+            ? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`
+            : ""
+    );
+    const [hasError, setHasError] = useState(false);
+
     const { scrollYProgress } = useScroll({
         target: targetRef,
         offset: ["start end", "end start"],
     });
 
     const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+
+    const handleImgError = () => {
+        if (youtubeId && !thumbSrc.includes("hqdefault.jpg")) {
+            setThumbSrc(`https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`);
+        } else {
+            setHasError(true);
+        }
+    };
 
     return (
         <motion.div
@@ -32,13 +47,22 @@ export default function ProjectCard({ title, year, youtubeId, slug }: ProjectCar
         >
             <Link href={`/work/${slug}`} className={styles.link}>
                 <div className={styles.imageContainer}>
-                    <motion.img
-                        src={`https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`}
-                        alt={title}
-                        className={styles.image}
-                        style={{ y }}
-                    />
-                    <div className={styles.overlay}>
+                    {youtubeId && !hasError ? (
+                        <motion.img
+                            src={thumbSrc}
+                            alt={title}
+                            className={styles.image}
+                            style={{ y }}
+                            loading="lazy"
+                            decoding="async"
+                            onError={handleImgError}
+                        />
+                    ) : (
+                        <div className={styles.placeholder} style={{ y }}>
+                            <span className={styles.placeholderText}>{title}</span>
+                        </div>
+                    )}
+                    <div className={styles.overlay} aria-label={`Play ${title}`}>
                         <div className={styles.playButton} />
                     </div>
                 </div>
