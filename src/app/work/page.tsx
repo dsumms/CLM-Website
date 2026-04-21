@@ -2,24 +2,32 @@
 
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import styles from "./page.module.css";
 import { projects } from "@/data/projects";
 import { useState } from "react";
 import Link from "next/link";
 
 export default function Work() {
+    const prefersReducedMotion = useReducedMotion();
+    const noMotion = { duration: 0 };
     const [hoveredProject, setHoveredProject] = useState<string | null>(null);
+
+    // Only set background-image for the hovered project (or the first as default).
+    // This avoids preloading all YouTube thumbnails at once.
+    const activeSlug = hoveredProject ?? projects[0]?.slug ?? null;
+    const activeProject = projects.find((p) => p.slug === activeSlug);
 
     return (
         <main className={styles.main}>
-            {/* Background Images */}
-            {projects.map((project) => (
+            {/* Background Image — only one loaded at a time */}
+            {activeProject && activeProject.youtubeId && (
                 <div
-                    key={`bg-${project.slug}`}
-                    className={`${styles.backgroundLayer} ${hoveredProject === project.slug ? styles.activeBg : ""}`}
-                    style={{ backgroundImage: `url(https://img.youtube.com/vi/${project.youtubeId}/maxresdefault.jpg)` }}
+                    key={`bg-${activeProject.slug}`}
+                    className={`${styles.backgroundLayer} ${styles.activeBg}`}
+                    style={{ backgroundImage: `url(https://img.youtube.com/vi/${activeProject.youtubeId}/maxresdefault.jpg)` }}
                 />
-            ))}
+            )}
 
             {/* Dark gradient overlay so text remains readable */}
             <div className={`${styles.overlay} ${hoveredProject ? styles.overlayDark : ""}`} />
@@ -31,7 +39,7 @@ export default function Work() {
                     <motion.h1
                         initial={{ opacity: 0, y: 50 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1 }}
+                        transition={prefersReducedMotion ? noMotion : { duration: 1 }}
                     >
                         OUR WORK
                     </motion.h1>
@@ -50,7 +58,7 @@ export default function Work() {
                                     className={styles.projectTitle}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5 }}
+                                    transition={prefersReducedMotion ? noMotion : { duration: 0.5 }}
                                 >
                                     {project.title}
                                 </motion.h2>

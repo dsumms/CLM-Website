@@ -2,6 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import Link from "next/link";
 import styles from "./page.module.css";
 
@@ -69,6 +70,8 @@ const itemVariants = {
 };
 
 export default function Process() {
+    const prefersReducedMotion = useReducedMotion();
+    const noMotion = { duration: 0 };
     return (
         <main className={styles.main}>
             <Navbar />
@@ -78,7 +81,7 @@ export default function Process() {
                     className={styles.heroTitle}
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as const }}
+                    transition={prefersReducedMotion ? noMotion : { duration: 1, ease: [0.16, 1, 0.3, 1] as const }}
                 >
                     OUR PROCESS
                 </motion.h1>
@@ -86,7 +89,7 @@ export default function Process() {
                     className={styles.heroSub}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 0.4 }}
+                    transition={prefersReducedMotion ? noMotion : { duration: 1, delay: 0.4 }}
                 >
                     From first conversation to final frame.
                 </motion.p>
@@ -124,7 +127,7 @@ export default function Process() {
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as const }}
+                    transition={prefersReducedMotion ? noMotion : { duration: 1, ease: [0.16, 1, 0.3, 1] as const }}
                     className={styles.ctaContent}
                 >
                     <h2 className={styles.ctaTitle}>
