@@ -16,13 +16,13 @@ const SplatHero = dynamic(() => import("@/components/SplatHero"), {
 import Image from "next/image";
 
 const partners = [
-  "/logos/media__1776718766123.png",
-  "/logos/media__1776718766127.png",
-  "/logos/media__1776718884197.png",
-  "/logos/media__1776718884198.png",
-  "/logos/media__1776720924256.png",
-  "/logos/media__1776719321756.png",
-  "/logos/media__1776719502962.png",
+  { src: "/logos/media__1776718766123.png", name: "Apaluma" },
+  { src: "/logos/media__1776718766127.png", name: "The New Mexico Environment Department" },
+  { src: "/logos/media__1776718884197.png", name: "The Santa Fe Film Institute" },
+  { src: "/logos/media__1776718884198.png", name: "The New Mexico Film Office" },
+  { src: "/logos/media__1776720924256.png", name: "Los Luceros Historic Site / NM Historic Sites" },
+  { src: "/logos/media__1776719321756.png", name: "Hands Across Cultures" },
+  { src: "/logos/media__1776719502962.png", name: "Santa Fe International Film Festival" },
 ];
 
 export default function Home() {
@@ -66,14 +66,15 @@ export default function Home() {
       <section className={styles.partnerStrip}>
         <div className={styles.partnerTrack}>
           {/* Duplicate the list for seamless infinite scroll */}
-          {[...partners, ...partners].map((src, i) => (
-            <div key={`${src}-${i}`} className={styles.partnerLogoWrapper}>
+          {[...partners, ...partners].map((partner, i) => (
+            <div key={`${partner.src}-${i}`} className={styles.partnerLogoWrapper}>
               <Image 
-                src={src} 
-                alt="Partner Logo" 
+                src={partner.src} 
+                alt={partner.name} 
                 fill 
                 style={{ objectFit: 'contain' }} 
               />
+              <span className={styles.partnerName}>{partner.name}</span>
             </div>
           ))}
         </div>
