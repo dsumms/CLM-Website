@@ -96,7 +96,11 @@
 
 .menuLink:hover {
     opacity: 1;
-    color: var(--accent);
+    color: #ff4500;
+}
+
+.menuLink:active {
+    color: #ff4500;
 }
 
 /* Hamburger Button — the "locomotive" */
@@ -105,8 +109,9 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -188,10 +193,17 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     text-decoration: none;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
     transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .mobileMenuLink:hover {
-    color: var(--accent, rgba(255, 255, 255, 0.8));
+    color: #ff4500;
     transform: scale(1.05);
+}
+
+.mobileMenuLink:active {
+    color: #ff4500;
 }
