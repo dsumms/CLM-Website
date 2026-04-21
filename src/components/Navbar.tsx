@@ -10,14 +10,23 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 const menuItems = ["Work", "Process", "About", "Contact"];
 
 export default function Navbar() {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
     const prefersReducedMotion = useReducedMotion();
     const hamburgerRef = useRef<HTMLButtonElement>(null);
     const mobileMenuRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        const handleResize = () => {
+            const mobile = window.innerWidth <= 768;
+            setIsMobile((prevIsMobile) => {
+                if (prevIsMobile !== mobile) {
+                    setIsOpen(!mobile);
+                }
+                return mobile;
+            });
+        };
+
         handleResize();
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
@@ -36,15 +45,9 @@ export default function Navbar() {
         }
     }, [isOpen, isMobile]);
 
-    const toggleMenu = () => {
-        if (!isMobile) {
-            return;
-        }
-
-        setIsOpen(!isOpen);
-    };
+    const toggleMenu = () => setIsOpen(!isOpen);
     const closeMenu = useCallback(() => setIsOpen(false), []);
-    const menuOpen = isMobile ? isOpen : true;
+    const menuOpen = isOpen;
 
     const handleMobileKeyDown = useCallback((e: React.KeyboardEvent) => {
         if (e.key === "Escape") {
@@ -105,7 +108,7 @@ export default function Navbar() {
             </div>
 
             <div className={styles.navRight}>
-                {!isMobile && (
+                {!isMobile && menuOpen && (
                     <>
                         <motion.div
                             className={styles.trainLocomotive}
