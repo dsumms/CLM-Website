@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import styles from "./Navbar.module.css";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-const menuItems = ['Work', 'Process', 'About', 'Contact'];
+const menuItems = ["Work", "Process", "About", "Contact"];
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +23,6 @@ export default function Navbar() {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    // Focus trap: focus first link when mobile menu opens, restore to hamburger on close
     useEffect(() => {
         if (isOpen && isMobile && mobileMenuRef.current) {
             const firstLink = mobileMenuRef.current.querySelector<HTMLAnchorElement>("a");
@@ -40,7 +39,6 @@ export default function Navbar() {
     const toggleMenu = () => setIsOpen(!isOpen);
     const closeMenu = useCallback(() => setIsOpen(false), []);
 
-    // Handle Tab key within mobile menu for focus trap
     const handleMobileKeyDown = useCallback((e: React.KeyboardEvent) => {
         if (e.key === "Escape") {
             closeMenu();
@@ -65,7 +63,9 @@ export default function Navbar() {
     }, [closeMenu]);
 
     const noMotion = { duration: 0 };
-    const navTransition = prefersReducedMotion ? noMotion : { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const };
+    const navTransition = prefersReducedMotion
+        ? noMotion
+        : { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const };
 
     return (
         <motion.nav
@@ -76,11 +76,10 @@ export default function Navbar() {
                 opacity: 1,
                 background: isOpen && isMobile
                     ? "rgba(0, 0, 0, 1)"
-                    : "linear-gradient(to bottom, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 0.5) 70%, rgba(0, 0, 0, 0) 100%)"
+                    : "linear-gradient(to bottom, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 0.5) 70%, rgba(0, 0, 0, 0) 100%)",
             }}
             transition={navTransition}
         >
-            {/* Skip to content link */}
             <a href="#main-content" className={styles.skipLink}>
                 Skip to content
             </a>
@@ -99,23 +98,26 @@ export default function Navbar() {
             </div>
 
             <div className={styles.navRight}>
-                {/* Desktop: train links always visible */}
                 {!isMobile && (
                     <>
                         <motion.div
-                            key="train-locomotive"
                             className={styles.trainLocomotive}
                             initial={{ x: 140, opacity: 0, scale: 0.9 }}
                             animate={{ x: 0, opacity: 1, scale: 1 }}
                             transition={prefersReducedMotion ? noMotion : {
                                 delay: 0,
                                 duration: 0.8,
-                                ease: [0.16, 1, 0.3, 1]
+                                ease: [0.16, 1, 0.3, 1],
                             }}
                         >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <Link href="/" onClick={closeMenu}>
-                                <img src="/train.png" alt="Train Locomotive" className={styles.locomotiveImage} />
+                                <Image
+                                    src="/train.png"
+                                    alt="Train Locomotive"
+                                    width={160}
+                                    height={40}
+                                    className={styles.locomotiveImage}
+                                />
                             </Link>
                         </motion.div>
                         {menuItems.map((item, index) => (
@@ -127,7 +129,7 @@ export default function Navbar() {
                                 transition={prefersReducedMotion ? noMotion : {
                                     delay: (index + 1) * 0.12,
                                     duration: 0.8,
-                                    ease: [0.16, 1, 0.3, 1]
+                                    ease: [0.16, 1, 0.3, 1],
                                 }}
                             >
                                 <Link
@@ -154,7 +156,6 @@ export default function Navbar() {
                 </button>
             </div>
 
-            {/* Mobile Menu Dropdown */}
             <AnimatePresence>
                 {isOpen && isMobile && (
                     <motion.div

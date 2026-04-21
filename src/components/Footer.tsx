@@ -1,8 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import styles from "./Footer.module.css";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import styles from "./Footer.module.css";
 
 export default function Footer() {
     const prefersReducedMotion = useReducedMotion();
@@ -14,7 +14,7 @@ export default function Footer() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-10%" }}
-                transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.8 }}
+                transition={{ duration: prefersReducedMotion ? 0 : 0.8 }}
             >
                 <h2>GET IN TOUCH</h2>
                 <a href="mailto:CLM@chilelinemedia.com" className={styles.email}>CLM@chilelinemedia.com</a>
