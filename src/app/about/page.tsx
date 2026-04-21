@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import styles from "./page.module.css";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const team = [
     {
@@ -44,14 +45,17 @@ const easeOut = [0.16, 1, 0.3, 1] as const;
 
 export default function About() {
     const containerRef = useRef<HTMLDivElement>(null);
+    const prefersReducedMotion = useReducedMotion();
     const { scrollYProgress } = useScroll({ target: containerRef });
 
     const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
     const y2 = useTransform(scrollYProgress, [0, 1], [0, -200]);
     const imgY = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
 
+    const noMotion = { duration: 0 };
+
     return (
-        <main className={styles.main} ref={containerRef}>
+        <main className={styles.main} ref={containerRef} id="main-content">
             <Navbar />
 
             <section className={styles.hero}>
@@ -59,7 +63,7 @@ export default function About() {
                     className={styles.title}
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1 }}
+                    transition={prefersReducedMotion ? noMotion : { duration: 1 }}
                 >
                     ABOUT US
                 </motion.h1>
@@ -68,7 +72,7 @@ export default function About() {
             <section className={styles.contentSection}>
                 <motion.div
                     className={styles.textBlock}
-                    style={{ y: y1 }}
+                    style={{ y: prefersReducedMotion ? 0 : y1 }}
                 >
                     <p>
                         Chile Line Media is a film and media production company based in northern
@@ -82,17 +86,17 @@ export default function About() {
                 <div className={styles.imageContainer}>
                     <motion.div
                         className={styles.parallaxImage}
-                        style={{ y: imgY, backgroundImage: "url('/images/bosque.png')" }}
+                        style={{ y: prefersReducedMotion ? 0 : imgY, backgroundImage: "url('/images/bosque.png')" }}
                     />
                 </div>
 
                 <motion.div
                     className={styles.textBlockRight}
-                    style={{ y: y2 }}
+                    style={{ y: prefersReducedMotion ? 0 : y2 }}
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true, margin: "-20%" }}
-                    transition={{ duration: 1 }}
+                    transition={prefersReducedMotion ? noMotion : { duration: 1 }}
                 >
                     <p>
                         Our team blends narrative craft with visual poetry, capturing the quiet
@@ -105,7 +109,7 @@ export default function About() {
                 <div className={styles.imageContainer}>
                     <motion.div
                         className={styles.parallaxImage}
-                        style={{ y: imgY, backgroundImage: "url('/images/landscape.png')" }}
+                        style={{ y: prefersReducedMotion ? 0 : imgY, backgroundImage: "url('/images/landscape.png')" }}
                     />
                 </div>
 
@@ -114,7 +118,7 @@ export default function About() {
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true, margin: "-20%" }}
-                    transition={{ duration: 1 }}
+                    transition={prefersReducedMotion ? noMotion : { duration: 1 }}
                 >
                     <p>
                         Alongside our original work, CLM partners with organizations, nonprofits,
@@ -131,7 +135,7 @@ export default function About() {
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 2 }}
+                    transition={prefersReducedMotion ? noMotion : { duration: 2 }}
                 >
                     At Chile Line Media, we believe <br />
                     <span className={styles.highlight}>storytelling is stewardship.</span>
@@ -148,7 +152,7 @@ export default function About() {
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.8, ease: easeOut }}
+                    transition={prefersReducedMotion ? noMotion : { duration: 0.8, ease: easeOut }}
                 >
                     OUR TEAM
                 </motion.h2>
@@ -161,11 +165,15 @@ export default function About() {
                             initial={{ opacity: 0, y: 40 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-10%" }}
-                            transition={{
-                                duration: 0.7,
-                                delay: i * 0.1,
-                                ease: easeOut,
-                            }}
+                            transition={
+                                prefersReducedMotion
+                                    ? noMotion
+                                    : {
+                                        duration: 0.7,
+                                        delay: i * 0.1,
+                                        ease: easeOut,
+                                    }
+                            }
                         >
                             <div className={styles.teamPhoto} />
                             <h3 className={styles.teamName}>{member.name}</h3>
@@ -183,7 +191,7 @@ export default function About() {
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.8, ease: easeOut }}
+                    transition={prefersReducedMotion ? noMotion : { duration: 0.8, ease: easeOut }}
                 >
                     PAST PARTNERSHIPS
                 </motion.h2>
@@ -193,22 +201,30 @@ export default function About() {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
-                    variants={{
-                        hidden: { opacity: 0 },
-                        visible: {
-                            opacity: 1,
-                            transition: { staggerChildren: 0.08, delayChildren: 0.2 },
-                        },
-                    }}
+                    variants={
+                        prefersReducedMotion
+                            ? { hidden: { opacity: 1 }, visible: { opacity: 1 } }
+                            : {
+                                hidden: { opacity: 0 },
+                                visible: {
+                                    opacity: 1,
+                                    transition: { staggerChildren: 0.08, delayChildren: 0.2 },
+                                },
+                            }
+                    }
                 >
                     {partnerships.map((partner) => (
                         <motion.div
                             key={partner.name}
                             className={styles.partnerGridItem}
-                            variants={{
-                                hidden: { opacity: 0, y: 20 },
-                                visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: easeOut } },
-                            }}
+                            variants={
+                                prefersReducedMotion
+                                    ? { hidden: { opacity: 1, y: 0 }, visible: { opacity: 1, y: 0 } }
+                                    : {
+                                        hidden: { opacity: 0, y: 20 },
+                                        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: easeOut } },
+                                    }
+                            }
                         >
                             {partner.logo ? (
                                 <div className={styles.partnerLogoBox}>

@@ -3,6 +3,7 @@
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
 import styles from "./page.module.css";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -48,8 +49,11 @@ const budgetRanges = [
 ];
 
 export default function Contact() {
+    const prefersReducedMotion = useReducedMotion();
+    const noMotion = { duration: 0 };
+
     return (
-        <main className={styles.main}>
+        <main className={styles.main} id="main-content">
             <Navbar />
 
             <div className={styles.contentContainer}>
@@ -61,7 +65,7 @@ export default function Contact() {
                         className={styles.heroSection}
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1, ease: easeOut }}
+                        transition={prefersReducedMotion ? noMotion : { duration: 1, ease: easeOut }}
                     >
                         <h1 className={styles.ctaHeadline}>
                             Let&apos;s Build Something Remarkable
@@ -77,7 +81,7 @@ export default function Contact() {
                         className={styles.form}
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1, delay: 0.15, ease: easeOut }}
+                        transition={prefersReducedMotion ? noMotion : { duration: 1, delay: 0.15, ease: easeOut }}
                         onSubmit={(e) => e.preventDefault()}
                     >
                         <div className={styles.formRow}>
@@ -171,8 +175,8 @@ export default function Contact() {
                         <motion.button
                             type="submit"
                             className={styles.submitButton}
-                            whileHover={{ scale: 1.03 }}
-                            whileTap={{ scale: 0.97 }}
+                            whileHover={prefersReducedMotion ? {} : { scale: 1.03 }}
+                            whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
                         >
                             Send Inquiry
                         </motion.button>
@@ -183,7 +187,7 @@ export default function Contact() {
                         className={styles.servicesSection}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ duration: 1, delay: 0.35, ease: easeOut }}
+                        transition={prefersReducedMotion ? noMotion : { duration: 1, delay: 0.35, ease: easeOut }}
                     >
                         <h2 className={styles.servicesTitle}>Our Services</h2>
                         <div className={styles.servicesGrid}>
@@ -193,12 +197,16 @@ export default function Contact() {
                                     className={styles.serviceCard}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{
-                                        duration: 0.6,
-                                        delay: 0.45 + i * 0.1,
-                                        ease: easeOut,
-                                    }}
-                                    whileHover={{ y: -4 }}
+                                    transition={
+                                        prefersReducedMotion
+                                            ? noMotion
+                                            : {
+                                                duration: 0.6,
+                                                delay: 0.45 + i * 0.1,
+                                                ease: easeOut,
+                                            }
+                                    }
+                                    whileHover={prefersReducedMotion ? {} : { y: -4 }}
                                 >
                                     <div className={styles.serviceIconPlaceholder} />
                                     <h3 className={styles.serviceName}>
@@ -217,32 +225,41 @@ export default function Contact() {
                         className={styles.socialGrid}
                         initial="hidden"
                         animate="visible"
-                        variants={{
-                            hidden: { opacity: 0 },
-                            visible: {
-                                opacity: 1,
-                                transition: {
-                                    staggerChildren: 0.1,
-                                    delayChildren: 0.65,
-                                },
-                            },
-                        }}
+                        variants={
+                            prefersReducedMotion
+                                ? { hidden: { opacity: 1 }, visible: { opacity: 1 } }
+                                : {
+                                    hidden: { opacity: 0 },
+                                    visible: {
+                                        opacity: 1,
+                                        transition: {
+                                            staggerChildren: 0.1,
+                                            delayChildren: 0.65,
+                                        },
+                                    },
+                                }
+                        }
                     >
                         <motion.a
                             href="https://www.youtube.com/@ChileLineMedia"
                             target="_blank"
                             rel="noopener noreferrer"
                             className={styles.socialCard}
-                            variants={{
-                                hidden: { opacity: 0, y: 20 },
-                                visible: {
-                                    opacity: 1,
-                                    y: 0,
-                                    transition: { duration: 0.6, ease: easeOut },
-                                },
-                            }}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+                            aria-label="Chile Line Media on YouTube"
+                            variants={
+                                prefersReducedMotion
+                                    ? { hidden: { opacity: 1, y: 0 }, visible: { opacity: 1, y: 0 } }
+                                    : {
+                                        hidden: { opacity: 0, y: 20 },
+                                        visible: {
+                                            opacity: 1,
+                                            y: 0,
+                                            transition: { duration: 0.6, ease: easeOut },
+                                        },
+                                    }
+                            }
+                            whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
+                            whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
                         >
                             <span>YouTube</span>
                         </motion.a>
@@ -251,16 +268,21 @@ export default function Contact() {
                             target="_blank"
                             rel="noopener noreferrer"
                             className={styles.socialCard}
-                            variants={{
-                                hidden: { opacity: 0, y: 20 },
-                                visible: {
-                                    opacity: 1,
-                                    y: 0,
-                                    transition: { duration: 0.6, ease: easeOut },
-                                },
-                            }}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+                            aria-label="Chile Line Media on Instagram"
+                            variants={
+                                prefersReducedMotion
+                                    ? { hidden: { opacity: 1, y: 0 }, visible: { opacity: 1, y: 0 } }
+                                    : {
+                                        hidden: { opacity: 0, y: 20 },
+                                        visible: {
+                                            opacity: 1,
+                                            y: 0,
+                                            transition: { duration: 0.6, ease: easeOut },
+                                        },
+                                    }
+                            }
+                            whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
+                            whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
                         >
                             <span>Instagram</span>
                         </motion.a>
@@ -269,16 +291,21 @@ export default function Contact() {
                             target="_blank"
                             rel="noopener noreferrer"
                             className={styles.socialCard}
-                            variants={{
-                                hidden: { opacity: 0, y: 20 },
-                                visible: {
-                                    opacity: 1,
-                                    y: 0,
-                                    transition: { duration: 0.6, ease: easeOut },
-                                },
-                            }}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+                            aria-label="Chile Line Media on TikTok"
+                            variants={
+                                prefersReducedMotion
+                                    ? { hidden: { opacity: 1, y: 0 }, visible: { opacity: 1, y: 0 } }
+                                    : {
+                                        hidden: { opacity: 0, y: 20 },
+                                        visible: {
+                                            opacity: 1,
+                                            y: 0,
+                                            transition: { duration: 0.6, ease: easeOut },
+                                        },
+                                    }
+                            }
+                            whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
+                            whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
                         >
                             <span>TikTok</span>
                         </motion.a>

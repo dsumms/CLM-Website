@@ -1,16 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./Navbar.module.css";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-const menuItems = ['Work', 'Process', 'About', 'Contact'];
+const menuItems = ["Work", "Process", "About", "Contact"];
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const prefersReducedMotion = useReducedMotion();
+    const hamburgerRef = useRef<HTMLButtonElement>(null);
+    const mobileMenuRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -19,8 +23,49 @@ export default function Navbar() {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+    useEffect(() => {
+        if (isOpen && isMobile && mobileMenuRef.current) {
+            const firstLink = mobileMenuRef.current.querySelector<HTMLAnchorElement>("a");
+            if (firstLink) {
+                firstLink.focus();
+            }
+        }
+
+        if (!isOpen && isMobile && hamburgerRef.current) {
+            hamburgerRef.current.focus();
+        }
+    }, [isOpen, isMobile]);
+
     const toggleMenu = () => setIsOpen(!isOpen);
-    const closeMenu = () => setIsOpen(false);
+    const closeMenu = useCallback(() => setIsOpen(false), []);
+
+    const handleMobileKeyDown = useCallback((e: React.KeyboardEvent) => {
+        if (e.key === "Escape") {
+            closeMenu();
+            return;
+        }
+
+        if (e.key === "Tab" && mobileMenuRef.current) {
+            const focusableElements = mobileMenuRef.current.querySelectorAll<HTMLElement>(
+                'a[href], button, [tabindex]:not([tabindex="-1"])'
+            );
+            const firstEl = focusableElements[0];
+            const lastEl = focusableElements[focusableElements.length - 1];
+
+            if (e.shiftKey && document.activeElement === firstEl) {
+                e.preventDefault();
+                lastEl.focus();
+            } else if (!e.shiftKey && document.activeElement === lastEl) {
+                e.preventDefault();
+                firstEl.focus();
+            }
+        }
+    }, [closeMenu]);
+
+    const noMotion = { duration: 0 };
+    const navTransition = prefersReducedMotion
+        ? noMotion
+        : { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const };
 
     return (
         <motion.nav
@@ -29,12 +74,16 @@ export default function Navbar() {
             animate={{
                 y: 0,
                 opacity: 1,
-                background: isOpen
-                    ? (isMobile ? "rgba(0, 0, 0, 1)" : "linear-gradient(to bottom, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 0.75) 75%, rgba(0, 0, 0, 0) 100%)")
-                    : "linear-gradient(to bottom, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 0.5) 70%, rgba(0, 0, 0, 0) 100%)"
+                background: isOpen && isMobile
+                    ? "rgba(0, 0, 0, 1)"
+                    : "linear-gradient(to bottom, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 0.5) 70%, rgba(0, 0, 0, 0) 100%)",
             }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            transition={navTransition}
         >
+            <a href="#main-content" className={styles.skipLink}>
+                Skip to content
+            </a>
+
             <div className={styles.logo}>
                 <Link href="/" onClick={closeMenu}>
                     <Image
@@ -49,27 +98,16 @@ export default function Navbar() {
             </div>
 
             <div className={styles.navRight}>
-                <AnimatePresence>
-                    {!isMobile && (
+                {!isMobile && (
+                    <>
                         <motion.div
-                            key="train-locomotive"
                             className={styles.trainLocomotive}
                             initial={{ x: 140, opacity: 0, scale: 0.9 }}
                             animate={{ x: 0, opacity: 1, scale: 1 }}
-                            exit={{
-                                x: 100,
-                                opacity: 0,
-                                scale: 0.9,
-                                transition: {
-                                    delay: menuItems.length * 0.08,
-                                    duration: 0.4,
-                                    ease: [0.76, 0, 0.24, 1]
-                                }
-                            }}
-                            transition={{
+                            transition={prefersReducedMotion ? noMotion : {
                                 delay: 0,
                                 duration: 0.8,
-                                ease: [0.16, 1, 0.3, 1]
+                                ease: [0.16, 1, 0.3, 1],
                             }}
                         >
                             <Link href="/" onClick={closeMenu}>
@@ -82,60 +120,56 @@ export default function Navbar() {
                                 />
                             </Link>
                         </motion.div>
-                    )}
-                    {!isMobile && menuItems.map((item, index) => (
-                        <motion.div
-                            key={item}
-                            className={styles.trainCar}
-                            initial={{ x: 140, opacity: 0, scale: 0.9 }}
-                            animate={{ x: 0, opacity: 1, scale: 1 }}
-                            exit={{
-                                x: 100,
-                                opacity: 0,
-                                scale: 0.9,
-                                transition: {
-                                    delay: (menuItems.length - 1 - index) * 0.08,
-                                    duration: 0.4,
-                                    ease: [0.76, 0, 0.24, 1]
-                                }
-                            }}
-                            transition={{
-                                delay: (index + 1) * 0.12,
-                                duration: 0.8,
-                                ease: [0.16, 1, 0.3, 1]
-                            }}
-                        >
-                            <Link
-                                href={`/${item.toLowerCase()}`}
-                                className={styles.menuLink}
-                                onClick={closeMenu}
+                        {menuItems.map((item, index) => (
+                            <motion.div
+                                key={item}
+                                className={styles.trainCar}
+                                initial={{ x: 140, opacity: 0, scale: 0.9 }}
+                                animate={{ x: 0, opacity: 1, scale: 1 }}
+                                transition={prefersReducedMotion ? noMotion : {
+                                    delay: (index + 1) * 0.12,
+                                    duration: 0.8,
+                                    ease: [0.16, 1, 0.3, 1],
+                                }}
                             >
-                                {item}
-                            </Link>
-                        </motion.div>
-                    ))}
-                </AnimatePresence>
+                                <Link
+                                    href={`/${item.toLowerCase()}`}
+                                    className={styles.menuLink}
+                                    onClick={closeMenu}
+                                >
+                                    {item}
+                                </Link>
+                            </motion.div>
+                        ))}
+                    </>
+                )}
 
                 <button
+                    ref={hamburgerRef}
                     className={`${styles.hamburger} ${isOpen ? styles.open : ""}`}
                     onClick={toggleMenu}
                     aria-label="Toggle menu"
+                    aria-expanded={isOpen}
                 >
                     <span className={styles.line}></span>
                     <span className={styles.line}></span>
                 </button>
             </div>
 
-            {/* Mobile Menu Dropdown */}
             <AnimatePresence>
                 {isOpen && isMobile && (
                     <motion.div
+                        ref={mobileMenuRef}
                         key="mobile-menu"
                         className={styles.mobileMenuOverlay}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Navigation menu"
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "100vh" }}
-                        exit={{ opacity: 0, height: 0, transition: { duration: 0.3 } }}
-                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                        exit={{ opacity: 0, height: 0, transition: prefersReducedMotion ? noMotion : { duration: 0.3 } }}
+                        transition={prefersReducedMotion ? noMotion : { duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                        onKeyDown={handleMobileKeyDown}
                     >
                         <div className={styles.mobileMenuContent}>
                             {menuItems.map((item, index) => (
@@ -143,8 +177,8 @@ export default function Navbar() {
                                     key={`mobile-${item}`}
                                     initial={{ opacity: 0, x: 20 }}
                                     animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: 20, transition: { duration: 0.2 } }}
-                                    transition={{ delay: index * 0.1, duration: 0.4 }}
+                                    exit={{ opacity: 0, x: 20, transition: prefersReducedMotion ? noMotion : { duration: 0.2 } }}
+                                    transition={prefersReducedMotion ? noMotion : { delay: index * 0.1, duration: 0.4 }}
                                 >
                                     <Link
                                         href={`/${item.toLowerCase()}`}

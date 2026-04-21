@@ -12,6 +12,27 @@
     pointer-events: none;
 }
 
+/* Skip to content link */
+.skipLink {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: white;
+    color: black;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    z-index: 10000;
+    border-radius: 0 0 4px 4px;
+    pointer-events: auto;
+    transition: top 0.2s ease;
+}
+
+.skipLink:focus {
+    top: 0;
+}
+
 /* Re-enable pointer events for interactive elements */
 .logo a,
 .hamburger,
@@ -96,11 +117,11 @@
 
 .menuLink:hover {
     opacity: 1;
-    color: #ff4500;
+    color: var(--accent, #ff4500);
 }
 
 .menuLink:active {
-    color: #ff4500;
+    color: var(--accent, #ff4500);
 }
 
 /* Hamburger Button — the "locomotive" */
@@ -200,10 +221,10 @@
 }
 
 .mobileMenuLink:hover {
-    color: #ff4500;
+    color: var(--accent, #ff4500);
     transform: scale(1.05);
 }
 
 .mobileMenuLink:active {
-    color: #ff4500;
+    color: var(--accent, #ff4500);
 }
