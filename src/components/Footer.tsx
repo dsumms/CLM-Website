@@ -2,8 +2,11 @@
 
 import { motion } from "framer-motion";
 import styles from "./Footer.module.css";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 export default function Footer() {
+    const prefersReducedMotion = useReducedMotion();
+
     return (
         <footer className={styles.footer}>
             <motion.div
@@ -11,14 +14,35 @@ export default function Footer() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-10%" }}
-                transition={{ duration: 0.8 }}
+                transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.8 }}
             >
                 <h2>GET IN TOUCH</h2>
                 <a href="mailto:CLM@chilelinemedia.com" className={styles.email}>CLM@chilelinemedia.com</a>
                 <div className={styles.socials}>
-                    <a href="https://www.youtube.com/@ChileLineMedia" target="_blank" rel="noopener noreferrer">YouTube</a>
-                    <a href="https://www.instagram.com/chilelinemedia/" target="_blank" rel="noopener noreferrer">Instagram</a>
-                    <a href="https://www.tiktok.com/@chilelinemedia?lang=en" target="_blank" rel="noopener noreferrer">TikTok</a>
+                    <a
+                        href="https://www.youtube.com/@ChileLineMedia"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Chile Line Media on YouTube"
+                    >
+                        YouTube
+                    </a>
+                    <a
+                        href="https://www.instagram.com/chilelinemedia/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Chile Line Media on Instagram"
+                    >
+                        Instagram
+                    </a>
+                    <a
+                        href="https://www.tiktok.com/@chilelinemedia?lang=en"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Chile Line Media on TikTok"
+                    >
+                        TikTok
+                    </a>
                 </div>
                 <p className={styles.copyright}>&copy; {new Date().getFullYear()} Chile Line Media. All rights reserved.</p>
             </motion.div>

@@ -1,19 +1,16 @@
-"use client";
-
 import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
-import ProjectCard from "@/components/ProjectCard";
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import styles from "./page.module.css";
 import { projects } from "@/data/projects";
-
-// Dynamic import to avoid SSR issues with Three.js / WebGL
-const SplatHero = dynamic(() => import("@/components/SplatHero"), {
-  ssr: false,
-});
-
 import Image from "next/image";
+
+// Client-side wrapper isolates the WebGL SplatHero (ssr:false is inside the wrapper)
+const SplatHeroWrapper = dynamic(
+  () => import("@/components/SplatHeroWrapper")
+);
+
+// Lazy-load ProjectCard so it doesn't block initial HTML
+const ProjectCard = dynamic(() => import("@/components/ProjectCard"));
 
 const partners = [
   "/logos/media__1776718766123.png",
@@ -26,13 +23,6 @@ const partners = [
 ];
 
 export default function Home() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
-  }, []);
-
   const narrativeProjects = projects.filter((p) => p.category === "narrative");
   const commercialProjects = projects.filter(
     (p) => p.category === "commercial"
@@ -44,21 +34,15 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className={styles.hero}>
-        {mounted && (
-          <div className={styles.canvasContainer}>
-            <SplatHero />
-          </div>
-        )}
+        <div className={styles.canvasContainer}>
+          <SplatHeroWrapper />
+        </div>
 
         <div className={styles.heroContent}>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
-          >
+          <div>
             <h1 className={styles.headline}>CHILE LINE MEDIA</h1>
             <p className={styles.subheadline}>Independent narrative and branded storytelling company</p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -81,15 +65,9 @@ export default function Home() {
 
       {/* Narrative Works */}
       <section className={styles.projects}>
-        <motion.div
-          className={styles.projectsHeader}
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
+        <div className={styles.projectsHeader}>
           <h2>NARRATIVE WORKS</h2>
-        </motion.div>
+        </div>
 
         <div className={styles.grid}>
           {narrativeProjects.map((project) => (
@@ -106,15 +84,9 @@ export default function Home() {
 
       {/* Commercial Works */}
       <section className={styles.projects}>
-        <motion.div
-          className={styles.projectsHeader}
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
+        <div className={styles.projectsHeader}>
           <h2>COMMERCIAL WORKS</h2>
-        </motion.div>
+        </div>
 
         <div className={styles.grid}>
           {commercialProjects.map((project) => (
