@@ -9,33 +9,32 @@ const easeOut = [0.16, 1, 0.3, 1] as const;
 
 const services = [
     {
-        title: "Brand Films",
+        title: "Narrative Films",
         description:
-            "Cinematic narratives that define your brand identity and leave a lasting impression on every viewer.",
+            "Original short and feature films rooted in place, culture, and character. Stories crafted with patience, intention, and a deep connection to the Southwest.",
+    },
+    {
+        title: "Brand Storytelling",
+        description:
+            "Commissioned films for organizations, institutions, and businesses. Place-based, cinematic, and built to the same standard as our original work.",
     },
     {
         title: "Documentary",
         description:
-            "Authentic, story-driven documentaries that capture real moments and amplify unheard voices.",
+            "Nonfiction stories rooted in place and culture. We capture what's real — the people, traditions, and landscapes that deserve to be seen and preserved.",
     },
     {
-        title: "Commercial Production",
+        title: "Campaign & Digital Content",
         description:
-            "High-end commercial content crafted for maximum impact across broadcast, digital, and social platforms.",
-    },
-    {
-        title: "Event Coverage",
-        description:
-            "Comprehensive live-event capture that translates the energy of the room into compelling visual stories.",
+            "Social cuts, promotional spots, event recaps, and digital-first content. Short-form work with the same visual standard and sense of story.",
     },
 ];
 
 const projectTypes = [
-    "Brand Film",
+    "Narrative Films",
+    "Brand Storytelling",
     "Documentary",
-    "Commercial",
-    "Event Coverage",
-    "Social Content",
+    "Campaign & Digital Content",
     "Other",
 ];
 
