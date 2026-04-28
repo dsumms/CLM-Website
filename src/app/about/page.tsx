@@ -23,7 +23,7 @@ const team = [
     {
         name: "Dylan Summer",
         role: "Partner, CTO & Head of Post-Production",
-        bio: "Dylan Summer, co-founder of Chile Line Media, is a visual effects artist, editor, and producer. He helps define the visual direction of the company's film and commercial projects, from early compositing through final cut. Five years in post-production — he brings a careful eye to timing, color, and continuity under real production constraints. On location he supports producing, keeping projects on track and the work itself the priority.",
+        bio: "Dylan Summer, co-founder of Chile Line Media, is a visual effects artist, editor, and producer. He helps define the visual direction of the company's film and commercial projects, from early compositing through final cut. Five years in post-production — he brings a careful eye to timing, color, and continuity under real production constraints. On set, he supports the production process and helps keep projects on track so the work stays the main priority.",
         photo: "/images/team/dylan.jpg",
     },
     {
