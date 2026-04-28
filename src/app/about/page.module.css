@@ -132,27 +132,29 @@
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 4px;
     margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
 }
 
 .teamName {
-    font-size: 1.4rem;
+    font-size: 1.75rem;
     font-weight: 600;
     letter-spacing: 0.04em;
 }
 
 .teamRole {
     display: block;
-    font-size: 0.9rem;
+    font-size: 1.05rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     opacity: 0.5;
     margin-top: 0.35rem;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
 }
 
 .teamBio {
-    font-size: 1rem;
-    line-height: 1.7;
+    font-size: 1.15rem;
+    line-height: 1.75;
     opacity: 0.75;
 }
 
