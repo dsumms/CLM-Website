@@ -12,21 +12,25 @@ const team = [
         name: "Makaio Frazier",
         role: "Founder, CEO & Creative Director",
         bio: "Makaio Frazier is a filmmaker, writer, and producer based in northern New Mexico. He began his career working on crews for acclaimed projects such as Oppenheimer, American Primeval, and Frybread Face and Me, experiences that led him to launch Chile Line Media in 2022. Through CLM, Makaio develops narrative films and commercial content that highlight the landscapes, communities, and traditions of the Southwest. His latest short, The Way We Carry Water (2025), was filmed across all four seasons and celebrates the living heritage of acequia culture while tracing a young man's journey through grief and renewal. Makaio's work reflects a commitment to craft, authenticity, and supporting regional voices in cinema.",
+        photo: "/images/team/makaio.jpg",
     },
     {
         name: 'Fred "Boomer" Mady III',
         role: "Partner, COO & Head of Production",
         bio: "Fred Mady III is a filmmaker, producer, and production manager based in New Mexico. He is the co-founder of Chile Line Media, where he develops narrative films and visual work rooted in the landscapes, people, and traditions of the Southwest. With a background in set leadership, production logistics, and independent filmmaking, his work is built on both story and execution.",
+        photo: "/images/team/fred.jpg",
     },
     {
         name: "Dylan Summer",
         role: "Partner, CTO & Head of Post-Production",
         bio: "Dylan Summer, co-founder of Chile Line Media, is a visual effects artist, editor, and producer. He helps define the visual direction of the company's film and commercial projects, from early compositing through final cut. Five years in post-production — he brings a careful eye to timing, color, and continuity under real production constraints. On location he supports producing, keeping projects on track and the work itself the priority.",
+        photo: "/images/team/dylan.jpg",
     },
     {
         name: "Mia Gonzales",
         role: "Head of Marketing",
         bio: "Mia Gonzales is a multidisciplinary artist, writer, and marketing strategist specializing in brand storytelling, compelling social media strategy, and creative direction. As Head of Marketing for Chile Line Media, she develops campaigns that extend film beyond the screen, shaping how they connect with audiences across digital platforms and festival spaces.",
+        photo: "/images/team/mia.jpg",
     },
 ];
 
@@ -39,6 +43,8 @@ const partnerships = [
     { name: "Apaluma", logo: "/logos/media__1776718766123.png" },
     { name: "The New Mexico Environment Department", logo: "/logos/media__1776718766127.png" },
     { name: "Hands Across Cultures", logo: "/logos/media__1776719321756.png" },
+    { name: "Taos Mainstreet", logo: "" },
+    { name: "Taos Destination Stewardship Network", logo: "" },
 ];
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
@@ -75,18 +81,14 @@ export default function About() {
                     style={{ y: prefersReducedMotion ? 0 : y1 }}
                 >
                     <p>
-                        Chile Line Media is a film and media production company based in northern
-                        New Mexico. Founded by Makaio Frazier, CLM is dedicated to telling stories
-                        rooted in land, legacy, and lived experience. We create films that celebrate
-                        the depth of regional culture while connecting with universal themes of
-                        identity, resilience, and belonging.
+                        Chile Line Media is a production company based in New Mexico. We tell stories rooted in the Southwest — its people, its landscapes, and the traditions that have shaped it for generations. We believe this region deserves the same cinematic attention as anywhere else, and we&apos;re building a body of work that proves it.
                     </p>
                 </motion.div>
 
                 <div className={styles.imageContainer}>
                     <motion.div
                         className={styles.parallaxImage}
-                        style={{ y: prefersReducedMotion ? 0 : imgY, backgroundImage: "url('/images/bosque.png')" }}
+                        style={{ y: prefersReducedMotion ? 0 : imgY, backgroundImage: "url('/images/about-location.jpg')" }}
                     />
                 </div>
 
@@ -99,17 +101,14 @@ export default function About() {
                     transition={prefersReducedMotion ? noMotion : { duration: 1 }}
                 >
                     <p>
-                        Our team blends narrative craft with visual poetry, capturing the quiet
-                        beauty, humanity, and complexity of the Southwest. Whether through intimate
-                        short films or ambitious features, we are committed to authentic
-                        representation, ethical filmmaking, and collaboration with local communities.
+                        Our team brings professional film industry experience to independent, place-based storytelling. Whether through intimate short films or ambitious features, we are committed to authentic representation, ethical filmmaking, and collaboration with local communities.
                     </p>
                 </motion.div>
 
                 <div className={styles.imageContainer}>
                     <motion.div
                         className={styles.parallaxImage}
-                        style={{ y: prefersReducedMotion ? 0 : imgY, backgroundImage: "url('/images/landscape.png')" }}
+                        style={{ y: prefersReducedMotion ? 0 : imgY, backgroundImage: "url('/images/about-bts.jpg')" }}
                     />
                 </div>
 
@@ -121,11 +120,7 @@ export default function About() {
                     transition={prefersReducedMotion ? noMotion : { duration: 1 }}
                 >
                     <p>
-                        Alongside our original work, CLM partners with organizations, nonprofits,
-                        and brands to produce commercial content grounded in the same values —
-                        place-based storytelling that honors the communities and landscapes it
-                        represents. We bring the same cinematic standard to a brand film as we do
-                        to a festival submission.
+                        We also produce brand films and commissioned storytelling for organizations, institutions, and businesses who share that commitment — shot with the same cinematic standard and sense of place we bring to our original films.
                     </p>
                 </motion.div>
             </section>
@@ -175,7 +170,14 @@ export default function About() {
                                     }
                             }
                         >
-                            <div className={styles.teamPhoto} />
+                            <div className={styles.teamPhoto}>
+                                <Image
+                                    src={member.photo}
+                                    alt={member.name}
+                                    fill
+                                    style={{ objectFit: "cover" }}
+                                />
+                            </div>
                             <h3 className={styles.teamName}>{member.name}</h3>
                             <span className={styles.teamRole}>{member.role}</span>
                             <p className={styles.teamBio}>{member.bio}</p>
