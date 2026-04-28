@@ -10,14 +10,23 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 const menuItems = ["Work", "Process", "About", "Contact"];
 
 export default function Navbar() {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
     const prefersReducedMotion = useReducedMotion();
     const hamburgerRef = useRef<HTMLButtonElement>(null);
     const mobileMenuRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        const handleResize = () => {
+            const mobile = window.innerWidth <= 768;
+            setIsMobile((prevIsMobile) => {
+                if (prevIsMobile !== mobile) {
+                    setIsOpen(!mobile);
+                }
+                return mobile;
+            });
+        };
+
         handleResize();
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
@@ -38,6 +47,7 @@ export default function Navbar() {
 
     const toggleMenu = () => setIsOpen(!isOpen);
     const closeMenu = useCallback(() => setIsOpen(false), []);
+    const menuOpen = isOpen;
 
     const handleMobileKeyDown = useCallback((e: React.KeyboardEvent) => {
         if (e.key === "Escape") {
@@ -98,7 +108,7 @@ export default function Navbar() {
             </div>
 
             <div className={styles.navRight}>
-                {!isMobile && (
+                {!isMobile && menuOpen && (
                     <>
                         <motion.div
                             className={styles.trainLocomotive}
@@ -146,10 +156,10 @@ export default function Navbar() {
 
                 <button
                     ref={hamburgerRef}
-                    className={`${styles.hamburger} ${isOpen ? styles.open : ""}`}
+                    className={`${styles.hamburger} ${menuOpen ? styles.open : ""}`}
                     onClick={toggleMenu}
                     aria-label="Toggle menu"
-                    aria-expanded={isOpen}
+                    aria-expanded={menuOpen}
                 >
                     <span className={styles.line}></span>
                     <span className={styles.line}></span>
