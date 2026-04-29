@@ -104,7 +104,7 @@
     letter-spacing: 0.03em;
     text-transform: uppercase;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
     margin-top: 0.4rem;
     padding: 0 0.25rem;
     text-align: center;
@@ -113,10 +113,12 @@
     line-height: 1.3;
     white-space: normal;
     overflow-wrap: anywhere;
+    transform: translateY(4px);
 }
 
 .partnerLogoWrapper:hover .partnerName {
     opacity: 1;
+    transform: translateY(0);
 }
 
 @keyframes scrollPartners {
@@ -191,7 +193,6 @@
         min-height: 80px;
         width: 140px;
     }
-
     .partnerLogoImage {
         height: 55px;
     }
