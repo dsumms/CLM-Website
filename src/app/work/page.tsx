@@ -50,8 +50,10 @@ export default function Work() {
                         <div
                             key={project.slug}
                             className={styles.projectItem}
-                            onMouseEnter={() => setHoveredProject(project.slug)}
-                            onMouseLeave={() => setHoveredProject(null)}
+                            onPointerMove={() => setHoveredProject(project.slug)}
+                            onPointerLeave={() => setHoveredProject(null)}
+                            onFocus={() => setHoveredProject(project.slug)}
+                            onBlur={() => setHoveredProject(null)}
                         >
                             <Link href={`/work/${project.slug}`} className={styles.projectLink}>
                                 <motion.h2
