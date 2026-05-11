@@ -44,7 +44,7 @@ export const projects: Project[] = [
         title: "Apaluma - Brand Video",
         year: "",
         slug: "the-apaluma-brand-video",
-        youtubeId: "",
+        youtubeId: "tnYdJrTh75U",
         category: "commercial",
         description: "Coming soon.",
     },
