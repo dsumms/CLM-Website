@@ -70,8 +70,8 @@ const LIVE_SPLAT_BACKDROP = [
 
 // Calibrated hero pose. Keep these together so future visual tuning is easy.
 const DEFAULT_HERO_CAMERA: HeroCameraConfig = {
-    position: [0, 0.01, 0.19] as const,
-    target: [1, 0, -10] as const,
+    position: [-0.03, -0.02, -0.16] as const,
+    target: [0.23, 0.34, -15] as const,
     fov: 28.8,
     near: 0.01,
     far: 500,
