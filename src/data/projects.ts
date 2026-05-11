@@ -46,6 +46,7 @@ export const projects: Project[] = [
         slug: "the-apaluma-brand-video",
         youtubeId: "tnYdJrTh75U",
         category: "commercial",
-        description: "Coming soon.",
+        description:
+            "Apaluma is a unified data platform that connects government environmental agencies and makes environmental data more accessible, understandable, and delightful through the power of AI — with Luma, an AI agent helping communities understand their environmental landscape and empowering them to make more informed decisions.",
     },
 ];

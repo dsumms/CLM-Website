@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import { Component, Suspense, useEffect, useRef, useState, type CSSProperties, type MutableRefObject, type ReactNode } from "react";
@@ -78,7 +78,7 @@ const DEFAULT_HERO_CAMERA: HeroCameraConfig = {
 };
 
 const HERO_SPLAT = {
-    src: "/hero-image.spz",
+    src: "/hero-image-gigapixel.ply",
     position: [0, 0, 0] as const,
     rotation: [0, Math.PI, 0] as const,
 };
