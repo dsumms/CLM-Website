@@ -88,29 +88,24 @@
     align-self: stretch;
 }
 
-.imagePlaceholder {
+.imageFrame {
+    position: relative;
     width: 100%;
     max-width: 380px;
     aspect-ratio: 16 / 10;
     border-radius: 4px;
-    border: 1px dashed rgba(255, 255, 255, 0.15);
-    background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.03) 0%,
-        rgba(255, 255, 255, 0.01) 100%
-    );
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.04);
 }
 
-.imageHintText {
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    opacity: 0.25;
-    text-align: center;
-    padding: 1rem;
+.processImage {
+    object-fit: cover;
+    transition: transform 0.5s ease, filter 0.5s ease;
+}
+
+.stage:hover .processImage {
+    transform: scale(1.03);
+    filter: contrast(1.05);
 }
 
 /* CTA */
@@ -173,7 +168,7 @@
         justify-content: flex-start;
     }
 
-    .placeholderRect {
+    .imageFrame {
         max-width: 100%;
     }
 }
