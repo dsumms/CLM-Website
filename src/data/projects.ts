@@ -42,10 +42,11 @@ export const projects: Project[] = [
     },
     {
         title: "Apaluma - Brand Video",
-        year: "",
+        year: "2026",
         slug: "the-apaluma-brand-video",
-        youtubeId: "",
+        youtubeId: "tnYdJrTh75U",
         category: "commercial",
-        description: "Coming soon.",
+        description:
+            "Introducing Apaluma — a unified platform that centralizes government environmental data (air, water, waste, hazardous waste, energy) from agencies like the New Mexico Environment Department, making it accessible to regulators, decision-makers, and the public. The platform features Luma, an AI agent designed to help users find, connect, and understand information — even when they don't know exactly what they're looking for. From locating permits and checking compliance histories to surfacing relationships across data points that human staff might miss, Apaluma is transforming how government environmental data serves the people it's supposed to serve.",
     },
 ];
