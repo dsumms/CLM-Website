@@ -61,7 +61,7 @@ type NavigatorWithHints = Navigator & {
     deviceMemory?: number;
 };
 
-const FALLBACK_IMAGE_SRC = "/hero-image.jpg";
+const FALLBACK_IMAGE_SRC = "/hero-image-gigapixel.png";
 const MOBILE_FALLBACK_MAX_WIDTH = 900;
 const LIVE_SPLAT_BACKDROP = [
     "radial-gradient(120% 90% at 50% 30%, rgba(196, 218, 228, 0.95) 0%, rgba(160, 192, 205, 0.88) 38%, rgba(103, 128, 121, 0.52) 70%, rgba(24, 30, 28, 0.25) 100%)",
@@ -751,6 +751,7 @@ export default function SplatHero() {
     const [debugRenderer, setDebugRenderer] = useState<DebugRendererState>(() => makeDefaultDebugRenderer());
     const [splatRuntimeFailureMessage, setSplatRuntimeFailureMessage] = useState<string | null>(null);
     const [copyStatus, setCopyStatus] = useState("");
+    const [isSplatLoaded, setIsSplatLoaded] = useState(false);
 
     const activeCamera = debugEnabled ? debugCamera : DEFAULT_HERO_CAMERA;
     const activeWiggle = getActiveWiggleConfig(debugEnabled, debugWiggle);
@@ -885,6 +886,7 @@ export default function SplatHero() {
                     position={HERO_SPLAT.position}
                     rotation={HERO_SPLAT.rotation}
                     onError={handleSplatRuntimeError}
+                    onLoaded={() => setIsSplatLoaded(true)}
                 />
             </Suspense>
         </Canvas>
@@ -946,22 +948,26 @@ export default function SplatHero() {
                         {liveSplatCanvas}
                     </SplatCanvasErrorBoundary>
                 )
-            ) : (
-                <Image
-                    src={FALLBACK_IMAGE_SRC}
-                    alt=""
-                    fill
-                    priority
-                    sizes="100vw"
-                    aria-hidden="true"
-                    style={{
-                        objectFit: "cover",
-                        objectPosition: "center center",
-                        userSelect: "none",
-                        pointerEvents: "none",
-                    }}
-                />
-            )}
+            ) : null}
+
+            {/* Loading / Fallback Image Overlay */}
+            <Image
+                src={FALLBACK_IMAGE_SRC}
+                alt=""
+                fill
+                priority
+                sizes="100vw"
+                aria-hidden="true"
+                style={{
+                    objectFit: "cover",
+                    objectPosition: "center center",
+                    userSelect: "none",
+                    pointerEvents: "none",
+                    opacity: liveSplatActive && isSplatLoaded ? 0 : 1,
+                    transition: "opacity 1.5s ease-in-out",
+                    zIndex: 10,
+                }}
+            />
 
 
 
