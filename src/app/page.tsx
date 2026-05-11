@@ -20,6 +20,8 @@ const partners = [
   { src: "/logos/media__1776720924256.png", name: "Los Luceros Historic Site / NM Historic Sites" },
   { src: "/logos/media__1776719321756.png", name: "Hands Across Cultures" },
   { src: "/logos/media__1776719502962.png", name: "Santa Fe International Film Festival" },
+  { src: "/logos/taos-mainstreet.png", name: "Taos Mainstreet" },
+  { src: "/logos/taos-dsn.png", name: "Taos Destination Stewardship Network" },
 ];
 
 export default function Home() {

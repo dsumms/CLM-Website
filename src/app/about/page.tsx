@@ -43,8 +43,8 @@ const partnerships = [
     { name: "Apaluma", logo: "/logos/media__1776718766123.png" },
     { name: "The New Mexico Environment Department", logo: "/logos/media__1776718766127.png" },
     { name: "Hands Across Cultures", logo: "/logos/media__1776719321756.png" },
-    { name: "Taos Mainstreet", logo: "" },
-    { name: "Taos Destination Stewardship Network", logo: "" },
+    { name: "Taos Mainstreet", logo: "/logos/taos-mainstreet.png" },
+    { name: "Taos Destination Stewardship Network", logo: "/logos/taos-dsn.png" },
 ];
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
