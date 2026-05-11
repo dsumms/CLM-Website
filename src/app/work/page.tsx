@@ -13,9 +13,9 @@ export default function Work() {
     const noMotion = { duration: 0 };
     const [hoveredProject, setHoveredProject] = useState<string | null>(null);
 
-    // Only set background-image for the hovered project (or the first as default).
-    // This avoids preloading all YouTube thumbnails at once.
-    const activeSlug = hoveredProject ?? projects[0]?.slug ?? null;
+    // Only set background-image for the hovered project.
+    // This avoids preloading all YouTube thumbnails and keeps the default state black.
+    const activeSlug = hoveredProject;
     const activeProject = projects.find((p) => p.slug === activeSlug);
 
     return (
