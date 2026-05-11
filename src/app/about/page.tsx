@@ -11,7 +11,7 @@ const team = [
     {
         name: "Makaio Frazier",
         role: "Founder, CEO & Creative Director",
-        bio: "Makaio Frazier is a filmmaker, writer, and producer based in northern New Mexico. He began his career working on crews for acclaimed projects such as Oppenheimer, American Primeval, and Frybread Face and Me, experiences that led him to launch Chile Line Media in 2022. Through CLM, Makaio develops narrative films and commercial content that highlight the landscapes, communities, and traditions of the Southwest. His latest short, The Way We Carry Water (2025), was filmed across all four seasons and celebrates the living heritage of acequia culture while tracing a young man's journey through grief and renewal. Makaio's work reflects a commitment to craft, authenticity, and supporting regional voices in cinema.",
+        bio: "A graduate from the UNM Film Program, Makaio Frazier is a filmmaker, writer, and producer based in northern New Mexico. He began his career working on crews for acclaimed projects such as Oppenheimer, American Primeval, and Frybread Face and Me, experiences that led him to launch Chile Line Media in 2022. Through CLM, Makaio develops narrative films and commercial content that highlight the landscapes, communities, and traditions of the Southwest. His latest short, The Way We Carry Water (2025), was filmed across all four seasons and celebrates the living heritage of acequia culture while tracing a young man's journey through grief and renewal. Makaio's work reflects a commitment to craft, authenticity, and supporting regional voices in cinema.",
         photo: "/images/team/makaio.jpg",
     },
     {
