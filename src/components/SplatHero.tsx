@@ -70,9 +70,9 @@ const LIVE_SPLAT_BACKDROP = [
 
 // Calibrated hero pose. Keep these together so future visual tuning is easy.
 const DEFAULT_HERO_CAMERA: HeroCameraConfig = {
-    position: [1.41, -1.99, -20.3] as const,
-    target: [0.72, -1.3, 0] as const,
-    fov: 33,
+    position: [0, 0.01, 0.19] as const,
+    target: [1, 0, -10] as const,
+    fov: 28.8,
     near: 0.01,
     far: 500,
 };
@@ -80,7 +80,7 @@ const DEFAULT_HERO_CAMERA: HeroCameraConfig = {
 const HERO_SPLAT = {
     src: "/hero-image-gigapixel.ply",
     position: [0, 0, 0] as const,
-    rotation: [0, Math.PI, 0] as const,
+    rotation: [0, Math.PI, Math.PI] as const,
 };
 
 const DEFAULT_SPLAT_RENDERER: SplatRendererConfig = {
