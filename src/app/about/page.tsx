@@ -226,6 +226,7 @@ export default function About() {
                                         src={partner.logo}
                                         alt={partner.name}
                                         fill
+                                        sizes="(max-width: 768px) 140px, 250px"
                                         style={{ objectFit: "contain" }}
                                     />
                                 </div>

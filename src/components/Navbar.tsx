@@ -101,6 +101,7 @@ export default function Navbar() {
                         alt="Chile Line Media Logo"
                         width={150}
                         height={150}
+                        sizes="(max-width: 768px) 100px, 150px"
                         priority
                         className={styles.logoImage}
                     />
@@ -126,6 +127,7 @@ export default function Navbar() {
                                     alt="Train Locomotive"
                                     width={160}
                                     height={40}
+                                    sizes="160px"
                                     className={styles.locomotiveImage}
                                 />
                             </Link>
