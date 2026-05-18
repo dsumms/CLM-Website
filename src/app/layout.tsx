@@ -4,6 +4,15 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import Footer from "@/components/Footer";
+import {
+  defaultDescription,
+  defaultOgImage,
+  defaultTitle,
+  organizationJsonLd,
+  siteName,
+  siteUrl,
+  websiteJsonLd,
+} from "@/lib/seo";
 
 const ebGaramond = EB_Garamond({
   variable: "--font-eb-garamond",
@@ -12,25 +21,34 @@ const ebGaramond = EB_Garamond({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://chilelinemedia.com"),
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "Chile Line Media | New Mexico Video Production",
+    default: defaultTitle,
     template: "%s | Chile Line Media",
   },
-  description: "Independent narrative and branded storytelling company based in New Mexico. We specialize in cinematic commercial and narrative video production.",
-  keywords: ["video production", "New Mexico", "film production", "storytelling", "commercials", "narrative films", "documentaries", "Santa Fe", "Albuquerque"],
+  description: defaultDescription,
+  alternates: {
+    canonical: siteUrl,
+  },
   openGraph: {
-    title: "Chile Line Media | New Mexico Video Production",
-    description: "Independent narrative and branded storytelling company based in New Mexico.",
-    url: "https://chilelinemedia.com",
-    siteName: "Chile Line Media",
+    title: defaultTitle,
+    description: defaultDescription,
+    url: siteUrl,
+    siteName,
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: defaultOgImage,
+        alt: siteName,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Chile Line Media | New Mexico Video Production",
-    description: "Independent narrative and branded storytelling company based in New Mexico.",
+    title: defaultTitle,
+    description: defaultDescription,
+    images: [defaultOgImage],
   },
 };
 
@@ -47,15 +65,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "LocalBusiness",
-              "name": "Chile Line Media",
-              "url": "https://chilelinemedia.com",
-              "description": "Independent narrative and branded storytelling company based in New Mexico.",
-              "address": {
-                "@type": "PostalAddress",
-                "addressRegion": "NM",
-                "addressCountry": "US"
-              }
+              "@graph": [organizationJsonLd, websiteJsonLd],
             })
           }}
         />

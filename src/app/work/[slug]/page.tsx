@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import styles from "./page.module.css";
 import Link from "next/link";
 import { projects } from "@/data/projects";
+import { absoluteUrl, siteName, truncateDescription } from "@/lib/seo";
 
 interface PageProps {
     params: Promise<{ slug: string }>;
@@ -22,23 +23,32 @@ export async function generateMetadata(
     }
 
     const previousImages = (await parent).openGraph?.images || [];
+    const description = truncateDescription(project.description);
+    const url = absoluteUrl(`/work/${project.slug}`);
+    const image = `https://img.youtube.com/vi/${project.youtubeId}/maxresdefault.jpg`;
 
     return {
         title: project.title,
-        description: project.description.substring(0, 160) + (project.description.length > 160 ? "..." : ""),
+        description,
+        alternates: {
+            canonical: url,
+        },
         openGraph: {
             title: project.title,
-            description: project.description.substring(0, 160) + (project.description.length > 160 ? "..." : ""),
+            description,
+            url,
+            siteName,
+            type: "video.other",
             images: [
-                `https://img.youtube.com/vi/${project.youtubeId}/maxresdefault.jpg`,
+                image,
                 ...previousImages,
             ],
         },
         twitter: {
             card: "summary_large_image",
             title: project.title,
-            description: project.description.substring(0, 160) + (project.description.length > 160 ? "..." : ""),
-            images: [`https://img.youtube.com/vi/${project.youtubeId}/maxresdefault.jpg`],
+            description,
+            images: [image],
         },
     };
 }
@@ -60,6 +70,43 @@ export default async function ProjectDetail({ params }: PageProps) {
         );
     }
 
+    const projectUrl = absoluteUrl(`/work/${project.slug}`);
+    const thumbnailUrl = `https://img.youtube.com/vi/${project.youtubeId}/maxresdefault.jpg`;
+    const videoJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "VideoObject",
+        name: project.title,
+        description: project.description,
+        thumbnailUrl: [thumbnailUrl],
+        datePublished: project.year,
+        embedUrl: `https://www.youtube.com/embed/${project.youtubeId}`,
+        url: projectUrl,
+    };
+    const breadcrumbJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+            {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: absoluteUrl("/"),
+            },
+            {
+                "@type": "ListItem",
+                position: 2,
+                name: "Work",
+                item: absoluteUrl("/work"),
+            },
+            {
+                "@type": "ListItem",
+                position: 3,
+                name: project.title,
+                item: projectUrl,
+            },
+        ],
+    };
+
     return (
         <main className={styles.main}>
             <script
@@ -67,14 +114,7 @@ export default async function ProjectDetail({ params }: PageProps) {
                 dangerouslySetInnerHTML={{
                     __html: JSON.stringify({
                         "@context": "https://schema.org",
-                        "@type": "VideoObject",
-                        "name": project.title,
-                        "description": project.description,
-                        "thumbnailUrl": [
-                            `https://img.youtube.com/vi/${project.youtubeId}/maxresdefault.jpg`
-                        ],
-                        "datePublished": project.year,
-                        "embedUrl": `https://www.youtube.com/embed/${project.youtubeId}`
+                        "@graph": [videoJsonLd, breadcrumbJsonLd],
                     })
                 }}
             />

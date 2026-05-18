@@ -2,7 +2,17 @@ import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import styles from "./page.module.css";
 import { projects } from "@/data/projects";
+import { partners } from "@/data/partners";
 import Image from "next/image";
+import { createPageMetadata } from "@/lib/seo";
+
+export const metadata = createPageMetadata({
+  title: "Chile Line Media | New Mexico Video Production",
+  description:
+    "Chile Line Media is a New Mexico production company creating cinematic narrative films and branded storytelling rooted in the Southwest.",
+  path: "/",
+  absoluteTitle: true,
+});
 
 // Client-side wrapper isolates the WebGL SplatHero (ssr:false is inside the wrapper)
 const SplatHeroWrapper = dynamic(
@@ -11,18 +21,6 @@ const SplatHeroWrapper = dynamic(
 
 // Lazy-load ProjectCard so it doesn't block initial HTML
 const ProjectCard = dynamic(() => import("@/components/ProjectCard"));
-
-const partners = [
-  { src: "/logos/media__1776718766123.png", name: "Apaluma" },
-  { src: "/logos/media__1776718766127.png", name: "The New Mexico Environment Department" },
-  { src: "/logos/media__1776718884197.png", name: "The Santa Fe Film Institute" },
-  { src: "/logos/media__1776718884198.png", name: "The New Mexico Film Office" },
-  { src: "/logos/media__1776720924256.png", name: "Los Luceros Historic Site / NM Historic Sites" },
-  { src: "/logos/media__1776719321756.png", name: "Hands Across Cultures" },
-  { src: "/logos/media__1776719502962.png", name: "Santa Fe International Film Festival" },
-  { src: "/logos/taos-mainstreet.png", name: "Taos Mainstreet" },
-  { src: "/logos/taos-dsn.png", name: "Taos Destination Stewardship Network" },
-];
 
 export default function Home() {
   const narrativeProjects = projects.filter((p) => p.category === "narrative");
@@ -53,17 +51,24 @@ export default function Home() {
         <div className={styles.partnerTrack}>
           {/* Duplicate the list for seamless infinite scroll */}
           {[...partners, ...partners].map((partner, i) => (
-            <div key={`${partner.src}-${i}`} className={styles.partnerLogoWrapper}>
+            <a
+              key={`${partner.logo}-${i}`}
+              className={styles.partnerLogoWrapper}
+              href={partner.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Visit ${partner.name}`}
+            >
               <div className={styles.partnerLogoImage}>
                 <Image
-                  src={partner.src}
+                  src={partner.logo}
                   alt={partner.name}
                   fill
                   style={{ objectFit: 'contain' }}
                 />
               </div>
               <span className={styles.partnerName}>{partner.name}</span>
-            </div>
+            </a>
           ))}
         </div>
       </section>

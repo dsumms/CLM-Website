@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import styles from "./page.module.css";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { partners } from "@/data/partners";
 
 const team = [
     {
@@ -32,19 +33,6 @@ const team = [
         bio: "Mia Gonzales is a multidisciplinary artist, writer, and marketing strategist specializing in brand storytelling, compelling social media strategy, and creative direction. As Head of Marketing for Chile Line Media, she develops campaigns that extend film beyond the screen, shaping how they connect with audiences across digital platforms and festival spaces.",
         photo: "/images/team/mia.jpg",
     },
-];
-
-const partnerships = [
-    { name: "The New Mexico Film Office", logo: "/logos/media__1776718884198.png" },
-    { name: "The Santa Fe Film Institute", logo: "/logos/media__1776718884197.png" },
-    { name: "Santa Fe International Film Festival", logo: "/logos/media__1776719502962.png" },
-    { name: "Los Luceros Historic Site / NM Historic Sites", logo: "/logos/media__1776720924256.png" },
-    { name: "Northern Rio Grande Heritage Area", logo: "/logos/media__1776723477993.png" },
-    { name: "Apaluma", logo: "/logos/media__1776718766123.png" },
-    { name: "The New Mexico Environment Department", logo: "/logos/media__1776718766127.png" },
-    { name: "Hands Across Cultures", logo: "/logos/media__1776719321756.png" },
-    { name: "Taos Mainstreet", logo: "/logos/taos-mainstreet.png" },
-    { name: "Taos Destination Stewardship Network", logo: "/logos/taos-dsn.png" },
 ];
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
@@ -215,10 +203,14 @@ export default function About() {
                             }
                     }
                 >
-                    {partnerships.map((partner) => (
-                        <motion.div
+                    {partners.map((partner) => (
+                        <motion.a
                             key={partner.name}
                             className={styles.partnerGridItem}
+                            href={partner.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`Visit ${partner.name}`}
                             variants={
                                 prefersReducedMotion
                                     ? { hidden: { opacity: 1, y: 0 }, visible: { opacity: 1, y: 0 } }
@@ -243,7 +235,7 @@ export default function About() {
                                 </div>
                             )}
                             <span className={styles.partnerLabel}>{partner.name}</span>
-                        </motion.div>
+                        </motion.a>
                     ))}
                 </motion.div>
             </section>
