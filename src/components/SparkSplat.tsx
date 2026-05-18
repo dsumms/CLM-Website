@@ -4,18 +4,18 @@ import { useEffect, useRef } from "react";
 import { extend, useThree, useFrame, type ThreeElement } from "@react-three/fiber";
 import {
     SplatMesh as SparkSplatMesh,
-    SparkRenderer as SparkSparkRenderer,
+    SparkRenderer as SparkSplatRendererMesh,
 } from "@sparkjsdev/spark";
 import * as THREE from "three";
 
 // Register Spark classes with R3F so they can be used declaratively in JSX
-extend({ SparkSplatMesh, SparkSparkRenderer });
+extend({ SparkSplatMesh, SparkSplatRendererMesh });
 
 // Augment R3F's intrinsic elements for TypeScript
 declare module "@react-three/fiber" {
     interface ThreeElements {
         sparkSplatMesh: ThreeElement<typeof SparkSplatMesh>;
-        sparkSparkRenderer: ThreeElement<typeof SparkSparkRenderer>;
+        sparkSplatRendererMesh: ThreeElement<typeof SparkSplatRendererMesh>;
     }
 }
 
@@ -27,10 +27,10 @@ declare module "@react-three/fiber" {
 export function SparkSplatRenderer() {
     const gl = useThree((s) => s.gl);
     const scene = useThree((s) => s.scene);
-    const rendererRef = useRef<SparkSparkRenderer | null>(null);
+    const rendererRef = useRef<SparkSplatRendererMesh | null>(null);
 
     useEffect(() => {
-        const sparkRenderer = new SparkSparkRenderer({
+        const sparkRenderer = new SparkSplatRendererMesh({
             renderer: gl,
             autoUpdate: false,
         });
@@ -39,6 +39,7 @@ export function SparkSplatRenderer() {
 
         return () => {
             scene.remove(sparkRenderer);
+            sparkRenderer.dispose();
             rendererRef.current = null;
         };
     }, [gl, scene]);
@@ -47,11 +48,7 @@ export function SparkSplatRenderer() {
         const sparkRenderer = rendererRef.current;
         if (!sparkRenderer) return;
 
-        // Extract viewToWorld matrix from camera for sorting
-        const viewToWorld = new THREE.Matrix4();
-        viewToWorld.copy(camera.matrixWorld);
-
-        sparkRenderer.update({ scene, viewToWorld });
+        void sparkRenderer.update({ scene, camera });
     });
 
     return null;

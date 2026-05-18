@@ -61,8 +61,8 @@ type NavigatorWithHints = Navigator & {
     deviceMemory?: number;
 };
 
-const FALLBACK_IMAGE_SRC = "/hero-image-gigapixel.png";
-const MOBILE_FALLBACK_MAX_WIDTH = 900;
+const FALLBACK_IMAGE_SRC = "/hero-image.jpg";
+const MIN_LIVE_SPLAT_WIDTH = 900;
 const LIVE_SPLAT_BACKDROP = [
     "radial-gradient(120% 90% at 50% 30%, rgba(196, 218, 228, 0.95) 0%, rgba(160, 192, 205, 0.88) 38%, rgba(103, 128, 121, 0.52) 70%, rgba(24, 30, 28, 0.25) 100%)",
     "linear-gradient(180deg, #c5d9e2 0%, #a6bcc8 42%, #7f8f6d 74%, #1d2520 100%)",
@@ -78,7 +78,7 @@ const DEFAULT_HERO_CAMERA: HeroCameraConfig = {
 };
 
 const HERO_SPLAT = {
-    src: "/hero-image-gigapixel.ply",
+    src: "/hero-image-gigapixel.spz",
     position: [0, 0, 0] as const,
     rotation: [0, Math.PI, Math.PI] as const,
 };
@@ -175,47 +175,47 @@ function hasWebGLSupport() {
     }
 }
 
-function shouldUseStaticFallback() {
+function canUseLiveSplat() {
     if (typeof window === "undefined" || typeof navigator === "undefined") {
-        return true;
+        return false;
     }
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) {
-        return true;
+        return false;
     }
 
     const nav = navigator as NavigatorWithHints;
 
     if (nav.connection?.saveData) {
-        return true;
+        return false;
     }
 
     if (!hasWebGLSupport()) {
-        return true;
+        return false;
     }
 
     const coarsePointer =
         window.matchMedia("(pointer: coarse)").matches ||
         window.matchMedia("(any-pointer: coarse)").matches;
 
-    if (!coarsePointer) {
+    if (coarsePointer) {
         return false;
     }
 
-    if (window.innerWidth < MOBILE_FALLBACK_MAX_WIDTH) {
-        return true;
+    if (window.innerWidth < MIN_LIVE_SPLAT_WIDTH) {
+        return false;
     }
 
     if (typeof nav.deviceMemory === "number" && nav.deviceMemory <= 4) {
-        return true;
+        return false;
     }
 
     if (typeof nav.hardwareConcurrency === "number" && nav.hardwareConcurrency <= 4) {
-        return true;
+        return false;
     }
 
-    return false;
+    return true;
 }
 
 function readSplatUrlFlags(): SplatUrlFlags {
@@ -741,9 +741,7 @@ function makeDefaultDebugRenderer(): DebugRendererState {
 export default function SplatHero() {
     const pointerStateRef = useRef<PointerState>({ x: 0, y: 0, isTouch: false });
     const [splatUrlFlags] = useState<SplatUrlFlags>(() => readSplatUrlFlags());
-    const [baseRenderMode] = useState<"splat" | "fallback">(() =>
-        splatUrlFlags.forceLiveSplat ? "splat" : shouldUseStaticFallback() ? "fallback" : "splat"
-    );
+    const [liveSplatAllowed, setLiveSplatAllowed] = useState(false);
     const [debugEnabled] = useState<boolean>(() => shouldEnableCalibrationDebug());
     const [debugCamera, setDebugCamera] = useState<HeroCameraConfig>(() => cloneCameraConfig(DEFAULT_HERO_CAMERA));
     const [debugWiggle, setDebugWiggle] = useState<DebugWiggleState>(() => makeDefaultDebugWiggle());
@@ -753,10 +751,14 @@ export default function SplatHero() {
     const [copyStatus, setCopyStatus] = useState("");
     const [isSplatLoaded, setIsSplatLoaded] = useState(false);
 
+    useEffect(() => {
+        setLiveSplatAllowed(splatUrlFlags.forceLiveSplat || canUseLiveSplat());
+    }, [splatUrlFlags.forceLiveSplat]);
+
     const activeCamera = debugEnabled ? debugCamera : DEFAULT_HERO_CAMERA;
     const activeWiggle = getActiveWiggleConfig(debugEnabled, debugWiggle);
     const liveSplatActive =
-        baseRenderMode === "splat" &&
+        liveSplatAllowed &&
         (splatUrlFlags.disableRuntimeFallback || splatRuntimeFailureMessage === null);
     const calibrationRenderMode: CalibrationRenderMode = liveSplatActive
         ? "splat"

@@ -1,8 +1,8 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./ProjectCard.module.css";
 
 interface ProjectCardProps {
@@ -16,34 +16,50 @@ export default function ProjectCard({ title, year, youtubeId, slug }: ProjectCar
     const targetRef = useRef<HTMLDivElement>(null);
     const [thumbSrc, setThumbSrc] = useState(
         youtubeId
-            ? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`
+            ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
             : ""
     );
     const [hasError, setHasError] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
 
-    const { scrollYProgress } = useScroll({
-        target: targetRef,
-        offset: ["start end", "end start"],
-    });
+    useEffect(() => {
+        const element = targetRef.current;
+        if (!element) {
+            return;
+        }
 
-    const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+        if (!("IntersectionObserver" in window)) {
+            const frame = requestAnimationFrame(() => setIsVisible(true));
+            return () => cancelAnimationFrame(frame);
+        }
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { rootMargin: "0px 0px -10% 0px", threshold: 0.1 }
+        );
+
+        observer.observe(element);
+
+        return () => observer.disconnect();
+    }, []);
 
     const handleImgError = () => {
-        if (youtubeId && !thumbSrc.includes("hqdefault.jpg")) {
-            setThumbSrc(`https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`);
+        if (youtubeId && !thumbSrc.includes("mqdefault.jpg")) {
+            setThumbSrc(`https://img.youtube.com/vi/${youtubeId}/mqdefault.jpg`);
         } else {
             setHasError(true);
         }
     };
 
     return (
-        <motion.div
-            className={styles.card}
+        <div
+            className={`${styles.card} ${isVisible ? styles.cardVisible : ""}`}
             ref={targetRef}
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-10%" }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
         >
             <Link
                 href={`/work/${slug}`}
@@ -52,19 +68,18 @@ export default function ProjectCard({ title, year, youtubeId, slug }: ProjectCar
             >
                 <div className={styles.imageContainer}>
                     {youtubeId && !hasError ? (
-                        <motion.img
+                        <img
                             src={thumbSrc}
                             alt={title}
                             className={styles.image}
-                            style={{ y }}
                             loading="lazy"
                             decoding="async"
                             onError={handleImgError}
                         />
                     ) : (
-                        <motion.div className={styles.placeholder} style={{ y }}>
+                        <div className={styles.placeholder}>
                             <span className={styles.placeholderText}>{title}</span>
-                        </motion.div>
+                        </div>
                     )}
                     <div className={styles.overlay} aria-hidden="true">
                         <div className={styles.playButton} />
@@ -75,6 +90,6 @@ export default function ProjectCard({ title, year, youtubeId, slug }: ProjectCar
                     <span className={styles.year}>{year}</span>
                 </div>
             </Link>
-        </motion.div>
+        </div>
     );
 }
