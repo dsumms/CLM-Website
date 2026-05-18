@@ -1,3 +1,4 @@
+import { Metadata, ResolvingMetadata } from "next";
 import Navbar from "@/components/Navbar";
 import styles from "./page.module.css";
 import Link from "next/link";
@@ -5,6 +6,41 @@ import { projects } from "@/data/projects";
 
 interface PageProps {
     params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata(
+    { params }: PageProps,
+    parent: ResolvingMetadata
+): Promise<Metadata> {
+    const { slug } = await params;
+    const project = projects.find(p => p.slug === slug);
+
+    if (!project) {
+        return {
+            title: "Project Not Found",
+        };
+    }
+
+    const previousImages = (await parent).openGraph?.images || [];
+
+    return {
+        title: project.title,
+        description: project.description.substring(0, 160) + (project.description.length > 160 ? "..." : ""),
+        openGraph: {
+            title: project.title,
+            description: project.description.substring(0, 160) + (project.description.length > 160 ? "..." : ""),
+            images: [
+                `https://img.youtube.com/vi/${project.youtubeId}/maxresdefault.jpg`,
+                ...previousImages,
+            ],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: project.title,
+            description: project.description.substring(0, 160) + (project.description.length > 160 ? "..." : ""),
+            images: [`https://img.youtube.com/vi/${project.youtubeId}/maxresdefault.jpg`],
+        },
+    };
 }
 
 export default async function ProjectDetail({ params }: PageProps) {
@@ -26,6 +62,22 @@ export default async function ProjectDetail({ params }: PageProps) {
 
     return (
         <main className={styles.main}>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "VideoObject",
+                        "name": project.title,
+                        "description": project.description,
+                        "thumbnailUrl": [
+                            `https://img.youtube.com/vi/${project.youtubeId}/maxresdefault.jpg`
+                        ],
+                        "datePublished": project.year,
+                        "embedUrl": `https://www.youtube.com/embed/${project.youtubeId}`
+                    })
+                }}
+            />
             <Navbar />
 
             <div className={styles.hero}>
