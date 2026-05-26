@@ -31,4 +31,13 @@ export const projects: Project[] = [
         description:
             "A comedic exploration of life, friendship, and the absurdity of everyday situations.",
     },
+    {
+        title: "The Rural Film Project",
+        year: "2022",
+        slug: "the-rural-film-project",
+        youtubeId: "foS2B5aOQ74",
+        category: "commercial",
+        description:
+            "A world of locations in one state. Completed in the summer of 2022, this was the first project produced by Chile Line Media. In partnership with the New Mexico Film Office, the goal of this short film was to showcase New Mexico as a world of locations in one state. Furthermore, to honor all creators past, present, and future and represent New Mexico as a premier place of the arts.",
+    },
 ];
