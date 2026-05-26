@@ -2,6 +2,7 @@ These are our project links to past work that we have released and are proud to 
 
 The Way We Carry Water (2025) - https://youtu.be/ruBcMlhNMJQ
 Nick - A Comedy Short Film (2023) - https://youtu.be/JfFkKItuwLE
+Filming in New Mexico (2024) - https://youtu.be/foS2B5aOQ74
 
 
 This is the current about us section of our website. One of our team wrote it and she is quite poetic. I think it will help encapsulate the vibe we're going for.
@@ -20,8 +21,9 @@ to authentic representation, ethical filmmaking, and collaboration with local co
 
 
 Our debut short film, The Way We Carry Water (2025), embodies this vision. Filmed across the seasons in Northern New
-Mexico, it explores grief, tradition, and the interconnection between people and the land. The project reflects our dedication
-to preserving cultural heritage through cinema.
+Mexico, it explores grief, tradition, and the interconnection between people and the land. The project is supported by the
+Santa Fe International Film Festival, Los Luceros Historic Site, the Northern Rio Grande National Heritage Area, and Hands
+Across Cultures, reflecting our deep regional partnerships and dedication to preserving cultural heritage through cinema.
 
 
 At Chile Line Media, we believe storytelling is stewardship. We carry forward the stories of those who came before us while
