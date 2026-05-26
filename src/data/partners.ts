@@ -1,28 +1,8 @@
 export const partners = [
   {
-    name: "Apaluma",
-    logo: "/logos/media__1776718766123.png",
-    href: "https://apaluma.com/",
-  },
-  {
-    name: "The New Mexico Environment Department",
-    logo: "/logos/media__1776718766127.png",
-    href: "https://www.env.nm.gov/",
-  },
-  {
     name: "The Santa Fe Film Institute",
     logo: "/logos/media__1776718884197.png",
     href: "https://www.santafefilminstitute.org/",
-  },
-  {
-    name: "The New Mexico Film Office",
-    logo: "/logos/media__1776718884198.png",
-    href: "https://nmfilm.com/",
-  },
-  {
-    name: "Los Luceros Historic Site / NM Historic Sites",
-    logo: "/logos/media__1776720924256.png",
-    href: "https://nmhistoricsites.org/los-luceros",
   },
   {
     name: "Northern Rio Grande Heritage Area",
