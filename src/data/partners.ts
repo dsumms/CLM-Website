@@ -5,6 +5,16 @@ export const partners = [
     href: "https://www.santafefilminstitute.org/",
   },
   {
+    name: "The New Mexico Film Office",
+    logo: "/logos/media__1776718884198.png",
+    href: "https://nmfilm.com/",
+  },
+  {
+    name: "Los Luceros Historic Site / NM Historic Sites",
+    logo: "/logos/media__1776720924256.png",
+    href: "https://nmhistoricsites.org/los-luceros",
+  },
+  {
     name: "Northern Rio Grande Heritage Area",
     logo: "/logos/media__1776723477993.png",
     href: "https://riograndenha.org/",
