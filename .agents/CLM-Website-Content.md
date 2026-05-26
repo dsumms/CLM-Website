@@ -1,6 +1,6 @@
 # Chile Line Media — Website Content Draft
 
-This document contains all finalized copy and structural notes for the CLM website rebuild. Dylan, use this as the single source of truth for text content across the site.
+This document contains finalized copy and structural notes for the CLM website rebuild. Dylan, use this as the single source of truth for text content across the site.
 
 ---
 
@@ -16,17 +16,12 @@ This document contains all finalized copy and structural notes for the CLM websi
 
 **Subhead:** Independent narrative and branded storytelling company
 
-**Selected Works:** Split into two categories:
+**Selected Works:**
 
 ### Narrative Works
 
 - The Way We Carry Water (2025)  
 - Nick (2023)
-
-### Commercial Works
-
-- The Apaluma Brand Video  
-- The Rural Film Project (2022)
 
 **Notes for Dylan:**
 
@@ -66,13 +61,9 @@ Alongside our original work, CLM partners with organizations, nonprofits, and br
 
 We've proudly partnered with:
 
-- The New Mexico Film Office  
 - The Santa Fe Film Institute  
 - Santa Fe International Film Festival  
-- Los Luceros Historic Site  
 - Northern Rio Grande Heritage Area  
-- Apaluma  
-- The New Mexico Environment Department  
 - Hands Across Cultures
 
 ---
@@ -123,16 +114,6 @@ Filmed across the four seasons, the story mirrors the cycles of nature, grief an
 - Audience Choice Award — Las Cruces International Film Festival, 2026
 
 *(Additional sections like Director Statement, Crew Credits, and Specs are available if needed.)*
-
----
-
-### The Rural Film Project
-
-*(Formerly: Filming in New Mexico)*
-
-**Year:** 2022
-
-**About the Project:** A world of locations in one state. Completed in the summer of 2022, this was the first project produced by Chile Line Media. In partnership with the New Mexico Film Office, the goal of this short film was to showcase New Mexico as a world of locations in one state. Furthermore, to honor all creators past, present, and future and represent New Mexico as a premier place of the arts.
 
 ---
 
