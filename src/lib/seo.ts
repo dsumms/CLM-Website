@@ -82,6 +82,12 @@ export const organizationJsonLd = {
   logo: absoluteUrl(defaultOgImage),
   description: defaultDescription,
   sameAs: socialLinks,
+  address: {
+    "@type": "PostalAddress",
+    addressRegion: "NM",
+    addressCountry: "US",
+  },
+  areaServed: "New Mexico",
 };
 
 export const websiteJsonLd = {

@@ -42,7 +42,7 @@ export default function Home() {
         <div className={styles.heroContent}>
           <div>
             <h1 className={styles.headline}>CHILE LINE MEDIA</h1>
-            <p className={styles.subheadline}>Independent narrative and branded storytelling company</p>
+            <p className={styles.subheadline}>New Mexico narrative and branded storytelling company</p>
           </div>
         </div>
       </section>

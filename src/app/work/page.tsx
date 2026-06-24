@@ -43,6 +43,16 @@ export default function Work() {
                     >
                         OUR WORK
                     </motion.h1>
+                    <motion.p
+                        className={styles.headerSub}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={prefersReducedMotion ? noMotion : { duration: 1, delay: 0.3 }}
+                    >
+                        Narrative short films and commissioned storytelling from New Mexico.
+                        Each project is rooted in place — the landscapes, communities, and
+                        traditions that shape the stories we tell.
+                    </motion.p>
                 </section>
 
                 <section className={styles.projectList}>

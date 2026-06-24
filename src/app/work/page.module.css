@@ -60,6 +60,15 @@
     letter-spacing: 0.1em;
 }
 
+.headerSub {
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 540px;
+    margin-top: 1.5rem;
+}
+
 .projectList {
     flex: 1;
     display: flex;
