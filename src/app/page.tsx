@@ -120,7 +120,7 @@ export default function Home() {
         </div>
         <div style={{ textAlign: "center", padding: "2rem 1rem 4rem" }}>
           <p style={{ fontSize: "1.1rem", lineHeight: 1.8, color: "#bbb", maxWidth: "600px", margin: "0 auto 2rem" }}>
-            Have a story to tell? We'd love to hear it. Chile Line Media is a New Mexico-based
+            Have a story to tell? We&apos;d love to hear it. Chile Line Media is a New Mexico-based
             production company creating cinematic narrative films and branded storytelling rooted in the Southwest.
           </p>
           <div style={{ display: "flex", gap: "2rem", justifyContent: "center", flexWrap: "wrap" }}>
