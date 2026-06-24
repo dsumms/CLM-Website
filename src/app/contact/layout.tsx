@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { createPageMetadata } from "@/lib/seo";
 
 export const metadata = createPageMetadata({
-  title: "Contact",
+  title: "Contact — New Mexico Video Production",
   description:
     "Contact Chile Line Media to start a narrative film, brand storytelling, documentary, campaign, or digital content project.",
   path: "/contact",

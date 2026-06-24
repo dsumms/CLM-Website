@@ -22,19 +22,22 @@ export async function generateMetadata(
         };
     }
 
+    const projectType = project.category === "narrative" ? "Short Film" : "Commercial";
+    const seoTitle = `${project.title} — ${projectType}`;
+
     const previousImages = (await parent).openGraph?.images || [];
     const description = truncateDescription(project.description);
     const url = absoluteUrl(`/work/${project.slug}`);
     const image = `https://img.youtube.com/vi/${project.youtubeId}/maxresdefault.jpg`;
 
     return {
-        title: project.title,
+        title: seoTitle,
         description,
         alternates: {
             canonical: url,
         },
         openGraph: {
-            title: project.title,
+            title: `${seoTitle} | Chile Line Media`,
             description,
             url,
             siteName,
@@ -46,7 +49,7 @@ export async function generateMetadata(
         },
         twitter: {
             card: "summary_large_image",
-            title: project.title,
+            title: `${seoTitle} | Chile Line Media`,
             description,
             images: [image],
         },
@@ -75,12 +78,19 @@ export default async function ProjectDetail({ params }: PageProps) {
     const videoJsonLd = {
         "@context": "https://schema.org",
         "@type": "VideoObject",
-        name: project.title,
+        name: `${project.title} — ${project.category === "narrative" ? "Short Film" : "Commercial"}`,
         description: project.description,
         thumbnailUrl: [thumbnailUrl],
+        uploadDate: `${project.year}-01-01`,
         datePublished: project.year,
+        contentUrl: `https://www.youtube.com/watch?v=${project.youtubeId}`,
         embedUrl: `https://www.youtube.com/embed/${project.youtubeId}`,
         url: projectUrl,
+        creator: {
+            "@type": "Organization",
+            name: "Chile Line Media",
+            url: absoluteUrl("/"),
+        },
     };
     const breadcrumbJsonLd = {
         "@context": "https://schema.org",
@@ -166,6 +176,13 @@ export default async function ProjectDetail({ params }: PageProps) {
                         </div>
                     )}
                 </div>
+            </section>
+
+            {/* More Work Link */}
+            <section style={{ textAlign: "center", padding: "3rem 1rem" }}>
+                <Link href="/work" style={{ color: "#ff4500", textDecoration: "underline", fontSize: "1.1rem" }}>
+                    ← Back to all work
+                </Link>
             </section>
 
             <footer className={styles.footer}>
