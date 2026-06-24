@@ -4,6 +4,7 @@ import styles from "./page.module.css";
 import { projects } from "@/data/projects";
 import { partners } from "@/data/partners";
 import Image from "next/image";
+import Link from "next/link";
 import { createPageMetadata } from "@/lib/seo";
 
 export const metadata = createPageMetadata({
@@ -109,6 +110,33 @@ export default function Home() {
               slug={project.slug}
             />
           ))}
+        </div>
+      </section>
+
+      {/* CTA Section — internal links */}
+      <section className={styles.projects}>
+        <div className={styles.projectsHeader}>
+          <h2>GET IN TOUCH</h2>
+        </div>
+        <div style={{ textAlign: "center", padding: "2rem 1rem 4rem" }}>
+          <p style={{ fontSize: "1.1rem", lineHeight: 1.8, color: "#bbb", maxWidth: "600px", margin: "0 auto 2rem" }}>
+            Have a story to tell? We&apos;d love to hear it. Chile Line Media is a New Mexico-based
+            production company creating cinematic narrative films and branded storytelling rooted in the Southwest.
+          </p>
+          <div style={{ display: "flex", gap: "2rem", justifyContent: "center", flexWrap: "wrap" }}>
+            <Link href="/contact" style={{ color: "#ff4500", textDecoration: "underline", fontSize: "1.1rem" }}>
+              Start a project
+            </Link>
+            <Link href="/work" style={{ color: "#fff", textDecoration: "underline", fontSize: "1.1rem" }}>
+              See our work
+            </Link>
+            <Link href="/process" style={{ color: "#fff", textDecoration: "underline", fontSize: "1.1rem" }}>
+              Our process
+            </Link>
+            <Link href="/about" style={{ color: "#fff", textDecoration: "underline", fontSize: "1.1rem" }}>
+              About us
+            </Link>
+          </div>
         </div>
       </section>
 
