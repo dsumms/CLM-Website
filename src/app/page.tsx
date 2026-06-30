@@ -10,7 +10,7 @@ import { createPageMetadata } from "@/lib/seo";
 export const metadata = createPageMetadata({
   title: "Chile Line Media | New Mexico Video Production",
   description:
-    "Chile Line Media is a New Mexico production company creating cinematic narrative films and branded storytelling rooted in the Southwest.",
+    "Chile Line Media is a New Mexico production company creating cinematic narrative films, branded storytelling, and community-rooted partnerships in the Southwest.",
   path: "/",
   absoluteTitle: true,
 });
@@ -32,6 +32,12 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <Navbar />
+
+      <Link href="/events/young-washington-red-carpet-screening" className={styles.announcementBanner}>
+        <span>We are proud to be a Presenting Sponsor for:</span>
+        <strong>Young Washington Red Carpet Screening</strong>
+        <span>Learn more</span>
+      </Link>
 
       {/* Hero Section */}
       <section className={styles.hero}>

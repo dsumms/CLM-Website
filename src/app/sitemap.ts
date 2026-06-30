@@ -37,6 +37,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
+    {
+      url: `${baseUrl}/events/young-washington-red-carpet-screening`,
+      lastModified: '2026-06-30',
+      changeFrequency: 'yearly',
+      priority: 0.7,
+    },
     ...projectUrls,
   ];
 }
