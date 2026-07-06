@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-export const siteUrl = "https://chilelinemedia.com";
+export const siteUrl = "https://www.chilelinemedia.com";
 export const siteName = "Chile Line Media";
 export const defaultTitle = "Chile Line Media | New Mexico Video Production";
 export const defaultDescription =

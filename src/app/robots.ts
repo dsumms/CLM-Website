@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://chilelinemedia.com/sitemap.xml',
+    sitemap: 'https://www.chilelinemedia.com/sitemap.xml',
   };
 }

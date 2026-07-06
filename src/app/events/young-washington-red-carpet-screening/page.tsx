@@ -44,7 +44,7 @@ const eventJsonLd = {
   sponsor: {
     "@type": "Organization",
     name: "Chile Line Media",
-    url: "https://chilelinemedia.com",
+    url: "https://www.chilelinemedia.com",
   },
 };
 
