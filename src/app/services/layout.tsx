@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { createPageMetadata, serviceJsonLd, siteUrl } from "@/lib/seo";
+import { createPageMetadata, serviceJsonLd } from "@/lib/seo";
 
 export const metadata = createPageMetadata({
   title: "Video Production Services | Chile Line Media — New Mexico",

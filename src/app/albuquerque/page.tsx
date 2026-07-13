@@ -53,8 +53,8 @@ export default function AlbuquerquePage() {
                     </p>
 
                     <p>
-                        Albuquerque is home to major studio facilities including Netflix's
-                        Albuquerque Studios and NBCUniversal's production hub. New Mexico's
+                        Albuquerque is home to major studio facilities including Netflix&apos;s
+                        Albuquerque Studios and NBCUniversal&apos;s production hub. New Mexico&apos;s
                         25-35% film tax incentive applies to commercials, television, and feature
                         films alike, with additional uplifts for filming at qualified production
                         facilities and in rural zones. We understand the logistics of working
