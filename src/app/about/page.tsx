@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import Link from "next/link";
 import styles from "./page.module.css";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { partners } from "@/data/partners";
@@ -108,7 +109,7 @@ export default function About() {
                     transition={prefersReducedMotion ? noMotion : { duration: 1 }}
                 >
                     <p>
-                        We also produce brand films and commissioned storytelling for organizations, institutions, and businesses who share that commitment — shot with the same cinematic standard and sense of place we bring to our original films.
+                        We also produce brand films and commissioned storytelling for organizations, institutions, and businesses who share that commitment — shot with the same cinematic standard and sense of place we bring to our original films. <Link href="/services">Explore our services</Link> or <Link href="/work">see our recent work</Link>.
                     </p>
                 </motion.div>
             </section>

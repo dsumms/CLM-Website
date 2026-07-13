@@ -141,7 +141,7 @@ export default function Process() {
                         Ready to start your project?
                     </h2>
                     <p className={styles.ctaSub}>
-                        Let&apos;s talk about the story you want to tell.
+                        Let&apos;s talk about the story you want to tell. See examples in our <Link href="/work">recent work</Link> or learn about our <Link href="/services">production services</Link>.
                     </p>
                     <Link href="/contact" className={styles.ctaButton}>
                         GET IN TOUCH

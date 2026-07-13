@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import styles from "./Navbar.module.css";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-const menuItems = ["Work", "Process", "About", "Contact"];
+const menuItems = ["Work", "Services", "Process", "About", "Contact"];
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(true);

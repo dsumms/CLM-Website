@@ -76,7 +76,7 @@ export function createPageMetadata({
 
 export const organizationJsonLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": "LocalBusiness",
   name: siteName,
   url: siteUrl,
   logo: absoluteUrl(defaultOgImage),
@@ -87,7 +87,26 @@ export const organizationJsonLd = {
     addressRegion: "NM",
     addressCountry: "US",
   },
+  areaServed: ["New Mexico", "Santa Fe, NM", "Albuquerque, NM"],
+  priceRange: "$$",
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 35.6870,
+    longitude: -105.9378,
+  },
+};
+
+export const serviceJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "Video Production",
+  provider: {
+    "@type": "LocalBusiness",
+    name: siteName,
+    url: siteUrl,
+  },
   areaServed: "New Mexico",
+  description: "Commercial, narrative, and branded video production services in New Mexico.",
 };
 
 export const websiteJsonLd = {
