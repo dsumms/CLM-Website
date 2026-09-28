@@ -31,13 +31,15 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <Navbar />
-
-      <Link href="/events/young-washington-red-carpet-screening" className={styles.announcementBanner}>
-        <span>We are proud to be a Presenting Sponsor for:</span>
-        <strong>Young Washington Red Carpet Screening</strong>
-        <span>Learn more</span>
+      <Link href="/events/the-show-must-go-on" className={styles.announcementBanner}>
+        <span className={styles.announcementTitle}>Join us for The Show Must Go On!</span>
+        <span className={styles.announcementDetails}>
+          <span>A film community soirée</span>
+          <span className={styles.announcementCta}>Learn more</span>
+        </span>
       </Link>
+
+      <Navbar />
 
       {/* Hero Section */}
       <section className={styles.hero}>

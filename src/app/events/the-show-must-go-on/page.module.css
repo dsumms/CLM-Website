@@ -1,0 +1,295 @@
+.main {
+    min-height: 100vh;
+    background: #090708;
+}
+
+.hero {
+    width: min(1180px, calc(100% - 3rem));
+    margin: 0 auto;
+    padding: 11rem 0 4rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 0.78fr);
+    align-items: start;
+    gap: clamp(2rem, 5vw, 5rem);
+}
+
+.heroCopy {
+    min-width: 0;
+    padding-top: 1rem;
+}
+
+.eyebrow {
+    margin-bottom: 1.5rem;
+    color: #ff855c;
+    font-size: 0.84rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.hero h1 {
+    max-width: 9ch;
+    margin-bottom: 1.25rem;
+    color: #f4eee6;
+    font-size: 5rem;
+    line-height: 0.98;
+    overflow-wrap: anywhere;
+}
+
+.subtitle {
+    margin-bottom: 2rem;
+    color: #efbfae;
+    font-size: 1.9rem;
+    font-style: italic;
+    line-height: 1.2;
+}
+
+.lead {
+    max-width: 35rem;
+    margin-bottom: 2.25rem;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 1.2rem;
+    line-height: 1.65;
+}
+
+.ticketButton,
+.closingButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.25rem;
+    padding: 0.75rem 1.5rem;
+    background: #ff4500;
+    color: #140804;
+    font-size: 1.08rem;
+    font-weight: 800;
+    text-align: center;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.ticketButton:hover,
+.ticketButton:focus-visible {
+    background: #f4eee6;
+}
+
+.ticketButton:focus-visible,
+.closingButton:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 4px;
+}
+
+.flyer {
+    width: 100%;
+    max-width: 490px;
+    justify-self: end;
+}
+
+.flyer img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.detailsBand {
+    background: #211015;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.detailsInner {
+    width: min(1180px, calc(100% - 3rem));
+    margin: 0 auto;
+    padding: 3.25rem 0 3.75rem;
+}
+
+.detailsInner h2,
+.story h2,
+.closing h2 {
+    font-size: 2.6rem;
+    line-height: 1.08;
+}
+
+.detailsInner h2 {
+    margin-bottom: 2rem;
+    color: #f4eee6;
+}
+
+.detailsList {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+}
+
+.detailsList div {
+    min-width: 0;
+    padding: 0 1.5rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+.detailsList div:first-child {
+    padding-left: 0;
+    border-left: 0;
+}
+
+.detailsList dt {
+    margin-bottom: 0.65rem;
+    color: #f5b49e;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.detailsList dd {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.08rem;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.story {
+    width: min(1180px, calc(100% - 3rem));
+    margin: 0 auto;
+    padding: 6rem 0;
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    gap: 4rem;
+}
+
+.story h2 {
+    max-width: 13ch;
+    color: #f4eee6;
+}
+
+.storyCopy p {
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 1.15rem;
+    line-height: 1.75;
+}
+
+.storyCopy p:last-child {
+    margin-bottom: 0;
+}
+
+.closing {
+    background: #e6d9cc;
+    color: #27141a;
+}
+
+.closingInner {
+    width: min(1180px, calc(100% - 3rem));
+    margin: 0 auto;
+    padding: 3.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.closing h2 {
+    margin-bottom: 0.65rem;
+}
+
+.closing p {
+    font-size: 1.08rem;
+    line-height: 1.5;
+}
+
+.closingButton {
+    flex: 0 0 auto;
+    background: #27141a;
+    color: #fff;
+}
+
+.closingButton:hover,
+.closingButton:focus-visible {
+    background: #a32615;
+}
+
+@media (max-width: 900px) {
+    .hero {
+        grid-template-columns: minmax(0, 1fr) minmax(250px, 0.75fr);
+        gap: 2rem;
+    }
+
+    .hero h1 {
+        font-size: 4.4rem;
+    }
+
+    .detailsList {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 2rem 0;
+    }
+
+    .detailsList div:nth-child(3) {
+        padding-left: 0;
+        border-left: 0;
+    }
+}
+
+@media (max-width: 700px) {
+    .hero {
+        width: min(100% - 2rem, 560px);
+        padding: 9.5rem 0 3.5rem;
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .heroCopy {
+        padding-top: 0;
+    }
+
+    .hero h1 {
+        font-size: 3.5rem;
+    }
+
+    .subtitle {
+        font-size: 1.6rem;
+    }
+
+    .flyer {
+        justify-self: center;
+        max-width: 410px;
+    }
+
+    .detailsInner,
+    .story,
+    .closingInner {
+        width: min(100% - 2rem, 560px);
+    }
+
+    .detailsInner h2,
+    .story h2,
+    .closing h2 {
+        font-size: 2.2rem;
+    }
+
+    .detailsList {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .detailsList div,
+    .detailsList div:first-child,
+    .detailsList div:nth-child(3) {
+        padding: 0 0 1.25rem;
+        border-left: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .detailsList div:last-child {
+        padding-bottom: 0;
+        border-bottom: 0;
+    }
+
+    .story {
+        padding: 4rem 0;
+        grid-template-columns: 1fr;
+        gap: 1.75rem;
+    }
+
+    .closingInner {
+        padding: 3rem 0;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
