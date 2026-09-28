@@ -31,9 +31,16 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <Link href="/events/the-show-must-go-on" className={styles.announcementBanner}>
-        The Show Must Go On! Join us for a film community soirée.
-      </Link>
+      <div className={styles.announcementBanner}>
+        <Link href="/events/the-show-must-go-on">The Show Must Go On!</Link>
+        <a
+          href="https://tickets.holdmyticket.com/tickets/467199"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Get your tickets here
+        </a>
+      </div>
 
       <Navbar />
 
