@@ -32,11 +32,7 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <Link href="/events/the-show-must-go-on" className={styles.announcementBanner}>
-        <span className={styles.announcementTitle}>Join us for The Show Must Go On!</span>
-        <span className={styles.announcementDetails}>
-          <span>A film community soirée</span>
-          <span className={styles.announcementCta}>Learn more</span>
-        </span>
+        Join us for The Show Must Go On!, a film community soirée.
       </Link>
 
       <Navbar />
