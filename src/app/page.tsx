@@ -96,11 +96,7 @@ export default function Home() {
                 ) : (
                   <div className={styles.clientTextTile}>{organization.name}</div>
                 )}
-                {organization.relationship ? (
-                  <span className={styles.clientRelationship}>{organization.relationship}</span>
-                ) : (
-                  <span className={styles.partnerName}>{organization.name}</span>
-                )}
+                <span className={styles.partnerName}>{organization.name}</span>
               </>
             );
 
@@ -109,7 +105,6 @@ export default function Home() {
                 key={`${organization.name}-${i}`}
                 className={styles.partnerLogoWrapper}
                 data-duplicate="true"
-                data-featured-logo={organization.name === "Moving Arts Española" ? "true" : undefined}
                 aria-hidden="true"
               >
                 {content}
@@ -118,7 +113,6 @@ export default function Home() {
               <a
                 key={`${organization.name}-${i}`}
                 className={styles.partnerLogoWrapper}
-                data-featured-logo={organization.name === "Moving Arts Española" ? "true" : undefined}
                 href={organization.href}
                 target="_blank"
                 rel="noopener noreferrer"
