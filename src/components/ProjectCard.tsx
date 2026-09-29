@@ -3,25 +3,20 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { getProjectImageSources } from "@/lib/projectImages";
 import styles from "./ProjectCard.module.css";
 
 interface ProjectCardProps {
     title: string;
     year: string;
     youtubeId?: string;
+    imageSrc?: string;
     slug: string;
 }
 
-export default function ProjectCard({ title, year, youtubeId, slug }: ProjectCardProps) {
+export default function ProjectCard({ title, year, youtubeId, imageSrc, slug }: ProjectCardProps) {
     const targetRef = useRef<HTMLDivElement>(null);
-    const thumbnailSources = youtubeId
-        ? [
-              `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`,
-              `https://img.youtube.com/vi/${youtubeId}/sddefault.jpg`,
-              `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`,
-              `https://img.youtube.com/vi/${youtubeId}/mqdefault.jpg`,
-          ]
-        : [];
+    const thumbnailSources = getProjectImageSources(imageSrc, youtubeId);
     const [thumbnailIndex, setThumbnailIndex] = useState(0);
     const [hasError, setHasError] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
@@ -72,7 +67,7 @@ export default function ProjectCard({ title, year, youtubeId, slug }: ProjectCar
                 aria-label={`View project ${title}`}
             >
                 <div className={styles.imageContainer}>
-                    {youtubeId && !hasError ? (
+                    {thumbnailSources.length > 0 && !hasError ? (
                         <img
                             src={thumbSrc}
                             alt={title}

@@ -6,6 +6,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { SparkSplat, SparkSplatRenderer } from "./SparkSplat";
 import { canUseLiveSplat } from "@/lib/splatEligibility";
+import { observeSplatFrameActivity } from "@/lib/splatFrameActivity";
 
 type Vec3 = [number, number, number];
 
@@ -674,6 +675,7 @@ function makeDefaultDebugRenderer(): DebugRendererState {
 }
 
 export default function SplatHero() {
+    const heroRootRef = useRef<HTMLDivElement>(null);
     const pointerStateRef = useRef<PointerState>({ x: 0, y: 0, isTouch: false });
     const [splatUrlFlags] = useState<SplatUrlFlags>(() => readSplatUrlFlags());
     const [liveSplatAllowed, setLiveSplatAllowed] = useState(false);
@@ -685,10 +687,33 @@ export default function SplatHero() {
     const [splatRuntimeFailureMessage, setSplatRuntimeFailureMessage] = useState<string | null>(null);
     const [copyStatus, setCopyStatus] = useState("");
     const [isSplatLoaded, setIsSplatLoaded] = useState(false);
+    const [isFrameActive, setIsFrameActive] = useState(false);
+    const [hasPresentedLiveSplat, setHasPresentedLiveSplat] = useState(false);
 
     useEffect(() => {
         setLiveSplatAllowed(splatUrlFlags.forceLiveSplat || canUseLiveSplat());
     }, [splatUrlFlags.forceLiveSplat]);
+
+    useEffect(() => {
+        const element = heroRootRef.current;
+        if (!element) return;
+
+        return observeSplatFrameActivity(
+            element,
+            document,
+            typeof IntersectionObserver === "undefined"
+                ? undefined
+                : (onIntersectionChange) => new IntersectionObserver((entries) => {
+                    const entry = entries.find((item) => item.target === element);
+                    if (entry) onIntersectionChange(entry.isIntersecting);
+                }),
+            setIsFrameActive
+        );
+    }, []);
+
+    useEffect(() => {
+        if (isFrameActive && isSplatLoaded) setHasPresentedLiveSplat(true);
+    }, [isFrameActive, isSplatLoaded]);
 
     const activeCamera = debugEnabled ? debugCamera : DEFAULT_HERO_CAMERA;
     const activeWiggle = getActiveWiggleConfig(debugEnabled, debugWiggle);
@@ -801,6 +826,7 @@ export default function SplatHero() {
     const liveSplatCanvas = (
         <Canvas
             key={heroCameraKey(activeCamera)}
+            frameloop={isFrameActive ? "always" : "never"}
             dpr={[1, 1.25]}
             camera={{
                 position: activeCamera.position,
@@ -816,7 +842,7 @@ export default function SplatHero() {
                 cameraConfig={activeCamera}
                 wiggleConfig={activeWiggle}
             />
-            <SparkSplatRenderer />
+            <SparkSplatRenderer onError={handleSplatRuntimeError} />
             <Suspense fallback={null}>
                 <SparkSplat
                     url={HERO_SPLAT.src}
@@ -831,6 +857,8 @@ export default function SplatHero() {
 
     return (
         <div
+            ref={heroRootRef}
+            data-splat-rendering={!liveSplatActive ? "fallback" : isFrameActive ? "active" : "paused"}
             style={{
                 position: "relative",
                 width: "100%",
@@ -900,7 +928,7 @@ export default function SplatHero() {
                     objectPosition: "center center",
                     userSelect: "none",
                     pointerEvents: "none",
-                    opacity: liveSplatActive && isSplatLoaded ? 0 : 1,
+                    opacity: liveSplatActive && hasPresentedLiveSplat ? 0 : 1,
                     transition: "opacity 1.5s ease-in-out",
                     zIndex: 10,
                 }}

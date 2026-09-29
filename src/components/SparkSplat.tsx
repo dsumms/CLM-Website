@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { extend, useThree, useFrame, type ThreeElement } from "@react-three/fiber";
 import {
     SplatMesh as SparkSplatMesh,
@@ -24,12 +24,25 @@ declare module "@react-three/fiber" {
  * Must be placed as a child of <Canvas>. Handles initialization
  * and per-frame updates automatically.
  */
-export function SparkSplatRenderer() {
+export function SparkSplatRenderer({ onError }: { onError?: (error: unknown) => void }) {
     const gl = useThree((s) => s.gl);
     const scene = useThree((s) => s.scene);
     const rendererRef = useRef<SparkSplatRendererMesh | null>(null);
+    const onErrorRef = useRef(onError);
+    const failureReportedRef = useRef(false);
 
     useEffect(() => {
+        onErrorRef.current = onError;
+    }, [onError]);
+
+    const reportFailure = useCallback((error: unknown) => {
+        if (failureReportedRef.current) return;
+        failureReportedRef.current = true;
+        onErrorRef.current?.(error);
+    }, []);
+
+    useEffect(() => {
+        failureReportedRef.current = false;
         const sparkRenderer = new SparkSplatRendererMesh({
             renderer: gl,
             autoUpdate: false,
@@ -37,18 +50,31 @@ export function SparkSplatRenderer() {
         scene.add(sparkRenderer);
         rendererRef.current = sparkRenderer;
 
+        const handleContextLost = (event: Event) => {
+            event.preventDefault();
+            reportFailure(new Error("WebGL context lost"));
+        };
+        gl.domElement.addEventListener("webglcontextlost", handleContextLost);
+
         return () => {
+            gl.domElement.removeEventListener("webglcontextlost", handleContextLost);
             scene.remove(sparkRenderer);
             sparkRenderer.dispose();
             rendererRef.current = null;
         };
-    }, [gl, scene]);
+    }, [gl, scene, reportFailure]);
 
     useFrame(({ camera }) => {
         const sparkRenderer = rendererRef.current;
-        if (!sparkRenderer) return;
+        if (!sparkRenderer || failureReportedRef.current) return;
 
-        void sparkRenderer.update({ scene, camera });
+        try {
+            void sparkRenderer.update({ scene, camera }).catch((error: unknown) => {
+                if (rendererRef.current === sparkRenderer) reportFailure(error);
+            });
+        } catch (error) {
+            if (rendererRef.current === sparkRenderer) reportFailure(error);
+        }
     });
 
     return null;
@@ -81,10 +107,11 @@ export function SparkSplat({
     const meshRef = useRef<SparkSplatMesh | null>(null);
 
     useEffect(() => {
+        let active = true;
         const mesh = new SparkSplatMesh({
             url,
             onLoad: () => {
-                onLoaded?.();
+                if (active) onLoaded?.();
             },
         });
 
@@ -99,10 +126,11 @@ export function SparkSplat({
 
         // Catch async initialization errors
         mesh.initialized.catch((err: unknown) => {
-            onError?.(err);
+            if (active) onError?.(err);
         });
 
         return () => {
+            active = false;
             mesh.dispose();
             meshRef.current = null;
         };

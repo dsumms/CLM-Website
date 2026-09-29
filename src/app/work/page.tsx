@@ -1,32 +1,69 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element */
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { getProjectImageSources } from "@/lib/projectImages";
 import styles from "./page.module.css";
 import { projects } from "@/data/projects";
 import { useState } from "react";
 import Link from "next/link";
+
+function ProjectVisual({ imageSrc, youtubeId, className }: {
+    imageSrc?: string;
+    youtubeId?: string;
+    className: string;
+}) {
+    const sources = getProjectImageSources(imageSrc, youtubeId);
+    const [sourceIndex, setSourceIndex] = useState(0);
+    const source = sources[sourceIndex];
+
+    if (!source) {
+        return <div className={`${className} ${styles.imageFallback}`} aria-hidden="true" />;
+    }
+
+    return (
+        <img
+            className={className}
+            src={source}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            onError={() => setSourceIndex((index) => index + 1)}
+            onLoad={(event) => {
+                if (event.currentTarget.naturalWidth <= 120) {
+                    setSourceIndex((index) => index + 1);
+                }
+            }}
+        />
+    );
+}
 
 export default function Work() {
     const prefersReducedMotion = useReducedMotion();
     const noMotion = { duration: 0 };
     const [hoveredProject, setHoveredProject] = useState<string | null>(null);
 
-    // Only set background-image for the hovered project.
-    // This avoids preloading all YouTube thumbnails and keeps the default state black.
+    // Only load the desktop background for the active project.
     const activeSlug = hoveredProject;
     const activeProject = projects.find((p) => p.slug === activeSlug);
 
     return (
         <main className={styles.main} id="main-content">
             {/* Background Image — only one loaded at a time */}
-            {activeProject && activeProject.youtubeId && (
+            {activeProject && (
                 <div
                     key={`bg-${activeProject.slug}`}
                     className={`${styles.backgroundLayer} ${styles.activeBg}`}
-                    style={{ backgroundImage: `url(https://img.youtube.com/vi/${activeProject.youtubeId}/maxresdefault.jpg)` }}
-                />
+                    aria-hidden="true"
+                >
+                    <ProjectVisual
+                        imageSrc={activeProject.imageSrc}
+                        youtubeId={activeProject.youtubeId}
+                        className={styles.backgroundImage}
+                    />
+                </div>
             )}
 
             {/* Dark gradient overlay so text remains readable */}
@@ -59,12 +96,21 @@ export default function Work() {
                         <div
                             key={project.slug}
                             className={styles.projectItem}
-                            onPointerMove={() => setHoveredProject(project.slug)}
+                            onPointerEnter={(event) => {
+                                if (event.pointerType !== "touch") setHoveredProject(project.slug);
+                            }}
                             onPointerLeave={() => setHoveredProject(null)}
                             onFocus={() => setHoveredProject(project.slug)}
                             onBlur={() => setHoveredProject(null)}
                         >
                             <Link href={`/work/${project.slug}`} className={styles.projectLink}>
+                                <span className={styles.mobileVisual} aria-hidden="true">
+                                    <ProjectVisual
+                                        imageSrc={project.imageSrc}
+                                        youtubeId={project.youtubeId}
+                                        className={styles.mobileImage}
+                                    />
+                                </span>
                                 <motion.h2
                                     className={styles.projectTitle}
                                     initial={{ opacity: 0, y: 20 }}

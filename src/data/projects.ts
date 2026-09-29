@@ -3,6 +3,7 @@ export interface Project {
     year: string;
     slug: string;
     youtubeId: string;
+    imageSrc?: string;
     description: string;
     category: "narrative" | "commercial";
     awards?: string[];

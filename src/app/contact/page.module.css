@@ -165,6 +165,77 @@
     box-shadow: 0 8px 30px -8px rgba(255, 69, 0, 0.45);
 }
 
+.submitButton:disabled {
+    cursor: wait;
+    opacity: 0.6;
+    box-shadow: none;
+}
+
+.formNotice,
+.formFeedback,
+.formError {
+    margin: 0;
+    text-align: left;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.formNotice {
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.formFeedback {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.formError {
+    color: #ffaf94;
+}
+
+.draftLink {
+    align-self: flex-start;
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    font-weight: 600;
+}
+
+.draftLink:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 5px;
+}
+
+.draftDetails {
+    text-align: left;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.draftDetails summary {
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.draftDetails textarea {
+    width: 100%;
+    min-height: 10rem;
+    color: var(--foreground);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 0.75rem;
+    resize: vertical;
+}
+
+.honeypot {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
 /* ── Services ── */
 .servicesSection {
     display: flex;

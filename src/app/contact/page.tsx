@@ -4,6 +4,15 @@ import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
 import styles from "./page.module.css";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useEffect, useState, type FormEvent } from "react";
+import {
+    INQUIRY_EMAIL,
+    budgetRanges,
+    inquiryBody,
+    inquiryDraftUrl,
+    projectTypes,
+    validateInquiry,
+} from "@/lib/inquiry";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -30,26 +39,104 @@ const services = [
     },
 ];
 
-const projectTypes = [
-    "Narrative Films",
-    "Brand Storytelling",
-    "Documentary",
-    "Campaign & Digital Content",
-    "Other",
-];
-
-const budgetRanges = [
-    "Under $5k",
-    "$5k – $15k",
-    "$15k – $50k",
-    "$50k – $100k",
-    "$100k+",
-    "Not sure yet",
-];
-
 export default function Contact() {
     const prefersReducedMotion = useReducedMotion();
     const noMotion = { duration: 0 };
+    const [deliveryMode, setDeliveryMode] = useState<"checking" | "direct" | "draft">("checking");
+    const [submitting, setSubmitting] = useState(false);
+    const [feedback, setFeedback] = useState<{ message: string; error: boolean } | null>(null);
+    const [draftHref, setDraftHref] = useState<string | null>(null);
+    const [draftText, setDraftText] = useState<string | null>(null);
+
+    useEffect(() => {
+        let active = true;
+        const controller = new AbortController();
+        const timeout = window.setTimeout(() => controller.abort(), 4000);
+        fetch("/api/inquiry", { cache: "no-store", signal: controller.signal })
+            .then((response) => response.ok ? response.json() : null)
+            .then((result: unknown) => {
+                if (active) setDeliveryMode(
+                    result && typeof result === "object" && "mode" in result && result.mode === "direct"
+                        ? "direct"
+                        : "draft",
+                );
+            })
+            .catch(() => { if (active) setDeliveryMode("draft"); })
+            .finally(() => window.clearTimeout(timeout));
+        return () => {
+            active = false;
+            controller.abort();
+            window.clearTimeout(timeout);
+        };
+    }, []);
+
+    async function submitInquiry(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        if (submitting || deliveryMode === "checking") return;
+
+        const form = event.currentTarget;
+        const fields = Object.fromEntries(new FormData(form));
+        const validation = validateInquiry(fields);
+        setDraftHref(null);
+        setDraftText(null);
+        if (!validation.ok) {
+            setFeedback({ message: validation.error, error: true });
+            return;
+        }
+
+        const draft = inquiryDraftUrl(validation.inquiry);
+        const draftBody = inquiryBody(validation.inquiry);
+        if (deliveryMode === "draft") {
+            setDraftHref(draft);
+            setDraftText(draftBody);
+            setFeedback({
+                message: `Your inquiry has not been sent. Open the email draft and press Send in your email app to reach ${INQUIRY_EMAIL}.`,
+                error: false,
+            });
+            return;
+        }
+
+        setSubmitting(true);
+        setFeedback({ message: "Sending your inquiry…", error: false });
+        try {
+            const response = await fetch("/api/inquiry", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(fields),
+                signal: AbortSignal.timeout(15_000),
+            });
+            if (response.ok) {
+                form.reset();
+                setFeedback({ message: "Your inquiry was accepted for delivery. We'll reply by email.", error: false });
+            } else if (response.status === 400) {
+                const result: unknown = await response.json();
+                setFeedback({
+                    message: result && typeof result === "object" && "error" in result && typeof result.error === "string"
+                        ? result.error
+                        : "Please check your inquiry and try again.",
+                    error: true,
+                });
+            } else {
+                setDraftHref(draft);
+                setDraftText(draftBody);
+                setDeliveryMode("draft");
+                setFeedback({
+                    message: `Your inquiry was not confirmed as sent. Open the email draft and press Send in your email app to reach ${INQUIRY_EMAIL}.`,
+                    error: true,
+                });
+            }
+        } catch {
+            setDraftHref(draft);
+            setDraftText(draftBody);
+            setDeliveryMode("draft");
+            setFeedback({
+                message: `Your inquiry was not confirmed as sent. Open the email draft and press Send in your email app to reach ${INQUIRY_EMAIL}.`,
+                error: true,
+            });
+        } finally {
+            setSubmitting(false);
+        }
+    }
 
     return (
         <main className={styles.main} id="main-content">
@@ -81,8 +168,18 @@ export default function Contact() {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={prefersReducedMotion ? noMotion : { duration: 1, delay: 0.15, ease: easeOut }}
-                        onSubmit={(e) => e.preventDefault()}
+                        onSubmit={submitInquiry}
+                        onChange={() => {
+                            setDraftHref(null);
+                            setDraftText(null);
+                            setFeedback(null);
+                        }}
                     >
+                        {deliveryMode === "draft" && (
+                            <p className={styles.formNotice}>
+                                Complete the form to prepare an email to {INQUIRY_EMAIL}. Review and send it in your email app.
+                            </p>
+                        )}
                         <div className={styles.formRow}>
                             <div className={styles.fieldGroup}>
                                 <label htmlFor="name" className={styles.label}>
@@ -94,6 +191,10 @@ export default function Contact() {
                                     type="text"
                                     className={styles.input}
                                     placeholder="Your name"
+                                    minLength={2}
+                                    maxLength={120}
+                                    autoComplete="name"
+                                    disabled={submitting}
                                     required
                                 />
                             </div>
@@ -108,6 +209,9 @@ export default function Contact() {
                                     type="email"
                                     className={styles.input}
                                     placeholder="you@company.com"
+                                    maxLength={254}
+                                    autoComplete="email"
+                                    disabled={submitting}
                                     required
                                 />
                             </div>
@@ -123,6 +227,7 @@ export default function Contact() {
                                     name="projectType"
                                     className={styles.select}
                                     defaultValue=""
+                                    disabled={submitting}
                                     required
                                 >
                                     <option value="" disabled>
@@ -145,6 +250,7 @@ export default function Contact() {
                                     name="budget"
                                     className={styles.select}
                                     defaultValue=""
+                                    disabled={submitting}
                                     required
                                 >
                                     <option value="" disabled>
@@ -169,18 +275,44 @@ export default function Contact() {
                                 className={styles.textarea}
                                 placeholder="Tell us about your project…"
                                 rows={5}
+                                minLength={10}
+                                maxLength={5000}
+                                disabled={submitting}
                                 required
                             />
+                        </div>
+
+                        <div className={styles.honeypot} aria-hidden="true">
+                            <label htmlFor="website">Leave this field blank</label>
+                            <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" disabled={submitting} />
                         </div>
 
                         <motion.button
                             type="submit"
                             className={styles.submitButton}
+                            disabled={deliveryMode === "checking" || submitting}
                             whileHover={prefersReducedMotion ? {} : { scale: 1.03 }}
                             whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
                         >
-                            Send Inquiry
+                            {submitting ? "Sending…" : deliveryMode === "checking" ? "Preparing…" : deliveryMode === "draft" ? "Prepare Email Draft" : "Send Inquiry"}
                         </motion.button>
+                        {feedback && (
+                            <p className={feedback.error ? styles.formError : styles.formFeedback} role={feedback.error ? "alert" : "status"}>
+                                {feedback.message}
+                            </p>
+                        )}
+                        {draftHref && (
+                            <a className={styles.draftLink} href={draftHref}>
+                                Open email draft
+                            </a>
+                        )}
+                        {draftText && (
+                            <details className={styles.draftDetails}>
+                                <summary>If your email app does not open, copy the inquiry text</summary>
+                                <p>Email {INQUIRY_EMAIL} and paste this text:</p>
+                                <textarea readOnly value={draftText} rows={8} onFocus={(event) => event.currentTarget.select()} />
+                            </details>
+                        )}
                     </motion.form>
 
                     {/* ── Services Section ── */}

@@ -138,6 +138,7 @@ export default function Home() {
               title={project.title}
               year={project.year}
               youtubeId={project.youtubeId}
+              imageSrc={project.imageSrc}
               slug={project.slug}
             />
           ))}
@@ -157,6 +158,7 @@ export default function Home() {
               title={project.title}
               year={project.year}
               youtubeId={project.youtubeId}
+              imageSrc={project.imageSrc}
               slug={project.slug}
             />
           ))}

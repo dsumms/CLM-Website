@@ -13,12 +13,20 @@
     left: 0;
     width: 100%;
     height: 100vh;
-    background-size: cover;
-    background-position: center;
     opacity: 0;
     transition: opacity 0.8s ease, transform 6s ease-out;
     transform: scale(1.05);
     z-index: 0;
+}
+
+.backgroundImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.imageFallback {
+    background: #131313;
 }
 
 .activeBg {
@@ -90,6 +98,11 @@
     transform: translateX(30px);
 }
 
+.projectItem:focus-within {
+    opacity: 1;
+    transform: translateX(30px);
+}
+
 .projectLink {
     text-decoration: none;
     color: inherit;
@@ -97,6 +110,15 @@
     justify-content: space-between;
     align-items: baseline;
     padding: 2.5rem 0;
+}
+
+.projectLink:focus-visible {
+    outline: 2px solid var(--foreground);
+    outline-offset: 5px;
+}
+
+.mobileVisual {
+    display: none;
 }
 
 .projectTitle {
@@ -113,21 +135,78 @@
     opacity: 0.8;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px), (hover: none) {
+
+    .backgroundLayer,
+    .overlay {
+        display: none;
+    }
 
     .header,
     .projectList {
-        padding: 6rem 2rem 2rem 2rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
     }
 
-    .projectItem:hover {
+    .header {
+        padding-top: 8rem;
+        padding-bottom: 3rem;
+    }
+
+    .projectList {
+        justify-content: flex-start;
+        padding-top: 0;
+        padding-bottom: 5rem;
+        gap: 2rem;
+    }
+
+    .projectItem {
+        opacity: 1;
+        border-bottom: 0;
+        contain-intrinsic-size: 0 20rem;
+    }
+
+    .projectItem:hover,
+    .projectItem:focus-within {
         transform: none;
-        /* Disable shift on mobile */
     }
 
     .projectLink {
-        padding: 1.5rem 0;
+        padding: 0;
         flex-direction: column;
-        gap: 0.5rem;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    .mobileVisual {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        background: #131313;
+    }
+
+    .mobileImage {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .projectTitle {
+        font-size: clamp(1.65rem, 5vw, 2.5rem);
+        line-height: 1.1;
+    }
+
+    .projectYear {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header,
+    .projectList {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
     }
 }
