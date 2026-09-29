@@ -5,6 +5,7 @@ import { Component, Suspense, useEffect, useRef, useState, type CSSProperties, t
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { SparkSplat, SparkSplatRenderer } from "./SparkSplat";
+import { canUseLiveSplat } from "@/lib/splatEligibility";
 
 type Vec3 = [number, number, number];
 
@@ -54,15 +55,7 @@ type PointerState = {
     isTouch: boolean;
 };
 
-type NavigatorWithHints = Navigator & {
-    connection?: {
-        saveData?: boolean;
-    };
-    deviceMemory?: number;
-};
-
 const FALLBACK_IMAGE_SRC = "/hero-image.jpg";
-const MIN_LIVE_SPLAT_WIDTH = 900;
 const LIVE_SPLAT_BACKDROP = [
     "radial-gradient(120% 90% at 50% 30%, rgba(196, 218, 228, 0.95) 0%, rgba(160, 192, 205, 0.88) 38%, rgba(103, 128, 121, 0.52) 70%, rgba(24, 30, 28, 0.25) 100%)",
     "linear-gradient(180deg, #c5d9e2 0%, #a6bcc8 42%, #7f8f6d 74%, #1d2520 100%)",
@@ -158,64 +151,6 @@ function buildConstantsSnippet(
         `[${round(values[0], 3)}, ${round(values[1], 3)}, ${round(values[2], 3)}]`;
 
     return `const HERO_CAMERA = {\n  position: ${formatVec3(camera.position)} as const,\n  target: ${formatVec3(camera.target)} as const,\n  fov: ${round(camera.fov, 2)},\n  near: ${camera.near},\n  far: ${camera.far},\n};\n\nconst WIGGLE = {\n  damping: ${round(wiggle.damping, 4)},\n  desktopYaw: ${round(wiggle.desktopYaw, 4)},\n  desktopPitch: ${round(wiggle.desktopPitch, 4)},\n  touchYaw: ${round(wiggle.touchYaw, 4)},\n  touchPitch: ${round(wiggle.touchPitch, 4)},\n};\n\nconst SPLAT_RENDERER = {\n  screenCullBoundsMultiplier: ${round(renderer.screenCullBoundsMultiplier, 2)},\n  alphaHash: ${renderer.alphaHash},\n};`;
-}
-
-function hasWebGLSupport() {
-    if (typeof document === "undefined") {
-        return false;
-    }
-
-    try {
-        const canvas = document.createElement("canvas");
-        const webgl2 = canvas.getContext("webgl2");
-        const webgl = canvas.getContext("webgl");
-        return Boolean(webgl2 ?? webgl);
-    } catch {
-        return false;
-    }
-}
-
-function canUseLiveSplat() {
-    if (typeof window === "undefined" || typeof navigator === "undefined") {
-        return false;
-    }
-
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) {
-        return false;
-    }
-
-    const nav = navigator as NavigatorWithHints;
-
-    if (nav.connection?.saveData) {
-        return false;
-    }
-
-    if (!hasWebGLSupport()) {
-        return false;
-    }
-
-    const coarsePointer =
-        window.matchMedia("(pointer: coarse)").matches ||
-        window.matchMedia("(any-pointer: coarse)").matches;
-
-    if (coarsePointer) {
-        return false;
-    }
-
-    if (window.innerWidth < MIN_LIVE_SPLAT_WIDTH) {
-        return false;
-    }
-
-    if (typeof nav.deviceMemory === "number" && nav.deviceMemory <= 4) {
-        return false;
-    }
-
-    if (typeof nav.hardwareConcurrency === "number" && nav.hardwareConcurrency <= 4) {
-        return false;
-    }
-
-    return true;
 }
 
 function readSplatUrlFlags(): SplatUrlFlags {
