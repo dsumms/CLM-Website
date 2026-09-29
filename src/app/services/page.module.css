@@ -106,28 +106,12 @@
     margin-bottom: 3rem;
 }
 
-.deliverablesList {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem 3rem;
-}
-
-.deliverablesItem {
-    font-size: 1.15rem;
+.deliverablesDescription {
+    max-width: 48rem;
+    font-size: clamp(1.1rem, 1.5vw, 1.25rem);
     font-weight: 300;
-    line-height: 1.6;
+    line-height: 1.7;
     opacity: 0.75;
-    padding-left: 1.5rem;
-    position: relative;
-}
-
-.deliverablesItem::before {
-    content: '—';
-    position: absolute;
-    left: 0;
-    color: var(--accent);
-    opacity: 0.6;
 }
 
 /* CTA */
@@ -222,10 +206,6 @@
 
     .deliverablesSection {
         padding: 2rem 2rem 4rem;
-    }
-
-    .deliverablesList {
-        grid-template-columns: 1fr;
     }
 
     .ctaSection {

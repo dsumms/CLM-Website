@@ -6,181 +6,198 @@
 }
 
 .hero {
-    height: 60vh;
+    min-height: 60vh;
     display: flex;
     align-items: flex-end;
     padding: 4rem;
 }
 
 .title {
-    font-size: clamp(4rem, 8vw, 8rem);
+    margin: 0;
+    font-size: clamp(3.5rem, 8vw, 8rem);
     font-weight: 800;
     letter-spacing: 0.1em;
+    line-height: 0.95;
     opacity: 0.9;
     mix-blend-mode: difference;
 }
 
 .contentSection {
-    padding: 4rem;
     max-width: 1400px;
     margin: 0 auto;
+    padding: 4rem;
 }
 
-.textBlock {
-    max-width: 800px;
-    font-size: clamp(1.5rem, 3vw, 2.5rem);
-    line-height: 1.4;
+.introCopy {
+    max-width: 1000px;
+    font-size: clamp(1.35rem, 2.25vw, 2rem);
     font-weight: 300;
+    line-height: 1.55;
 }
 
-.textBlockRight {
-    max-width: 800px;
-    font-size: clamp(1.5rem, 3vw, 2.5rem);
-    line-height: 1.4;
-    font-weight: 300;
-    margin-left: auto;
-    text-align: right;
-    color: #d1d1d1;
+.introCopy p {
+    margin: 0 0 1.5em;
+}
+
+.introCopy p:last-child {
+    margin-bottom: 0;
+}
+
+.imageGallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto 6rem;
+    padding: 0 4rem;
+    overflow: hidden;
 }
 
 .imageContainer {
     width: 100%;
-    margin-left: 0;
-    height: 70vh;
+    aspect-ratio: 16 / 10;
     overflow: hidden;
     position: relative;
-    margin-top: 8rem;
-    margin-bottom: 8rem;
-}
-
-.parallaxImage {
-    width: 100%;
-    height: 130%;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    position: absolute;
-    top: -15%;
-    left: 0;
 }
 
-.mantraSection {
-    min-height: 80vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 4rem;
+.locationImage {
+    background-image: url("/images/about-location.jpg");
 }
 
-.mantraSection h2 {
-    font-size: clamp(2rem, 4vw, 3.5rem);
-    font-weight: 400;
-    line-height: 1.2;
-    margin-bottom: 2rem;
+.btsImage {
+    background-image: url("/images/about-bts.jpg");
 }
 
-.highlight {
-    font-style: italic;
-    font-weight: 700;
-    color: var(--accent);
-}
-
-.mantraSection p {
-    font-size: 1.25rem;
-    opacity: 0.7;
-    max-width: 600px;
-}
-
-/* ── Section Heading (shared) ── */
 .sectionHeading {
+    margin: 0 0 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     font-size: 2rem;
     font-weight: 300;
     letter-spacing: 0.1em;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    padding-bottom: 2rem;
-    margin-bottom: 4rem;
 }
 
-/* ── Our Team ── */
-.teamSection {
-    padding: 6rem 4rem 8rem;
+.teamSection,
+.clientsSection,
+.partnershipsSection {
     max-width: 1400px;
     margin: 0 auto;
+    padding: 4rem;
 }
 
 .teamGrid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 4rem 3rem;
 }
 
 .teamCard {
     display: flex;
+    min-width: 0;
     flex-direction: column;
 }
 
 .teamPhoto {
     width: 100%;
     aspect-ratio: 3 / 4;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
     background: linear-gradient(
         135deg,
         rgba(255, 255, 255, 0.04) 0%,
         rgba(255, 255, 255, 0.01) 100%
     );
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 4px;
-    margin-bottom: 1.5rem;
-    position: relative;
-    overflow: hidden;
 }
 
 .teamName {
+    margin: 0;
     font-size: 1.75rem;
     font-weight: 600;
     letter-spacing: 0.04em;
 }
 
 .teamRole {
-    display: block;
-    font-size: 1.05rem;
-    letter-spacing: 0.08em;
+    margin: 0.35rem 0 1.25rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.07em;
+    line-height: 1.5;
     text-transform: uppercase;
-    opacity: 0.5;
-    margin-top: 0.35rem;
-    margin-bottom: 1.5rem;
+    opacity: 0.65;
 }
 
 .teamBio {
-    font-size: 1.15rem;
+    margin: 0;
+    font-size: 1.05rem;
     line-height: 1.75;
-    opacity: 0.75;
+    opacity: 0.8;
 }
 
-/* ── Past Partnerships ── */
-.partnershipsSection {
-    padding: 6rem 4rem 10rem;
-    max-width: 1400px;
-    margin: 0 auto;
+.clientGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+    gap: 1.5rem;
+}
+
+.clientCard {
+    display: flex;
+    min-height: 130px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.clientCard:hover,
+.clientCard:focus-visible {
+    border-color: var(--accent);
+    background-color: rgba(255, 255, 255, 0.04);
+}
+
+.clientCard:focus-visible,
+.partnerGridItem:focus-visible,
+.inquiryLink:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+
+.clientName {
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
+.clientRelationship {
+    font-size: 0.9rem;
+    opacity: 0.7;
 }
 
 .partnerGrid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 3rem 2rem;
 }
 
 .partnerGridItem {
     display: flex;
+    min-width: 0;
     flex-direction: column;
     align-items: center;
-    text-align: center;
     gap: 1rem;
-    transition: opacity 0.3s ease;
-    opacity: 0.6;
     color: inherit;
+    text-align: center;
     text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
 }
 
 .partnerGridItem:hover,
@@ -188,25 +205,20 @@
     opacity: 1;
 }
 
-.partnerGridItem:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 0.75rem;
-}
-
 .partnerLogoBox {
-    position: relative;
     width: 100%;
     height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
 .partnerLabel {
     font-size: 0.8rem;
     letter-spacing: 0.06em;
-    opacity: 0.5;
-    line-height: 1.3;
+    line-height: 1.4;
+    opacity: 0.75;
 }
 
 .partnerPlaceholderText {
@@ -214,24 +226,74 @@
     font-weight: 500;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    opacity: 0.4;
+    opacity: 0.6;
+}
+
+.inquirySection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 5rem 4rem 8rem;
+    text-align: center;
+}
+
+.inquirySection p {
+    margin: 0;
+    font-size: clamp(1.35rem, 3vw, 2rem);
+}
+
+.inquiryLink {
+    display: inline-flex;
+    justify-content: center;
+    padding: 0.9rem 1.4rem;
+    border: 1px solid var(--accent);
+    color: inherit;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.inquiryLink:hover {
+    color: var(--background);
+    background-color: var(--accent);
 }
 
 @media (max-width: 768px) {
+    .hero {
+        min-height: 48vh;
+        padding: 2rem 1.25rem;
+    }
 
-    .hero,
+    .title {
+        font-size: clamp(2.4rem, 10vw, 4.5rem);
+        letter-spacing: 0.07em;
+    }
+
     .contentSection,
-    .mantraSection {
-        padding: 2rem;
-    }
-
-    .textBlockRight {
-        text-align: left;
-    }
-
     .teamSection,
+    .clientsSection,
     .partnershipsSection {
-        padding: 4rem 2rem;
+        padding: 3rem 1.25rem;
+    }
+
+    .introCopy {
+        font-size: clamp(1.25rem, 5.5vw, 1.7rem);
+    }
+
+    .imageGallery {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin-bottom: 3rem;
+        padding: 0 1.25rem;
+    }
+
+    .sectionHeading {
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        font-size: 1.5rem;
     }
 
     .teamGrid {
@@ -239,12 +301,36 @@
         gap: 3rem;
     }
 
+    .teamPhoto {
+        aspect-ratio: 4 / 5;
+    }
+
+    .teamName {
+        font-size: 1.5rem;
+    }
+
     .partnerGrid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2rem 1.5rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 2rem 1.25rem;
     }
 
     .partnerLogoBox {
         height: 60px;
+    }
+
+    .clientGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .inquirySection {
+        padding: 3rem 1.25rem 5rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .clientCard,
+    .partnerGridItem,
+    .inquiryLink {
+        transition: none;
     }
 }

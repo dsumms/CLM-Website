@@ -66,7 +66,7 @@ export default function SantaFePage() {
                     <p>
                         Our recent projects include narrative short films shot across all four
                         seasons in northern New Mexico, branded content for the New Mexico Film
-                        Office, and documentary work celebrating the heritage of acequia culture.
+                        Office. We also work in documentary production.
                         We collaborate with local organizations including the Santa Fe Film
                         Institute, the Santa Fe International Film Festival, Los Luceros Historic
                         Site, and the Taos Destination Stewardship Network.

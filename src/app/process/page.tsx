@@ -44,7 +44,7 @@ const stages = [
         number: "05",
         title: "Delivery",
         description:
-            "Your finished film is exported in the right formats for every platform and audience. We provide the deliverables you need — from broadcast masters to social cuts — so your story reaches the world exactly as intended.",
+            "We prepare the final work and supporting assets agreed during scoping, with formats chosen for the platforms and audiences the project needs to reach.",
         image: "/images/process/delivery.png",
         accent: "#ff4500",
     },
@@ -74,7 +74,7 @@ export default function Process() {
     const prefersReducedMotion = useReducedMotion();
     const noMotion = { duration: 0 };
     return (
-        <main className={styles.main}>
+        <main className={styles.main} id="main-content">
             <Navbar />
 
             <section className={styles.hero}>

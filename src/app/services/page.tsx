@@ -13,35 +13,26 @@ const services = [
         number: "01",
         title: "Commercial & Branded Content",
         description:
-            "We produce cinematic commercials, brand films, and branded content for businesses, agencies, and institutions across New Mexico. From a 30-second spot to a long-form brand documentary, we bring the same cinematic eye to commercial work that we bring to our narrative films. Our commercial productions have served organizations like the New Mexico Film Office, Los Luceros Historic Site, and the Taos Destination Stewardship Network — projects rooted in place and purpose, not just product.",
+            "We produce commercials, brand films, and branded content for businesses, organizations, and institutions. From focused short-form pieces to longer brand stories, we build each production around the project's goals, audience, and scope.",
     },
     {
         number: "02",
         title: "Narrative Film Production",
         description:
-            "Original short films, features, and scripted content shot and produced in New Mexico. Our narrative work has screened at festivals and venues across the Southwest. We handle the full pipeline — development, financing strategy, pre-production, production, and post — with a team built from crews who have worked on productions like Oppenheimer, American Primeval, and Frybread Face and Me. We develop stories that highlight the landscapes, communities, and traditions of the Southwest.",
+            "We develop and produce original narrative films and scripted work. Our core team brings in trusted collaborators to build a crew around each story, from development and production through post. Our narrative short The Way We Carry Water was filmed across four seasons in northern New Mexico.",
     },
     {
         number: "03",
         title: "Documentary & Non-Fiction",
         description:
-            "Commissioned documentaries and non-fiction storytelling for organizations, institutions, and brands who want real stories told with cinematic craft. We specialize in place-based documentary work — films about people, land, water, culture, and community in New Mexico and the broader Southwest. Our documentary work is built on ethical collaboration with the communities we film.",
+            "Our documentary and non-fiction work brings cinematic craft to real people and events. We collaborate with subjects and partners to shape each film around its story and audience.",
     },
     {
         number: "04",
         title: "Post-Production",
         description:
-            "Editing, color grading, visual effects, and sound design for projects shot in New Mexico or anywhere else. Our post-production team brings feature film standards to every project — from commercial deliverables to independent films. We offer full post-production support including editorial, color, VFX compositing, sound mixing, and final delivery in any format required.",
+            "We support projects through editing, color grading, visual effects, sound, and finishing. The scope is planned with each team, from a focused edit to full post-production support.",
     },
-];
-
-const deliverables = [
-    "Final film in all required formats (broadcast master, web, social)",
-    "Behind-the-scenes photography from the production",
-    "Project archive with all raw footage",
-    "Music licensing and rights documentation",
-    "Color-graded and sound-mixed deliverables",
-    "Social media cutdowns and trailer edits",
 ];
 
 export default function Services() {
@@ -67,8 +58,8 @@ export default function Services() {
                     animate={{ opacity: 1 }}
                     transition={prefersReducedMotion ? noMotion : { duration: 1, delay: 0.4 }}
                 >
-                    Video production services in New Mexico — commercial, narrative, and
-                    branded storytelling from the Southwest.
+                    Narrative films, documentaries, and commercial work from a
+                    production studio based in New Mexico.
                 </motion.p>
             </section>
 
@@ -99,14 +90,11 @@ export default function Services() {
                     viewport={{ once: true }}
                     transition={prefersReducedMotion ? noMotion : { duration: 0.8, ease: easeOut }}
                 >
-                    <h2 className={styles.deliverablesHeading}>What You Receive</h2>
-                    <ul className={styles.deliverablesList}>
-                        {deliverables.map((item) => (
-                            <li key={item} className={styles.deliverablesItem}>
-                                {item}
-                            </li>
-                        ))}
-                    </ul>
+                    <h2 className={styles.deliverablesHeading}>Deliverables tailored to your project</h2>
+                    <p className={styles.deliverablesDescription}>
+                        We agree on deliverables during scoping. Depending on the project,
+                        these may include a finished film, web and social versions, and supporting assets.
+                    </p>
                 </motion.div>
             </section>
 

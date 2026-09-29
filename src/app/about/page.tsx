@@ -7,31 +7,31 @@ import { useRef } from "react";
 import Link from "next/link";
 import styles from "./page.module.css";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { partners } from "@/data/partners";
+import { formerClients, partners } from "@/data/partners";
 
 const team = [
     {
         name: "Makaio Frazier",
-        role: "Founder, CEO & Creative Director",
-        bio: "A graduate from the UNM Film Program, Makaio Frazier is a filmmaker, writer, and producer based in northern New Mexico. He began his career working on crews for acclaimed projects such as Oppenheimer, American Primeval, and Frybread Face and Me, experiences that led him to launch Chile Line Media in 2022. Through CLM, Makaio develops narrative films and commercial content that highlight the landscapes, communities, and traditions of the Southwest. His latest short, The Way We Carry Water (2025), was filmed across all four seasons and celebrates the living heritage of acequia culture while tracing a young man's journey through grief and renewal. Makaio's work reflects a commitment to craft, authenticity, and supporting regional voices in cinema.",
+        role: "Co-Founder & Creative Director",
+        bio: "Makaio Frazier is a filmmaker, writer, and producer based in northern New Mexico. His crew work includes Oppenheimer, American Primeval, and Frybread Face and Me. As Creative Director and co-founder, he develops Chile Line Media’s narrative films and commercial content.",
         photo: "/images/team/makaio.jpg",
     },
     {
-        name: 'Fred "Boomer" Mady III',
-        role: "Partner, COO & Head of Production",
-        bio: "Fred Mady III is a filmmaker, producer, and production manager based in New Mexico. He is the co-founder of Chile Line Media, where he develops narrative films and visual work rooted in the landscapes, people, and traditions of the Southwest. With a background in set leadership, production logistics, and independent filmmaking, his work is built on both story and execution.",
+        name: 'Fred “Boomer” Mady III',
+        role: "Co-Founder & Head of Production",
+        bio: "Fred “Boomer” Mady III is a filmmaker, producer, and production manager based in New Mexico. As co-founder and Head of Production, he brings experience in set leadership, production logistics, and independent filmmaking.",
         photo: "/images/team/fred.jpg",
     },
     {
         name: "Dylan Summer",
-        role: "Partner, CTO & Head of Post-Production",
-        bio: "Dylan Summer, co-founder of Chile Line Media, is a visual effects artist, editor, and producer. He helps define the visual direction of the company's film and commercial projects, from early compositing through final cut. Five years in post-production — he brings a careful eye to timing, color, and continuity under real production constraints. On location he supports producing, keeping projects on track and the work itself the priority.",
+        role: "Co-Founder & Post-Production Lead",
+        bio: "Dylan Summer is a co-founder and post-production lead at Chile Line Media. A visual effects artist, editor, and producer, he helps shape the visual direction of the studio’s film and commercial work, from early compositing through final cut.",
         photo: "/images/team/dylan.jpg",
     },
     {
         name: "Mia Gonzales",
         role: "Head of Marketing",
-        bio: "Mia Gonzales is a multidisciplinary artist, writer, and marketing strategist specializing in brand storytelling, compelling social media strategy, and creative direction. As Head of Marketing for Chile Line Media, she develops campaigns that extend film beyond the screen, shaping how they connect with audiences across digital platforms and festival spaces.",
+        bio: "Mia Gonzales is an integral member of Chile Line Media and leads the studio’s marketing. A multidisciplinary artist, writer, and marketing strategist, she develops brand storytelling, social media strategy, and creative direction for campaigns that connect with audiences across digital platforms and festival spaces.",
         photo: "/images/team/mia.jpg",
     },
 ];
@@ -43,10 +43,7 @@ export default function About() {
     const prefersReducedMotion = useReducedMotion();
     const { scrollYProgress } = useScroll({ target: containerRef });
 
-    const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
-    const y2 = useTransform(scrollYProgress, [0, 1], [0, -200]);
     const imgY = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
-
     const noMotion = { duration: 0 };
 
     return (
@@ -64,74 +61,42 @@ export default function About() {
                 </motion.h1>
             </section>
 
-            <section className={styles.contentSection}>
+            <section className={styles.contentSection} aria-label="Studio introduction">
                 <motion.div
-                    className={styles.textBlock}
-                    style={{ y: prefersReducedMotion ? 0 : y1 }}
+                    className={styles.introCopy}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-10%" }}
+                    transition={prefersReducedMotion ? noMotion : { duration: 0.8, ease: easeOut }}
                 >
                     <p>
-                        Chile Line Media is a production company based in New Mexico. We tell stories rooted in the Southwest — its people, its landscapes, and the traditions that have shaped it for generations. We believe this region deserves the same cinematic attention as anywhere else, and we&apos;re building a body of work that proves it.
+                        Chile Line Media is an independent production studio creating narrative films, documentaries, and commercial work. We bring cinematic craft, a collaborative approach, and a clear point of view to every project.
                     </p>
-                </motion.div>
-
-                <div className={styles.imageContainer}>
-                    <motion.div
-                        className={styles.parallaxImage}
-                        style={{ y: prefersReducedMotion ? 0 : imgY, backgroundImage: "url('/images/about-location.jpg')" }}
-                    />
-                </div>
-
-                <motion.div
-                    className={styles.textBlockRight}
-                    style={{ y: prefersReducedMotion ? 0 : y2 }}
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true, margin: "-20%" }}
-                    transition={prefersReducedMotion ? noMotion : { duration: 1 }}
-                >
                     <p>
-                        Our team brings professional film industry experience to independent, place-based storytelling. Whether through intimate short films or ambitious features, we are committed to authentic representation, ethical filmmaking, and collaboration with local communities.
+                        We’re hands-on from concept to delivery, working with filmmakers, brands, and organizations through development, production, and post. Our core team brings in trusted collaborators to build the right crew for each project, with the story and its audience guiding the work.
                     </p>
-                </motion.div>
-
-                <div className={styles.imageContainer}>
-                    <motion.div
-                        className={styles.parallaxImage}
-                        style={{ y: prefersReducedMotion ? 0 : imgY, backgroundImage: "url('/images/about-bts.jpg')" }}
-                    />
-                </div>
-
-                <motion.div
-                    className={styles.textBlock}
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true, margin: "-20%" }}
-                    transition={prefersReducedMotion ? noMotion : { duration: 1 }}
-                >
                     <p>
-                        We also produce brand films and commissioned storytelling for organizations, institutions, and businesses who share that commitment — shot with the same cinematic standard and sense of place we bring to our original films. <Link href="/services">Explore our services</Link> or <Link href="/work">see our recent work</Link>.
+                        Founded by Makaio Frazier, Fred “Boomer” Mady III, and Dylan Summer, Chile Line Media is based in New Mexico.
                     </p>
                 </motion.div>
             </section>
 
-            <section className={styles.mantraSection}>
-                <motion.h2
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={prefersReducedMotion ? noMotion : { duration: 2 }}
-                >
-                    At Chile Line Media, we believe <br />
-                    <span className={styles.highlight}>storytelling is stewardship.</span>
-                </motion.h2>
-                <p>
-                    We carry forward the stories of those who came before us while creating space for new voices to emerge.
-                </p>
+            <section className={styles.imageGallery} aria-label="Production imagery">
+                <motion.div
+                    className={`${styles.imageContainer} ${styles.locationImage}`}
+                    style={{ y: prefersReducedMotion ? 0 : imgY }}
+                    aria-hidden="true"
+                />
+                <motion.div
+                    className={`${styles.imageContainer} ${styles.btsImage}`}
+                    style={{ y: prefersReducedMotion ? 0 : imgY }}
+                    aria-hidden="true"
+                />
             </section>
 
-            {/* ── Our Team ── */}
-            <section className={styles.teamSection}>
+            <section className={styles.teamSection} aria-labelledby="team-heading">
                 <motion.h2
+                    id="team-heading"
                     className={styles.sectionHeading}
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -143,7 +108,7 @@ export default function About() {
 
                 <div className={styles.teamGrid}>
                     {team.map((member, i) => (
-                        <motion.div
+                        <motion.article
                             key={member.name}
                             className={styles.teamCard}
                             initial={{ opacity: 0, y: 40 }}
@@ -152,32 +117,58 @@ export default function About() {
                             transition={
                                 prefersReducedMotion
                                     ? noMotion
-                                    : {
-                                        duration: 0.7,
-                                        delay: i * 0.1,
-                                        ease: easeOut,
-                                    }
+                                    : { duration: 0.7, delay: i * 0.1, ease: easeOut }
                             }
                         >
                             <div className={styles.teamPhoto}>
                                 <Image
                                     src={member.photo}
-                                    alt={member.name}
+                                    alt=""
                                     fill
+                                    sizes="(max-width: 768px) 100vw, 50vw"
                                     style={{ objectFit: "cover" }}
                                 />
                             </div>
                             <h3 className={styles.teamName}>{member.name}</h3>
-                            <span className={styles.teamRole}>{member.role}</span>
+                            <p className={styles.teamRole}>{member.role}</p>
                             <p className={styles.teamBio}>{member.bio}</p>
-                        </motion.div>
+                        </motion.article>
                     ))}
                 </div>
             </section>
 
-            {/* ── Past Partnerships ── */}
-            <section className={styles.partnershipsSection}>
+            <section className={styles.clientsSection} aria-labelledby="clients-heading">
                 <motion.h2
+                    id="clients-heading"
+                    className={styles.sectionHeading}
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={prefersReducedMotion ? noMotion : { duration: 0.8, ease: easeOut }}
+                >
+                    CLIENTS &amp; COLLABORATORS
+                </motion.h2>
+
+                <div className={styles.clientGrid}>
+                    {formerClients.map((client) => (
+                        <a
+                            key={client.name}
+                            className={styles.clientCard}
+                            href={client.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`${client.name}, ${client.relationship}; opens in a new tab`}
+                        >
+                            <span className={styles.clientName}>{client.name}</span>
+                            <span className={styles.clientRelationship}>{client.relationship}</span>
+                        </a>
+                    ))}
+                </div>
+            </section>
+
+            <section className={styles.partnershipsSection} aria-labelledby="partnerships-heading">
+                <motion.h2
+                    id="partnerships-heading"
                     className={styles.sectionHeading}
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -196,12 +187,12 @@ export default function About() {
                         prefersReducedMotion
                             ? { hidden: { opacity: 1 }, visible: { opacity: 1 } }
                             : {
-                                hidden: { opacity: 0 },
-                                visible: {
-                                    opacity: 1,
-                                    transition: { staggerChildren: 0.08, delayChildren: 0.2 },
-                                },
-                            }
+                                  hidden: { opacity: 0 },
+                                  visible: {
+                                      opacity: 1,
+                                      transition: { staggerChildren: 0.08, delayChildren: 0.2 },
+                                  },
+                              }
                     }
                 >
                     {partners.map((partner) => (
@@ -216,16 +207,20 @@ export default function About() {
                                 prefersReducedMotion
                                     ? { hidden: { opacity: 1, y: 0 }, visible: { opacity: 1, y: 0 } }
                                     : {
-                                        hidden: { opacity: 0, y: 20 },
-                                        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: easeOut } },
-                                    }
+                                          hidden: { opacity: 0, y: 20 },
+                                          visible: {
+                                              opacity: 1,
+                                              y: 0,
+                                              transition: { duration: 0.5, ease: easeOut },
+                                          },
+                                      }
                             }
                         >
                             {partner.logo ? (
                                 <div className={styles.partnerLogoBox}>
                                     <Image
                                         src={partner.logo}
-                                        alt={partner.name}
+                                        alt=""
                                         fill
                                         sizes="(max-width: 768px) 140px, 250px"
                                         style={{ objectFit: "contain" }}
@@ -242,6 +237,12 @@ export default function About() {
                 </motion.div>
             </section>
 
+            <section className={styles.inquirySection} aria-label="Project inquiry">
+                <p>Have a project in mind?</p>
+                <Link className={styles.inquiryLink} href="/contact">
+                    Start a conversation
+                </Link>
+            </section>
         </main>
     );
 }

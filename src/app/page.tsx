@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import styles from "./page.module.css";
 import { projects } from "@/data/projects";
-import { partners } from "@/data/partners";
+import { formerClients, partners } from "@/data/partners";
 import Image from "next/image";
 import Link from "next/link";
 import { createPageMetadata } from "@/lib/seo";
@@ -10,7 +10,7 @@ import { createPageMetadata } from "@/lib/seo";
 export const metadata = createPageMetadata({
   title: "Chile Line Media | New Mexico Video Production",
   description:
-    "Chile Line Media is a New Mexico production company creating cinematic narrative films, branded storytelling, and community-rooted partnerships in the Southwest.",
+    "Chile Line Media is an independent production studio based in New Mexico, creating narrative films, documentaries, and commercial work.",
   path: "/",
   absoluteTitle: true,
 });
@@ -28,9 +28,14 @@ export default function Home() {
   const commercialProjects = projects.filter(
     (p) => p.category === "commercial"
   );
+  const organizations = [...partners, ...formerClients];
+  const organizationSlots = [
+    ...organizations.map((organization) => ({ organization, duplicate: false })),
+    ...organizations.map((organization) => ({ organization, duplicate: true })),
+  ];
 
   return (
-    <main className={styles.main}>
+    <main className={styles.main} id="main-content">
       <div className={styles.announcementBanner}>
         <Link href="/events/the-show-must-go-on">The Show Must Go On!</Link>
         <a
@@ -53,36 +58,65 @@ export default function Home() {
         <div className={styles.heroContent}>
           <div>
             <h1 className={styles.headline}>CHILE LINE MEDIA</h1>
-            <p className={styles.subheadline}>New Mexico narrative and branded storytelling company</p>
+            <p className={styles.subheadline}>Narrative films, documentaries, and commercial work</p>
+            <div className={styles.heroActions}>
+              <Link href="/work" className={styles.heroActionPrimary}>View Our Work</Link>
+              <Link href="/contact" className={styles.heroActionSecondary}>Start a Project</Link>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Partner Logo Scroll */}
-      <section className={styles.partnerStrip}>
+      <section className={styles.partnerStrip} aria-labelledby="organizations-heading">
+        <h2 id="organizations-heading" className={styles.organizationHeading}>Clients &amp; Collaborators</h2>
         <div className={styles.partnerTrack}>
-          {/* Duplicate the list for seamless infinite scroll */}
-          {[...partners, ...partners].map((partner, i) => (
-            <a
-              key={`${partner.logo}-${i}`}
-              className={styles.partnerLogoWrapper}
-              href={partner.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`Visit ${partner.name}`}
-            >
-              <div className={styles.partnerLogoImage}>
-                <Image
-                  src={partner.logo}
-                  alt={partner.name}
-                  fill
-                  sizes="(max-width: 768px) 140px, 250px"
-                  style={{ objectFit: 'contain' }}
-                />
+          {organizationSlots.map(({ organization, duplicate }, i) => {
+            const content = (
+              <>
+                {"logo" in organization ? (
+                  <div className={styles.partnerLogoImage}>
+                    <Image
+                      src={organization.logo}
+                      alt=""
+                      fill
+                      sizes="(max-width: 768px) 140px, 250px"
+                      style={{ objectFit: "contain" }}
+                    />
+                  </div>
+                ) : (
+                  <div className={styles.clientTextTile}>{organization.name}</div>
+                )}
+                {"relationship" in organization ? (
+                  <span className={styles.clientRelationship}>{organization.relationship}</span>
+                ) : (
+                  <span className={styles.partnerName}>{organization.name}</span>
+                )}
+              </>
+            );
+
+            return duplicate ? (
+              <div
+                key={`${organization.name}-${i}`}
+                className={styles.partnerLogoWrapper}
+                data-duplicate="true"
+                aria-hidden="true"
+              >
+                {content}
               </div>
-              <span className={styles.partnerName}>{partner.name}</span>
-            </a>
-          ))}
+            ) : (
+              <a
+                key={`${organization.name}-${i}`}
+                className={styles.partnerLogoWrapper}
+                href={organization.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Visit ${organization.name}${"relationship" in organization ? `, ${organization.relationship}` : ""}`}
+              >
+                {content}
+              </a>
+            );
+          })}
         </div>
       </section>
 
@@ -121,33 +155,6 @@ export default function Home() {
               slug={project.slug}
             />
           ))}
-        </div>
-      </section>
-
-      {/* CTA Section — internal links */}
-      <section className={styles.projects}>
-        <div className={styles.projectsHeader}>
-          <h2>GET IN TOUCH</h2>
-        </div>
-        <div style={{ textAlign: "center", padding: "2rem 1rem 4rem" }}>
-          <p style={{ fontSize: "1.1rem", lineHeight: 1.8, color: "#bbb", maxWidth: "600px", margin: "0 auto 2rem" }}>
-            Have a story to tell? We&apos;d love to hear it. Chile Line Media is a New Mexico-based
-            production company creating cinematic narrative films and branded storytelling rooted in the Southwest.
-          </p>
-          <div style={{ display: "flex", gap: "2rem", justifyContent: "center", flexWrap: "wrap" }}>
-            <Link href="/contact" style={{ color: "#ff4500", textDecoration: "underline", fontSize: "1.1rem" }}>
-              Start a project
-            </Link>
-            <Link href="/work" style={{ color: "#fff", textDecoration: "underline", fontSize: "1.1rem" }}>
-              See our work
-            </Link>
-            <Link href="/process" style={{ color: "#fff", textDecoration: "underline", fontSize: "1.1rem" }}>
-              Our process
-            </Link>
-            <Link href="/about" style={{ color: "#fff", textDecoration: "underline", fontSize: "1.1rem" }}>
-              About us
-            </Link>
-          </div>
         </div>
       </section>
 

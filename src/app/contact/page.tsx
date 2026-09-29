@@ -11,17 +11,17 @@ const services = [
     {
         title: "Narrative Films",
         description:
-            "Original short and feature films rooted in place, culture, and character. Stories crafted with patience, intention, and a deep connection to the Southwest.",
+            "Original films shaped around character and story, developed with a collaborative crew from concept through post.",
     },
     {
         title: "Brand Storytelling",
         description:
-            "Commissioned films for organizations, institutions, and businesses. Place-based, cinematic, and built to the same standard as our original work.",
+            "Commissioned films for organizations, institutions, and businesses, built around each project's message and audience.",
     },
     {
         title: "Documentary",
         description:
-            "Nonfiction stories rooted in place and culture. We capture what's real — the people, traditions, and landscapes that deserve to be seen and preserved.",
+            "Nonfiction films developed with care for the people and subjects at their center.",
     },
     {
         title: "Campaign & Digital Content",
@@ -122,9 +122,10 @@ export default function Contact() {
                                     id="projectType"
                                     name="projectType"
                                     className={styles.select}
+                                    defaultValue=""
                                     required
                                 >
-                                    <option value="" disabled selected>
+                                    <option value="" disabled>
                                         Select a project type
                                     </option>
                                     {projectTypes.map((type) => (
@@ -143,9 +144,10 @@ export default function Contact() {
                                     id="budget"
                                     name="budget"
                                     className={styles.select}
+                                    defaultValue=""
                                     required
                                 >
-                                    <option value="" disabled selected>
+                                    <option value="" disabled>
                                         Select a range
                                     </option>
                                     {budgetRanges.map((range) => (

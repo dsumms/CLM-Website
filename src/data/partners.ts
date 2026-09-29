@@ -40,3 +40,11 @@ export const partners = [
     href: "https://taos.org/taos-destination-stewardship-network/",
   },
 ];
+
+export const formerClients = [
+  {
+    name: "Moving Arts Española",
+    href: "https://movingartsespanola.org/",
+    relationship: "Former client" as const,
+  },
+];

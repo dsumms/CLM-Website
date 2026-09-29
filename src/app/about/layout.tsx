@@ -4,7 +4,7 @@ import { createPageMetadata } from "@/lib/seo";
 export const metadata = createPageMetadata({
   title: "About",
   description:
-    "Meet Chile Line Media, a New Mexico production company telling cinematic stories rooted in the Southwest, regional voices, and ethical collaboration.",
+    "Meet Chile Line Media, an independent New Mexico production studio creating narrative films, documentaries, and commercial work with a collaborative, hands-on approach.",
   path: "/about",
   image: "/images/about-location.jpg",
 });

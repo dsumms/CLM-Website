@@ -19,7 +19,7 @@ export default function Work() {
     const activeProject = projects.find((p) => p.slug === activeSlug);
 
     return (
-        <main className={styles.main}>
+        <main className={styles.main} id="main-content">
             {/* Background Image — only one loaded at a time */}
             {activeProject && activeProject.youtubeId && (
                 <div
@@ -49,9 +49,8 @@ export default function Work() {
                         animate={{ opacity: 1 }}
                         transition={prefersReducedMotion ? noMotion : { duration: 1, delay: 0.3 }}
                     >
-                        Narrative short films and commissioned storytelling from New Mexico.
-                        Each project is rooted in place — the landscapes, communities, and
-                        traditions that shape the stories we tell.
+                        Selected narrative films and commissioned work from our New Mexico studio.
+                        Each project brings its own story, collaborators, and audience.
                     </motion.p>
                 </section>
 

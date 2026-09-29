@@ -4,7 +4,7 @@ import { createPageMetadata, serviceJsonLd } from "@/lib/seo";
 export const metadata = createPageMetadata({
   title: "Video Production Services | Chile Line Media — New Mexico",
   description:
-    "Commercial, narrative, and branded video production services in New Mexico. From concept to final delivery — cinematic storytelling rooted in the Southwest.",
+    "Explore Chile Line Media's narrative, documentary, commercial, and post-production services from our New Mexico studio.",
   path: "/services",
   absoluteTitle: true,
 });

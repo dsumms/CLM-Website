@@ -63,7 +63,7 @@ export default async function ProjectDetail({ params }: PageProps) {
 
     if (!project) {
         return (
-            <main className={styles.main}>
+            <main className={styles.main} id="main-content">
                 <Navbar />
                 <div style={{ padding: "120px 20px", textAlign: "center" }}>
                     <h1>Project Not Found</h1>
@@ -72,6 +72,58 @@ export default async function ProjectDetail({ params }: PageProps) {
             </main>
         );
     }
+
+    const isWaterFilm = project.slug === "the-way-we-carry-water";
+    const recognitions = isWaterFilm
+        ? [
+            {
+                label: "Emerging Cinematographer Awards — Honoree: Jannis Schelenz, The Way We Carry Water",
+                year: "2026",
+                href: "https://ecawards.net/honorees/2026/the-way-we-carry-water/",
+            },
+            {
+                label: "TaosFF Favorite — Spirit of New Mexico, Narrative Short",
+                year: "2026",
+                href: "https://taosff.org/about/2026-highlights/",
+            },
+            {
+                label: "Best Local Short — Las Cruces International Film Festival",
+                year: "2026",
+                href: "https://nmfilm.com/news/the-way-we-carry-water-continues-successful-festival-run",
+            },
+            {
+                label: "Audience Choice Award — Las Cruces International Film Festival",
+                year: "2026",
+                href: "https://nmfilm.com/news/the-way-we-carry-water-continues-successful-festival-run",
+            },
+        ]
+        : (project.awards ?? []).map((label) => ({ label }));
+
+    const pressFeatures = isWaterFilm
+        ? [
+            {
+                source: "Emerging Cinematographer Awards",
+                title: "The Way We Carry Water — 2026 Honoree Profile",
+                date: "2026",
+                linkLabel: "View honoree profile",
+                href: "https://ecawards.net/honorees/2026/the-way-we-carry-water/",
+            },
+            {
+                source: "Taos News · Land, Water, People, Time",
+                title: "Stories Worth Saving",
+                date: "September 2026",
+                linkLabel: "Read the article",
+                href: "https://www.taosnews.com/magazines/land-water-people-time/stories-worth-saving/article_d0caf460-d3cc-557f-86b6-72ce80d9aa2e.html",
+            },
+            {
+                source: "New Mexico Film Office",
+                title: "‘The Way We Carry Water’ Continues Successful Festival Run",
+                date: "May 20, 2026",
+                linkLabel: "Read the feature",
+                href: "https://nmfilm.com/news/the-way-we-carry-water-continues-successful-festival-run",
+            },
+        ]
+        : [];
 
     const projectUrl = absoluteUrl(`/work/${project.slug}`);
     const thumbnailUrl = `https://img.youtube.com/vi/${project.youtubeId}/maxresdefault.jpg`;
@@ -118,7 +170,7 @@ export default async function ProjectDetail({ params }: PageProps) {
     };
 
     return (
-        <main className={styles.main}>
+        <main className={styles.main} id="main-content">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
@@ -141,17 +193,27 @@ export default async function ProjectDetail({ params }: PageProps) {
 
             <section className={styles.content}>
                 {project.youtubeId && (
-                    <div className={styles.videoPlaceholder}>
-                        <iframe
-                            width="100%"
-                            height="100%"
-                            src={`https://www.youtube.com/embed/${project.youtubeId}`}
-                            title="YouTube video player"
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerPolicy="strict-origin-when-cross-origin"
-                            allowFullScreen>
-                        </iframe>
+                    <div className={styles.videoSection}>
+                        <div className={styles.videoPlaceholder}>
+                            <iframe
+                                width="100%"
+                                height="100%"
+                                src={`https://www.youtube.com/embed/${project.youtubeId}`}
+                                title={`${project.title} video`}
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerPolicy="strict-origin-when-cross-origin"
+                                allowFullScreen>
+                            </iframe>
+                        </div>
+                        <a
+                            className={styles.videoFallback}
+                            href={`https://www.youtube.com/watch?v=${project.youtubeId}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Watch directly on YouTube ↗
+                        </a>
                     </div>
                 )}
 
@@ -165,17 +227,42 @@ export default async function ProjectDetail({ params }: PageProps) {
                         ))}
                     </div>
 
-                    {project.awards && project.awards.length > 0 && (
+                    {recognitions.length > 0 && (
                         <div className={styles.awards}>
-                            <h2>AWARDS</h2>
+                            <h2>{isWaterFilm ? "AWARDS & RECOGNITION" : "AWARDS"}</h2>
                             <ul>
-                                {project.awards.map((award) => (
-                                    <li key={award}>{award}</li>
+                                {recognitions.map((recognition) => (
+                                    <li key={recognition.label}>
+                                        {"href" in recognition ? (
+                                            <a href={recognition.href} target="_blank" rel="noopener noreferrer">
+                                                {recognition.label}
+                                            </a>
+                                        ) : recognition.label}
+                                        {"year" in recognition && `, ${recognition.year}`}
+                                    </li>
                                 ))}
                             </ul>
                         </div>
                     )}
                 </div>
+
+                {pressFeatures.length > 0 && (
+                    <section className={styles.press} aria-labelledby="press-heading">
+                        <h2 id="press-heading">PRESS &amp; FEATURES</h2>
+                        <div className={styles.pressGrid}>
+                            {pressFeatures.map((feature) => (
+                                <article className={styles.pressCard} key={feature.href}>
+                                    <p className={styles.pressSource}>{feature.source}</p>
+                                    <h3>{feature.title}</h3>
+                                    <p className={styles.pressDate}>{feature.date}</p>
+                                    <a href={feature.href} target="_blank" rel="noopener noreferrer">
+                                        {feature.linkLabel} ↗
+                                    </a>
+                                </article>
+                            ))}
+                        </div>
+                    </section>
+                )}
             </section>
 
             {/* More Work Link */}
@@ -184,10 +271,6 @@ export default async function ProjectDetail({ params }: PageProps) {
                     ← Back to all work
                 </Link>
             </section>
-
-            <footer className={styles.footer}>
-                <p>&copy; {new Date().getFullYear()} Chile Line Media. All rights reserved.</p>
-            </footer>
         </main>
     );
 }

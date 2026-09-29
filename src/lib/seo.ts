@@ -4,7 +4,7 @@ export const siteUrl = "https://www.chilelinemedia.com";
 export const siteName = "Chile Line Media";
 export const defaultTitle = "Chile Line Media | New Mexico Video Production";
 export const defaultDescription =
-  "Independent narrative and branded storytelling company based in New Mexico. We specialize in cinematic commercial and narrative video production.";
+  "Chile Line Media is an independent production studio based in New Mexico, creating narrative films, documentaries, and commercial work.";
 export const defaultOgImage = "/logo-full.png";
 
 export const socialLinks = [
