@@ -44,6 +44,7 @@ export const partners = [
 export const formerClients = [
   {
     name: "Moving Arts Española",
+    logo: "/logos/moving-arts-espanola.png",
     href: "https://movingartsespanola.org/",
     relationship: "Former client" as const,
   },

@@ -28,7 +28,12 @@ export default function Home() {
   const commercialProjects = projects.filter(
     (p) => p.category === "commercial"
   );
-  const organizations = [...partners, ...formerClients];
+  const organizations: {
+    name: string;
+    href: string;
+    logo?: string;
+    relationship?: string;
+  }[] = [...partners, ...formerClients];
   const organizationSlots = [
     ...organizations.map((organization) => ({ organization, duplicate: false })),
     ...organizations.map((organization) => ({ organization, duplicate: true })),
@@ -60,8 +65,12 @@ export default function Home() {
             <h1 className={styles.headline}>CHILE LINE MEDIA</h1>
             <p className={styles.subheadline}>Narrative films, documentaries, and commercial work</p>
             <div className={styles.heroActions}>
-              <Link href="/work" className={styles.heroActionPrimary}>View Our Work</Link>
-              <Link href="/contact" className={styles.heroActionSecondary}>Start a Project</Link>
+              <Link href="/work" className={styles.heroActionPrimary}>
+                View Our Work
+              </Link>
+              <Link href="/contact" className={styles.heroActionSecondary}>
+                Start a Project
+              </Link>
             </div>
           </div>
         </div>
@@ -74,7 +83,7 @@ export default function Home() {
           {organizationSlots.map(({ organization, duplicate }, i) => {
             const content = (
               <>
-                {"logo" in organization ? (
+                {organization.logo ? (
                   <div className={styles.partnerLogoImage}>
                     <Image
                       src={organization.logo}
@@ -87,7 +96,7 @@ export default function Home() {
                 ) : (
                   <div className={styles.clientTextTile}>{organization.name}</div>
                 )}
-                {"relationship" in organization ? (
+                {organization.relationship ? (
                   <span className={styles.clientRelationship}>{organization.relationship}</span>
                 ) : (
                   <span className={styles.partnerName}>{organization.name}</span>
@@ -100,6 +109,7 @@ export default function Home() {
                 key={`${organization.name}-${i}`}
                 className={styles.partnerLogoWrapper}
                 data-duplicate="true"
+                data-featured-logo={organization.name === "Moving Arts Española" ? "true" : undefined}
                 aria-hidden="true"
               >
                 {content}
@@ -108,10 +118,11 @@ export default function Home() {
               <a
                 key={`${organization.name}-${i}`}
                 className={styles.partnerLogoWrapper}
+                data-featured-logo={organization.name === "Moving Arts Española" ? "true" : undefined}
                 href={organization.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`Visit ${organization.name}${"relationship" in organization ? `, ${organization.relationship}` : ""}`}
+                aria-label={`Visit ${organization.name}${organization.relationship ? `, ${organization.relationship}` : ""}`}
               >
                 {content}
               </a>

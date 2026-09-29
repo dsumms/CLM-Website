@@ -14,13 +14,18 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ title, year, youtubeId, slug }: ProjectCardProps) {
     const targetRef = useRef<HTMLDivElement>(null);
-    const [thumbSrc, setThumbSrc] = useState(
-        youtubeId
-            ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
-            : ""
-    );
+    const thumbnailSources = youtubeId
+        ? [
+              `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`,
+              `https://img.youtube.com/vi/${youtubeId}/sddefault.jpg`,
+              `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`,
+              `https://img.youtube.com/vi/${youtubeId}/mqdefault.jpg`,
+          ]
+        : [];
+    const [thumbnailIndex, setThumbnailIndex] = useState(0);
     const [hasError, setHasError] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
+    const thumbSrc = thumbnailSources[thumbnailIndex] ?? "";
 
     useEffect(() => {
         const element = targetRef.current;
@@ -48,9 +53,9 @@ export default function ProjectCard({ title, year, youtubeId, slug }: ProjectCar
         return () => observer.disconnect();
     }, []);
 
-    const handleImgError = () => {
-        if (youtubeId && !thumbSrc.includes("mqdefault.jpg")) {
-            setThumbSrc(`https://img.youtube.com/vi/${youtubeId}/mqdefault.jpg`);
+    const advanceThumbnail = () => {
+        if (thumbnailIndex + 1 < thumbnailSources.length) {
+            setThumbnailIndex(thumbnailIndex + 1);
         } else {
             setHasError(true);
         }
@@ -74,7 +79,12 @@ export default function ProjectCard({ title, year, youtubeId, slug }: ProjectCar
                             className={styles.image}
                             loading="lazy"
                             decoding="async"
-                            onError={handleImgError}
+                            onError={advanceThumbnail}
+                            onLoad={(event) => {
+                                if (event.currentTarget.naturalWidth <= 120) {
+                                    advanceThumbnail();
+                                }
+                            }}
                         />
                     ) : (
                         <div className={styles.placeholder}>
