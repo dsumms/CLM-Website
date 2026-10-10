@@ -41,6 +41,11 @@ export default function Home() {
 
   return (
     <main className={styles.main} id="main-content">
+      <div className={styles.announcementBanner}>
+        <Link href="/work/the-way-we-carry-water">
+          The Way We Carry Water is out now. Watch the film.
+        </Link>
+      </div>
       <Navbar />
 
       {/* Hero Section */}

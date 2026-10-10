@@ -1,6 +1,46 @@
 .main {
+    --announcement-height: 3.25rem;
     width: 100%;
     min-height: 100vh;
+}
+
+.announcementBanner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 120;
+    box-sizing: border-box;
+    width: 100%;
+    height: var(--announcement-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1rem;
+    background: rgba(0, 0, 0, 0.94);
+    border-bottom: 1px solid rgba(255, 69, 0, 0.42);
+    color: #fff;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: center;
+    backdrop-filter: blur(12px);
+}
+
+.announcementBanner a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--accent, #ff4500);
+    text-underline-offset: 0.2em;
+}
+
+.announcementBanner a:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+}
+
+.main > nav {
+    top: var(--announcement-height);
 }
 
 /* Hero Section */
@@ -296,8 +336,16 @@
 }
 
 @media (max-width: 768px) {
+    .main {
+        --announcement-height: 4.25rem;
+    }
+
+    .announcementBanner {
+        font-size: 0.875rem;
+    }
+
     .hero {
-        padding: 5rem 1.25rem 3rem;
+        padding: calc(var(--announcement-height) + 5rem) 1.25rem 3rem;
         min-height: 100svh;
         height: auto;
     }
