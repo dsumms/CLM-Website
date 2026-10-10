@@ -1,53 +1,6 @@
 .main {
-    --announcement-height: 3.25rem;
     width: 100%;
     min-height: 100vh;
-}
-
-.announcementBanner {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 120;
-    box-sizing: border-box;
-    width: 100%;
-    min-height: var(--announcement-height);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1.25rem;
-    padding: 0.6rem 1.25rem;
-    background: rgba(0, 0, 0, 0.94);
-    border-bottom: 1px solid rgba(255, 69, 0, 0.42);
-    color: #fff;
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: 600;
-    line-height: 1.25;
-    text-align: center;
-    backdrop-filter: blur(12px);
-}
-
-.main > nav {
-    top: var(--announcement-height);
-}
-
-.announcementBanner a {
-    color: inherit;
-    text-decoration: none;
-    text-underline-offset: 0.2em;
-}
-
-.announcementBanner a:last-child,
-.announcementBanner a:hover,
-.announcementBanner a:focus-visible {
-    text-decoration: underline;
-    text-decoration-color: var(--accent, #ff4500);
-}
-
-.announcementBanner a:focus-visible {
-    outline: 2px solid #fff;
-    outline-offset: 3px;
 }
 
 /* Hero Section */
@@ -343,18 +296,8 @@
 }
 
 @media (max-width: 768px) {
-    .main {
-        --announcement-height: 4.25rem;
-    }
-
-    .announcementBanner {
-        flex-direction: column;
-        gap: 0.1rem;
-        padding: 0.4rem 0.75rem;
-    }
-
     .hero {
-        padding: calc(var(--announcement-height) + 5rem) 1.25rem 3rem;
+        padding: 5rem 1.25rem 3rem;
         min-height: 100svh;
         height: auto;
     }

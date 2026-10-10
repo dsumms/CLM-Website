@@ -58,12 +58,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly',
       priority: 0.7,
     },
-    {
-      url: `${baseUrl}/events/the-show-must-go-on`,
-      lastModified: '2026-09-28',
-      changeFrequency: 'yearly',
-      priority: 0.8,
-    },
     ...projectUrls,
   ];
 }
