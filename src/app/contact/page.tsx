@@ -108,6 +108,12 @@ export default function Contact() {
             if (response.ok) {
                 form.reset();
                 setFeedback({ message: "Your inquiry was accepted for delivery. We'll reply by email.", error: false });
+            } else if (response.status === 429) {
+                // The firewall can return HTML, so handle the status without parsing JSON.
+                setFeedback({
+                    message: "Too many submission attempts. Please wait up to 10 minutes and try again. Your message is still here.",
+                    error: true,
+                });
             } else if (response.status === 400) {
                 const result: unknown = await response.json();
                 setFeedback({

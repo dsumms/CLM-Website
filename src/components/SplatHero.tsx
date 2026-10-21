@@ -691,6 +691,8 @@ export default function SplatHero() {
     const [hasPresentedLiveSplat, setHasPresentedLiveSplat] = useState(false);
 
     useEffect(() => {
+        // Probe browser capabilities after hydration so the initial server/client fallback matches.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setLiveSplatAllowed(splatUrlFlags.forceLiveSplat || canUseLiveSplat());
     }, [splatUrlFlags.forceLiveSplat]);
 
@@ -712,6 +714,8 @@ export default function SplatHero() {
     }, []);
 
     useEffect(() => {
+        // Latch the first visible, loaded presentation; later offscreen pauses must not restore the cover.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (isFrameActive && isSplatLoaded) setHasPresentedLiveSplat(true);
     }, [isFrameActive, isSplatLoaded]);
 
