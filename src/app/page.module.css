@@ -148,6 +148,28 @@
     transform: translateY(-2px);
 }
 
+.heroReelLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+    padding: 0.5rem;
+    color: #fff;
+    font-size: 1.1rem;
+    pointer-events: auto;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+}
+
+.heroReelLink:hover {
+    color: var(--accent);
+}
+
+.heroReelLink:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 4px;
+}
+
 .heroActionPrimary:focus-visible,
 .heroActionSecondary:focus-visible {
     outline: 2px solid #fff;
@@ -300,6 +322,7 @@
 /* Projects Section */
 .projects {
     padding: 8rem 4rem;
+    scroll-margin-top: calc(var(--announcement-height) + 6rem);
     background-color: var(--background);
     position: relative;
     z-index: 20;

@@ -6,6 +6,7 @@ import { formerClients, partners } from "@/data/partners";
 import Image from "next/image";
 import Link from "next/link";
 import { createPageMetadata } from "@/lib/seo";
+import Showreel from "@/components/Showreel";
 
 export const metadata = createPageMetadata({
   title: "Chile Line Media | New Mexico Video Production",
@@ -66,6 +67,9 @@ export default function Home() {
                 Start a Project
               </Link>
             </div>
+            <a href="#commercial-work" className={styles.heroReelLink}>
+              Watch the reel <span aria-hidden="true">↓</span>
+            </a>
           </div>
         </div>
       </section>
@@ -140,12 +144,13 @@ export default function Home() {
       </section>
 
       {/* Commercial Works */}
-      <section className={styles.projects}>
+      <section id="commercial-work" className={styles.projects} aria-labelledby="commercial-heading">
         <div className={styles.projectsHeader}>
-          <h2>COMMERCIAL WORKS</h2>
+          <h2 id="commercial-heading">COMMERCIAL WORKS</h2>
         </div>
 
         <div className={styles.grid}>
+          <Showreel />
           {commercialProjects.map((project) => (
             <ProjectCard
               key={project.slug}
