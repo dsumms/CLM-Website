@@ -2,14 +2,31 @@ export interface Project {
     title: string;
     year: string;
     slug: string;
-    youtubeId: string;
+    youtubeId?: string;
+    videoSrc?: string;
+    captionsSrc?: string;
+    publishedAt?: string;
     imageSrc?: string;
     description: string;
     category: "narrative" | "commercial";
     awards?: string[];
 }
 
+export const movingArtsProject = {
+    title: "Moving Arts Española",
+    year: "2026",
+    slug: "moving-arts-espanola",
+    videoSrc: "/media/clm-showreel-v07.mp4",
+    captionsSrc: "/media/clm-showreel.vtt",
+    imageSrc: "/media/clm-showreel-poster.jpg",
+    publishedAt: "2026-10-22",
+    category: "commercial",
+    description:
+        "A short showcase of our work with Moving Arts Española, featuring interviews and moments from its arts programs.",
+} satisfies Project;
+
 export const projects: Project[] = [
+    movingArtsProject,
     {
         title: "The Way We Carry Water",
         year: "2025",

@@ -6,7 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const projectUrls: MetadataRoute.Sitemap = projects.map((project) => ({
     url: `${baseUrl}/work/${project.slug}`,
-    lastModified: `${project.year}-01-01`,
+    lastModified: project.publishedAt ?? `${project.year}-01-01`,
     changeFrequency: 'monthly',
     priority: 0.8,
   }));

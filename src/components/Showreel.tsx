@@ -1,9 +1,10 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { movingArtsProject } from "@/data/projects";
 import styles from "./Showreel.module.css";
 
-const reelSource = "/media/clm-showreel-v07.mp4";
+const reelSource = movingArtsProject.videoSrc;
 
 export default function Showreel() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -34,7 +35,7 @@ export default function Showreel() {
             ref={videoRef}
             className={styles.video}
             src={reelSource}
-            poster="/media/clm-showreel-poster.jpg"
+            poster={movingArtsProject.imageSrc}
             width={1280}
             height={720}
             preload="none"
@@ -47,7 +48,7 @@ export default function Showreel() {
           >
             <track
               kind="captions"
-              src="/media/clm-showreel.vtt"
+              src={movingArtsProject.captionsSrc}
               srcLang="en"
               label="English"
             />
@@ -80,8 +81,8 @@ export default function Showreel() {
           </p>
         )}
         <div className={styles.info}>
-          <h3 className={styles.title}>Moving Arts Española</h3>
-          <span className={styles.year}>2026</span>
+          <h3 className={styles.title}>{movingArtsProject.title}</h3>
+          <span className={styles.year}>{movingArtsProject.year}</span>
         </div>
     </div>
   );

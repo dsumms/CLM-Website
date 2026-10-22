@@ -28,7 +28,9 @@ export async function generateMetadata(
     const previousImages = (await parent).openGraph?.images || [];
     const description = truncateDescription(project.description);
     const url = absoluteUrl(`/work/${project.slug}`);
-    const image = `https://img.youtube.com/vi/${project.youtubeId}/maxresdefault.jpg`;
+    const image = project.imageSrc
+        ? absoluteUrl(project.imageSrc)
+        : `https://img.youtube.com/vi/${project.youtubeId}/maxresdefault.jpg`;
 
     return {
         title: seoTitle,
@@ -126,17 +128,23 @@ export default async function ProjectDetail({ params }: PageProps) {
         : [];
 
     const projectUrl = absoluteUrl(`/work/${project.slug}`);
-    const thumbnailUrl = `https://img.youtube.com/vi/${project.youtubeId}/maxresdefault.jpg`;
+    const thumbnailUrl = project.imageSrc
+        ? absoluteUrl(project.imageSrc)
+        : `https://img.youtube.com/vi/${project.youtubeId}/maxresdefault.jpg`;
     const videoJsonLd = {
         "@context": "https://schema.org",
         "@type": "VideoObject",
         name: `${project.title} — ${project.category === "narrative" ? "Short Film" : "Commercial"}`,
         description: project.description,
         thumbnailUrl: [thumbnailUrl],
-        uploadDate: `${project.year}-01-01`,
-        datePublished: project.year,
-        contentUrl: `https://www.youtube.com/watch?v=${project.youtubeId}`,
-        embedUrl: `https://www.youtube.com/embed/${project.youtubeId}`,
+        uploadDate: project.publishedAt ?? `${project.year}-01-01`,
+        datePublished: project.publishedAt ?? project.year,
+        contentUrl: project.videoSrc
+            ? absoluteUrl(project.videoSrc)
+            : `https://www.youtube.com/watch?v=${project.youtubeId}`,
+        embedUrl: project.videoSrc
+            ? `${projectUrl}#project-video`
+            : `https://www.youtube.com/embed/${project.youtubeId}`,
         url: projectUrl,
         creator: {
             "@type": "Organization",
@@ -183,7 +191,7 @@ export default async function ProjectDetail({ params }: PageProps) {
             <Navbar />
 
             <div className={styles.hero}>
-                <div className={styles.heroBackground} style={{ backgroundImage: `url(https://img.youtube.com/vi/${project.youtubeId}/maxresdefault.jpg)` }}></div>
+                <div className={styles.heroBackground} style={{ backgroundImage: `url(${thumbnailUrl})` }}></div>
                 <div className={styles.heroOverlay}></div>
                 <div className={styles.heroContent}>
                     <Link href="/work" className={styles.backLink}>← BACK TO WORK</Link>
@@ -192,7 +200,26 @@ export default async function ProjectDetail({ params }: PageProps) {
             </div>
 
             <section className={styles.content}>
-                {project.youtubeId && (
+                {project.videoSrc ? (
+                    <div id="project-video" className={styles.videoSection}>
+                        <div className={styles.videoPlaceholder}>
+                            <video
+                                className={styles.localVideo}
+                                src={project.videoSrc}
+                                poster={project.imageSrc}
+                                aria-label={`${project.title} video`}
+                                controls
+                                playsInline
+                                preload="none"
+                            >
+                                {project.captionsSrc && (
+                                    <track kind="captions" src={project.captionsSrc} srcLang="en" label="English" />
+                                )}
+                                Your browser does not support embedded video. <a href={project.videoSrc}>Watch the video</a>.
+                            </video>
+                        </div>
+                    </div>
+                ) : project.youtubeId && (
                     <div className={styles.videoSection}>
                         <div className={styles.videoPlaceholder}>
                             <iframe

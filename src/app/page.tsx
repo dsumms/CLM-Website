@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import styles from "./page.module.css";
-import { projects } from "@/data/projects";
+import { movingArtsProject, projects } from "@/data/projects";
 import { formerClients, partners } from "@/data/partners";
 import Image from "next/image";
 import Link from "next/link";
@@ -150,8 +150,9 @@ export default function Home() {
         </div>
 
         <div className={styles.grid}>
-          <Showreel />
-          {commercialProjects.map((project) => (
+          {commercialProjects.map((project) => project.slug === movingArtsProject.slug ? (
+            <Showreel key={project.slug} />
+          ) : (
             <ProjectCard
               key={project.slug}
               title={project.title}
