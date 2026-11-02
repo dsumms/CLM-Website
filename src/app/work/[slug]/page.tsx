@@ -137,8 +137,8 @@ export default async function ProjectDetail({ params }: PageProps) {
         name: `${project.title} — ${project.category === "narrative" ? "Short Film" : "Commercial"}`,
         description: project.description,
         thumbnailUrl: [thumbnailUrl],
-        uploadDate: project.publishedAt ?? `${project.year}-01-01`,
-        datePublished: project.publishedAt ?? project.year,
+        uploadDate: project.publishedAt,
+        datePublished: project.publishedAt,
         contentUrl: project.videoSrc
             ? absoluteUrl(project.videoSrc)
             : `https://www.youtube.com/watch?v=${project.youtubeId}`,

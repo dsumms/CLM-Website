@@ -5,7 +5,10 @@ export interface Project {
     youtubeId?: string;
     videoSrc?: string;
     captionsSrc?: string;
+    // Verified video publication date; leave unset when unknown.
     publishedAt?: string;
+    // Last substantive page update; separate from the film year or video publication.
+    updatedAt?: string;
     imageSrc?: string;
     description: string;
     category: "narrative" | "commercial";
@@ -20,6 +23,7 @@ export const movingArtsProject = {
     captionsSrc: "/media/clm-showreel.vtt",
     imageSrc: "/media/clm-showreel-poster.jpg",
     publishedAt: "2026-10-22",
+    updatedAt: "2026-10-22",
     category: "commercial",
     description:
         "A short showcase of our work with Moving Arts Española, featuring interviews and moments from its arts programs.",
@@ -31,6 +35,8 @@ export const projects: Project[] = [
         title: "The Way We Carry Water",
         year: "2025",
         slug: "the-way-we-carry-water",
+        publishedAt: "2026-10-10T12:36:47-07:00",
+        updatedAt: "2026-11-02",
         youtubeId: "ZPXvh91ShMc",
         category: "narrative",
         description:
@@ -44,6 +50,8 @@ export const projects: Project[] = [
         title: "Nick",
         year: "2023",
         slug: "nick",
+        publishedAt: "2023-11-26T19:47:49-08:00",
+        updatedAt: "2026-11-02",
         youtubeId: "JfFkKItuwLE",
         category: "narrative",
         description:
@@ -53,6 +61,8 @@ export const projects: Project[] = [
         title: "The Rural Film Project",
         year: "2022",
         slug: "the-rural-film-project",
+        publishedAt: "2023-02-05T18:03:56-08:00",
+        updatedAt: "2026-11-02",
         youtubeId: "foS2B5aOQ74",
         category: "commercial",
         description:
